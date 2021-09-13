@@ -15,8 +15,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import top.adxd.tikonlinejudge.generator.properties.*;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * @author wait_light
@@ -73,7 +76,8 @@ public class GeneratorConfig {
 
     //包配置
     @Bean("packageConfig")
-    public PackageConfig packageConfig(PackageProperties packageProperties) {
+    public PackageConfig packageConfig(@Autowired PackageProperties packageProperties,
+                                       @Autowired GlobalProperties globalProperties) {
         if (!StringUtils.hasText(packageProperties.getModuleName())) {
             log.error("[tik.online.judge.generator.package]  Must configure moduleName.");
         }
@@ -82,6 +86,40 @@ public class GeneratorConfig {
         }
         PackageConfig packageConfig = new PackageConfig();
         BeanUtils.copyProperties(packageProperties, packageConfig);
+        //配置模板生成路径相对路径
+        //ConstVal;
+        HashMap<String, String> pathInfo = new HashMap<>();
+        // 例如 getOutputDir = D:   getParent = top.adxd.tikonlinejudge   moduleName = user
+        //  controller的位置就为   D:/top/adxd/tikonlinejudge/user/controller
+        String parent2path = packageProperties.getParent().replaceAll("\\.", Matcher.quoteReplacement(File.separator));
+        pathInfo.put(ConstVal.CONTROLLER_PATH, globalProperties.getOutputDir()
+                + globalProperties.getModuleDir() + globalProperties.getClassDir()
+                + File.separator + parent2path
+                + File.separator + packageProperties.moduleName
+                + File.separator + "controller");
+        pathInfo.put(ConstVal.ENTITY_PATH, globalProperties.getOutputDir()
+                + globalProperties.getModuleDir() + globalProperties.getClassDir()
+                + File.separator + parent2path
+                + File.separator + packageProperties.moduleName
+                + File.separator + "entity");
+        pathInfo.put(ConstVal.SERVICE_PATH, globalProperties.getOutputDir()
+                + globalProperties.getModuleDir() + globalProperties.getClassDir()
+                + File.separator + parent2path
+                + File.separator + packageProperties.moduleName
+                + File.separator + "service");
+        pathInfo.put(ConstVal.MAPPER_PATH, globalProperties.getOutputDir()
+                + globalProperties.getModuleDir() + globalProperties.getClassDir()
+                + File.separator + parent2path
+                + File.separator + packageProperties.moduleName
+                + File.separator + "mapper");
+        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, globalProperties.getOutputDir()
+                + globalProperties.getModuleDir() + globalProperties.getClassDir()
+                + File.separator + parent2path
+                + File.separator + packageProperties.moduleName
+                + File.separator + "service" + File.separator + "impl");
+        pathInfo.put(ConstVal.XML_PATH, globalProperties.getOutputDir() +
+                globalProperties.getModuleDir() + globalProperties.getXmlDir());
+        packageConfig.setPathInfo(pathInfo);
         return packageConfig;
     }
 
@@ -90,6 +128,8 @@ public class GeneratorConfig {
     public StrategyConfig strategyConfig(StrategyProperties strategyProperties) {
         StrategyConfig strategyConfig = new StrategyConfig();
         BeanUtils.copyProperties(strategyProperties, strategyConfig);
+        String[] tablePrefixes = strategyProperties.getTablePrefix().split(",");
+        strategyConfig.setTablePrefix(tablePrefixes);
         return strategyConfig;
     }
 
@@ -97,10 +137,10 @@ public class GeneratorConfig {
     public GlobalConfig globalConfig(GlobalProperties globalProperties) {
         GlobalConfig globalConfig = new GlobalConfig();
         BeanUtils.copyProperties(globalProperties, globalConfig);
-        //输出路径为本项目下
+        //输出路径为本项目下 则输入的路径无效，直接使用生成System.getProperty("user.dir") 获取的路径
         if (globalProperties.isBaseDirInProject()) {
             String projectPath = System.getProperty("user.dir");
-            globalConfig.setOutputDir(projectPath + globalProperties.getOutputDir());
+            globalConfig.setOutputDir(projectPath);
         }
         return globalConfig;
     }
@@ -114,28 +154,29 @@ public class GeneratorConfig {
 
     @Bean("injectionConfig")
     public InjectionConfig injectionConfig(@Autowired TemplateProperties templateProperties,
-                                           @Autowired PackageProperties packageProperties) {
+                                           @Autowired PackageProperties packageProperties,
+                                           @Autowired GlobalProperties globalProperties) {
         InjectionConfig injectionConfig = new InjectionConfig() {
             @Override
             public void initMap() {
 
             }
         };
-        String projectPath = System.getProperty("user.dir");
-        String templatePath = StringUtils.hasLength(templateProperties.getTemplatePath())
-                ? templateProperties.getTemplatePath() : "/templates/mapper.xml.vm";
+//        String templatePath = StringUtils.hasLength(templateProperties.getTemplatePath())
+//                ? templateProperties.getTemplatePath() : "/templates/mapper.xml.vm";
 
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
-        focList.add(new FileOutConfig(templatePath) {
-            @Override
-            public String outputFile(TableInfo tableInfo) {
-                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/src/main/resources/mapper/" + packageProperties.getModuleName()
-                        + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
-            }
-        });
+//        focList.add(new FileOutConfig(templatePath) {
+//            @Override
+//            public String outputFile(TableInfo tableInfo) {
+//                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+//                String path = globalProperties.getOutputDir() + (StringUtils.hasLength(globalProperties.moduleDir) ? globalProperties.getModuleDir() + "/src/main/resources/mapper/" : "/src/main/resources/mapper/")
+//                        + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+//                return path;
+//            }
+//        });
         /*
         cfg.setFileCreate(new IFileCreate() {
             @Override

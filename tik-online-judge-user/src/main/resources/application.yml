@@ -5,4 +5,11 @@ spring:
     url: jdbc:mysql://192.168.181.20:3306/judge_ums?useUnicode=true&useSSL=false&characterEncoding=utf8
     username: root
     password: root
-debug: true
+debug: false
+tik-online-judge-user:
+  super-admin:
+    username: admin
+    password: admin
+    avatar: https://imgtu.com/i/4SEo8O
+  user-default:
+    avatar: https://imgtu.com/i/4SEo8O

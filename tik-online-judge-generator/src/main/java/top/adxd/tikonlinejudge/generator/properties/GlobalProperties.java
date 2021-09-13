@@ -10,8 +10,32 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "tik.online.judge.generator.global")
 public class GlobalProperties {
-    public String outputDir,author;
-    public boolean open,kotlin,swagger2,activeRecord,baseResultMap,enableCache,fileOverride,baseDirInProject;
+    public String outputDir = "D:", author, moduleDir = "", classDir = "/src/main/java", xmlDir = "/src/main/resources/mapper";
+    public boolean open, kotlin, swagger2, activeRecord, baseResultMap, enableCache, fileOverride, baseDirInProject;
+
+    public String getClassDir() {
+        return classDir;
+    }
+
+    public void setClassDir(String classDir) {
+        this.classDir = classDir;
+    }
+
+    public String getXmlDir() {
+        return xmlDir;
+    }
+
+    public void setXmlDir(String xmlDir) {
+        this.xmlDir = xmlDir;
+    }
+
+    public String getModuleDir() {
+        return moduleDir;
+    }
+
+    public void setModuleDir(String moduleDir) {
+        this.moduleDir = moduleDir;
+    }
 
     public String getOutputDir() {
         return outputDir;

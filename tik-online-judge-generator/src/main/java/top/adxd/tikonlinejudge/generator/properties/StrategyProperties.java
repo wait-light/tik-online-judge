@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+
 /**
  * @author wait_light
  * @create 2021/9/5
@@ -11,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "tik.online.judge.generator.strategy")
 public class StrategyProperties {
-    public String superEntityClass,superControllerClass,superEntityColumns,include,tablePrefix;
-    public Boolean restControllerStyle,entityLombokModel,controllerMappingHyphenStyle;
-    public NamingStrategy naming,columnNaming;
+    public String superEntityClass, superControllerClass, superEntityColumns, include,tablePrefix;
+    public Boolean restControllerStyle, entityLombokModel, controllerMappingHyphenStyle;
+    public NamingStrategy naming, columnNaming;
 
     public String getSuperEntityClass() {
         return superEntityClass;

@@ -1,4 +1,4 @@
-package ${package.Controller};
+package top.adxd.tikonlinejudge.user.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,84 +8,63 @@ import java.util.List;
 import java.util.Arrays;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
-import ${package.Entity}.${entity};
-import ${package.Service}.${table.ServiceName};
-#if(${restControllerStyle})
+import top.adxd.tikonlinejudge.user.entity.RoleMenu;
+import top.adxd.tikonlinejudge.user.service.IRoleMenuService;
 import org.springframework.web.bind.annotation.RestController;
-#else
-import org.springframework.stereotype.Controller;
-#end
-#if(${superControllerClassPackage})
-import ${superControllerClassPackage};
-#end
 
 /**
  * <p>
- * $!{table.comment} 前端控制器
+ *  前端控制器
  * </p>
  *
- * @author ${author}
- * @since ${date}
+ * @author wait_light
+ * @since 2021-09-11
  */
-#if(${restControllerStyle})
 @RestController
-#else
-@Controller
-#end
-@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
-#if(${kotlin})
-class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
-
-#else
-#if(${superControllerClass})
-public class ${table.controllerName} extends ${superControllerClass} {
-#else
-public class ${table.controllerName} {
-#end
-    ##将controllerName转为驼峰式
-    #set($service = $table.serviceName.substring(1,2).toLowerCase() + $table.serviceName.substring(2))
-
+@RequestMapping("/user/role-menu")
+public class RoleMenuController {
+    
     @Autowired
-    private ${table.serviceName} $service;
+    private IRoleMenuService roleMenuService;
 
     @GetMapping("/list")
     public CommonResult list(){
         PageUtils.makePage();
-        List<${entity}> list = ${service}.list();
+        List<RoleMenu> list = roleMenuService.list();
         return CommonResult.success().listData(list);
     }
 
     @PostMapping("/")
-    public CommonResult save(@RequestBody ${entity} entity) {
-        return  ${service}.save(entity) ?
+    public CommonResult save(@RequestBody RoleMenu entity) {
+        return  roleMenuService.save(entity) ?
             CommonResult.success().setMsg("添加成功") :
             CommonResult.error().setMsg("添加失败");
     }
 
     @DeleteMapping("/")
     public CommonResult deleteBatch(@RequestBody Long[] ids){
-        return ${service}.removeByIds(Arrays.asList(ids)) ?
+        return roleMenuService.removeByIds(Arrays.asList(ids)) ?
             CommonResult.success().setMsg("删除成功") :
             CommonResult.error().setMsg("删除失败");
     }
 
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable("id") Long id){
-        return ${service}.removeById(id) ?
+        return roleMenuService.removeById(id) ?
             CommonResult.success().setMsg("删除成功") :
             CommonResult.error().setMsg("删除失败");
     }
 
     @PutMapping("/{id}")
-    public CommonResult update(@RequestBody ${entity} entity){
-        return ${service}.updateById(entity) ?
+    public CommonResult update(@RequestBody RoleMenu entity){
+        return roleMenuService.updateById(entity) ?
             CommonResult.success().setMsg("更新成功"):
             CommonResult.error().setMsg("更新失败");
     }
 
     @GetMapping("/{id}")
     public CommonResult info(@PathVariable("id") Long id){
-        ${entity} entity = ${service}.getById(id);
+        RoleMenu entity = roleMenuService.getById(id);
         return entity != null ?
             CommonResult.success().singleData(entity):
             CommonResult.error();
@@ -93,4 +72,3 @@ public class ${table.controllerName} {
 
 }
 
-#end
