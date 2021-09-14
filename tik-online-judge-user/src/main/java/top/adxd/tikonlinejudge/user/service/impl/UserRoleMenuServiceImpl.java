@@ -4,12 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.validation.annotation.Validated;
+import top.adxd.tikonlinejudge.common.util.TransactionUtil;
 import top.adxd.tikonlinejudge.user.dto.MenuTree;
+import top.adxd.tikonlinejudge.user.dto.RoleWithMenu;
 import top.adxd.tikonlinejudge.user.entity.Menu;
 import top.adxd.tikonlinejudge.user.entity.Role;
+import top.adxd.tikonlinejudge.user.entity.RoleMenu;
 import top.adxd.tikonlinejudge.user.mapper.*;
 import top.adxd.tikonlinejudge.user.service.IUserRoleMenuService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,6 +102,64 @@ public class UserRoleMenuServiceImpl implements IUserRoleMenuService {
                 item.getParentId() == null || item.getParentId() == 0
         ).collect(Collectors.toList());
         return menuTrees;
+    }
+
+    @Transactional
+    @Override
+    public Boolean SaveRoleWithMenu(@Validated RoleWithMenu roleWithMenu) {
+        Role isExistRoleName = roleMapper.selectOne(new QueryWrapper<Role>().eq("name", roleWithMenu.getName()).select("id"));
+        if (isExistRoleName != null) {
+            return false;
+        }
+        //TODO 添加的用户信息还没弄
+        LocalDateTime now = LocalDateTime.now();
+        roleWithMenu.setCreateTime(now);
+        roleWithMenu.setUpdateTime(now);
+        int insert = roleMapper.insert(roleWithMenu);
+        //未成功，回滚
+        if (insert <= 0) {
+            TransactionUtil.rollback();
+            return false;
+        }
+        List<Long> roleMenuIds = roleWithMenu.getRoleMenus();
+        for (Long menuId : roleMenuIds) {
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setMenuId(menuId);
+            roleMenu.setRoleId(roleWithMenu.getId());
+            int success = roleMenuMapper.insert(roleMenu);
+            if (success <= 0) {
+                TransactionUtil.rollback();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean updateRoleWithMenu(@Validated RoleWithMenu roleWithMenu) {
+        //TODO 添加的用户信息还没弄
+        LocalDateTime now = LocalDateTime.now();
+        roleWithMenu.setUpdateTime(now);
+        int update = roleMapper.updateById(roleWithMenu);
+        //未成功，回滚
+        if (update <= 0) {
+            TransactionUtil.rollback();
+            return false;
+        }
+        //删除原有权限，再添加新的权限
+        roleMenuMapper.delete(new QueryWrapper<RoleMenu>().eq("role_id", roleWithMenu.getId()));
+        List<Long> roleMenuIds = roleWithMenu.getRoleMenus();
+        for (Long menuId : roleMenuIds) {
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setMenuId(menuId);
+            roleMenu.setRoleId(roleWithMenu.getId());
+            int success = roleMenuMapper.insert(roleMenu);
+            if (success <= 0) {
+                TransactionUtil.rollback();
+                return false;
+            }
+        }
+        return true;
     }
 
 

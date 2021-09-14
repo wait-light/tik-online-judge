@@ -8,6 +8,9 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * <p>
  * 
@@ -32,6 +35,8 @@ public class Role implements Serializable {
     /**
      * 角色名
      */
+    @NotNull
+    @Size(min = 1,max = 64,message = "角色名长度非法")
     private String name;
 
     /**

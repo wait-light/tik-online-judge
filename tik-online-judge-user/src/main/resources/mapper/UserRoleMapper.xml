@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.adxd.tikonlinejudge.user.mapper.UserRoleMapper">
     <!--    查询对应用户的角色id-->
-    <select id="getRoleIdsByUserId">
+    <select id="getRoleIdsByUserId" resultType="Long">
         select role_id from ums_user_role where uid = #{uid}
     </select>
 </mapper>

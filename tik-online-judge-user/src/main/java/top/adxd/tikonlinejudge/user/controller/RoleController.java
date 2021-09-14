@@ -11,9 +11,13 @@ import java.util.Arrays;
 
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
+import top.adxd.tikonlinejudge.user.dto.RoleWithMenu;
 import top.adxd.tikonlinejudge.user.entity.Role;
+import top.adxd.tikonlinejudge.user.service.IMenuService;
+import top.adxd.tikonlinejudge.user.service.IRoleMenuService;
 import top.adxd.tikonlinejudge.user.service.IRoleService;
 import org.springframework.web.bind.annotation.RestController;
+import top.adxd.tikonlinejudge.user.service.IUserRoleMenuService;
 
 /**
  * <p>
@@ -29,6 +33,8 @@ public class RoleController {
 
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IUserRoleMenuService userRoleMenuService;
 
     @GetMapping("/list")
     public CommonResult list() {
@@ -38,12 +44,8 @@ public class RoleController {
     }
 
     @PostMapping("")
-    public CommonResult save(@RequestBody Role entity) {
-        //TODO 添加的用户信息还没弄
-        LocalDateTime now = LocalDateTime.now();
-        entity.setCreateTime(now);
-        entity.setUpdateTime(now);
-        return roleService.save(entity) ?
+    public CommonResult save(@RequestBody RoleWithMenu entity) {
+        return userRoleMenuService.SaveRoleWithMenu(entity) ?
                 CommonResult.success().setMsg("添加成功") :
                 CommonResult.error().setMsg("添加失败");
     }
@@ -63,8 +65,8 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public CommonResult update(@RequestBody Role entity) {
-        return roleService.updateById(entity) ?
+    public CommonResult update(@RequestBody RoleWithMenu entity) {
+        return userRoleMenuService.updateRoleWithMenu(entity) ?
                 CommonResult.success().setMsg("更新成功") :
                 CommonResult.error().setMsg("更新失败");
     }

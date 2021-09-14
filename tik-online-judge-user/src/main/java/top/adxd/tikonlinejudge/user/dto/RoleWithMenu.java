@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.user.dto;
 import lombok.Data;
 import top.adxd.tikonlinejudge.user.entity.Role;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,5 +13,6 @@ import java.util.List;
  */
 @Data
 public class RoleWithMenu extends Role implements Serializable {
-    public Long menuId;
+    @NotNull
+    public List<Long> roleMenus;
 }

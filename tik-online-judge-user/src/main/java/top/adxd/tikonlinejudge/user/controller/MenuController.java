@@ -11,6 +11,7 @@ import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.user.entity.Menu;
 import top.adxd.tikonlinejudge.user.service.IMenuService;
 import org.springframework.web.bind.annotation.RestController;
+import top.adxd.tikonlinejudge.user.service.IUserRoleMenuService;
 
 /**
  * <p>
@@ -26,12 +27,20 @@ public class MenuController {
     
     @Autowired
     private IMenuService menuService;
+    @Autowired
+    private IUserRoleMenuService userRoleMenuService;
 
     @GetMapping("/list")
     public CommonResult list(){
         PageUtils.makePage();
         List<Menu> list = menuService.list();
         return CommonResult.success().listData(list);
+    }
+
+    @GetMapping("/tree/")
+    public CommonResult treeMenu(){
+
+        return CommonResult.success().singleData(userRoleMenuService.menuTree());
     }
 
     @PostMapping("")
