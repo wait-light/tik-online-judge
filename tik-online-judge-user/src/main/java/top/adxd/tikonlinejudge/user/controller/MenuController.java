@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Arrays;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
-import top.adxd.tikonlinejudge.user.dto.MenuTree;
 import top.adxd.tikonlinejudge.user.entity.Menu;
 import top.adxd.tikonlinejudge.user.service.IMenuService;
 import org.springframework.web.bind.annotation.RestController;
-import top.adxd.tikonlinejudge.user.service.IUserRoleMenuService;
 
 /**
  * <p>
@@ -20,13 +18,12 @@ import top.adxd.tikonlinejudge.user.service.IUserRoleMenuService;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-11
+ * @since 2021-09-13
  */
 @RestController
 @RequestMapping("/user/menu")
 public class MenuController {
-
-
+    
     @Autowired
     private IMenuService menuService;
 
@@ -37,14 +34,14 @@ public class MenuController {
         return CommonResult.success().listData(list);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public CommonResult save(@RequestBody Menu entity) {
         return  menuService.save(entity) ?
             CommonResult.success().setMsg("添加成功") :
             CommonResult.error().setMsg("添加失败");
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public CommonResult deleteBatch(@RequestBody Long[] ids){
         return menuService.removeByIds(Arrays.asList(ids)) ?
             CommonResult.success().setMsg("删除成功") :
@@ -72,12 +69,6 @@ public class MenuController {
             CommonResult.success().singleData(entity):
             CommonResult.error();
     }
-    @Autowired
-    private IUserRoleMenuService userRoleMenuService;
-    @GetMapping("/tree/")
-    public CommonResult menuTrees(){
-        List<MenuTree> menuTrees = userRoleMenuService.menuTree();
-        return CommonResult.success().singleData(menuTrees);
-    }
+
 }
 

@@ -55,14 +55,14 @@ public class ${table.controllerName} {
         return CommonResult.success().listData(list);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public CommonResult save(@RequestBody ${entity} entity) {
         return  ${service}.save(entity) ?
             CommonResult.success().setMsg("添加成功") :
             CommonResult.error().setMsg("添加失败");
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public CommonResult deleteBatch(@RequestBody Long[] ids){
         return ${service}.removeByIds(Arrays.asList(ids)) ?
             CommonResult.success().setMsg("删除成功") :

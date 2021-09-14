@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-11
+ * @since 2021-09-13
  */
 @RestController
 @RequestMapping("/user/user-social")
@@ -34,14 +34,14 @@ public class UserSocialController {
         return CommonResult.success().listData(list);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public CommonResult save(@RequestBody UserSocial entity) {
         return  userSocialService.save(entity) ?
             CommonResult.success().setMsg("添加成功") :
             CommonResult.error().setMsg("添加失败");
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public CommonResult deleteBatch(@RequestBody Long[] ids){
         return userSocialService.removeByIds(Arrays.asList(ids)) ?
             CommonResult.success().setMsg("删除成功") :
