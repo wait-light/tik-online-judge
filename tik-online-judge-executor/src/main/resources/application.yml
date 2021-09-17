@@ -1,0 +1,7 @@
+tik-online-judge.executor:
+  java:
+    classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\classTarget\Main.java
+  threadpool:
+    corePoolSize: 1
+    maxNumberPoolSize: 2
+    keepAliveTime: 10

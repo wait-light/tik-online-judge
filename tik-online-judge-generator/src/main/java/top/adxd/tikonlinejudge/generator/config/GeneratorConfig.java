@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 
 /**
@@ -155,43 +156,44 @@ public class GeneratorConfig {
     @Bean("injectionConfig")
     public InjectionConfig injectionConfig(@Autowired TemplateProperties templateProperties,
                                            @Autowired PackageProperties packageProperties,
-                                           @Autowired GlobalProperties globalProperties) {
+                                           @Autowired GlobalProperties globalProperties,
+                                           @Autowired GlobalConfig globalConfig) {
         InjectionConfig injectionConfig = new InjectionConfig() {
             @Override
             public void initMap() {
 
             }
         };
-//        String templatePath = StringUtils.hasLength(templateProperties.getTemplatePath())
-//                ? templateProperties.getTemplatePath() : "/templates/mapper.xml.vm";
-
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
-        // 自定义配置会被优先输出
-//        focList.add(new FileOutConfig(templatePath) {
-//            @Override
-//            public String outputFile(TableInfo tableInfo) {
-//                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-//                String path = globalProperties.getOutputDir() + (StringUtils.hasLength(globalProperties.moduleDir) ? globalProperties.getModuleDir() + "/src/main/resources/mapper/" : "/src/main/resources/mapper/")
-//                        + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
-//                return path;
-//            }
-//        });
-        /*
-        cfg.setFileCreate(new IFileCreate() {
+        // XXXList.vue
+        FileOutConfig vueListFileOutConfig = new FileOutConfig("/templates/list.vue.vm") {
             @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                // 判断自定义文件夹是否需要创建
-                checkDir("调用默认方法创建的目录，自定义目录用");
-                if (fileType == FileType.MAPPER) {
-                    // 已经生成 mapper 文件判断存在，不想重新生成返回 false
-                    return !new File(filePath).exists();
-                }
-                // 允许生成模板文件
-                return true;
+            public String outputFile(TableInfo tableInfo) {
+                String path = globalConfig.getOutputDir()
+                        + globalProperties.moduleDir
+                        + "/src/main/resources/vue/"
+                        + tableInfo.getEntityName().toLowerCase(Locale.ROOT)
+                        + File.separator
+                        + tableInfo.getEntityName() + "List.vue";
+                return path;
             }
-        });
-        */
+        };
+        // XXXAddOrUpdate.vue
+        FileOutConfig vueAddOrUpdateFileOutConfig = new FileOutConfig("/templates/AddOrUpdate.vue.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                String path = globalConfig.getOutputDir()
+                        + globalProperties.moduleDir
+                        + "/src/main/resources/vue/"
+                        + tableInfo.getEntityName().toLowerCase(Locale.ROOT)
+                        + File.separator
+                        + tableInfo.getEntityName() + "AddOrUpdate.vue";
+                return path;
+            }
+        };
+        focList.add(vueListFileOutConfig);
+        focList.add(vueAddOrUpdateFileOutConfig);
         injectionConfig.setFileOutConfigList(focList);
 
         return injectionConfig;

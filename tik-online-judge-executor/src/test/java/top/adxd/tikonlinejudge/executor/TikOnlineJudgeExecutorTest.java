@@ -2,11 +2,17 @@ package top.adxd.tikonlinejudge.executor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.adxd.tikonlinejudge.executor.service.impl.CPPCodeExecutor;
+import top.adxd.tikonlinejudge.executor.service.impl.JavaCodeExecutor;
+import top.adxd.tikonlinejudge.executor.vo.ExecuteResult;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author wait_light
@@ -15,46 +21,49 @@ import java.util.Map;
 //@SpringBootTest
 @Slf4j
 public class TikOnlineJudgeExecutorTest {
+    @Autowired
+    private CPPCodeExecutor javaCodeExecutor;
     @Test
-    public void context() {
-        try {
-            final long timeout = 3000; // 限制的执行时间（毫秒）
-
-            String cmd = "echo aaa";
-            final long starttime = System.currentTimeMillis();
-            final Process process = Runtime.getRuntime().exec(cmd); // 执行编译指令
-
-            if (process != null) {
-                InputStream is = process.getInputStream(); // 获取编译命令输出
-                InputStream error = process.getErrorStream(); // 获取编译命令错误输出
-                byte[] result = new byte[1024];
-                int len = -1;
-                while ((len = is.read(result)) != -1) {
-                    System.out.println(new String(result, 0, len));
-                }
-                new Thread() {
-                    public void run() {
-                        while (true) {
-                            try {
-                                sleep(10);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            if (System.currentTimeMillis() - starttime > timeout) {
-                                // 超时
-                                process.destroy();
-                            }
-                        }
-                    }
-                }.start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void context() throws ExecutionException, InterruptedException {
+        ExecuteResult execute = javaCodeExecutor.execute(null);
+        System.out.println(execute);
     }
 
     @Test
     public void systemMessageTest(){
         System.out.println(0 ^ 5);
+    }
+    @Test
+    public void builderTest() throws IOException, InterruptedException {
+        File input = new File("C:\\Users\\light\\Desktop\\cpptest\\hahahah.txt");
+        File error = new File("C:\\Users\\light\\Desktop\\cpptest\\error.txt");
+//        File aaaaa = new File("C:\\Users\\light\\Desktop\\cpptest\\a.exe");
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        Process a = processBuilder
+                .directory(new File("C:\\Users\\light\\Desktop\\cpptest"))
+                .command("cmd","/c","a.exe")
+                .redirectOutput(new File("C:\\Users\\light\\Desktop\\cpptest\\hahahah.txt"))
+                .redirectError(new File("C:\\Users\\light\\Desktop\\cpptest\\error.txt"))
+                .start();
+
+//        System.out.println(aaaaa.canExecute());
+//        Process a = processBuilder
+//                .directory(new File("D:\\study\\spring\\cloud\\project\\tik-online-judge\\tik-online-judge-executor\\classTarget"))
+////                .command("cmd","/c","a.exe")
+//                .command("java","Main")
+//                .redirectInput(input)
+//                .redirectError(error)
+//                .start();
+        InputStream inputStream = a.getInputStream();
+        byte[] bytes = new byte[1024];
+        int len = -1;
+        while ( (len = inputStream.read(bytes))!=-1){
+            System.out.println(new String(bytes,0,len));
+        }
+//        while (a.waitFor()){
+//
+//        }
+
+        System.out.println(   a.waitFor());
     }
 }

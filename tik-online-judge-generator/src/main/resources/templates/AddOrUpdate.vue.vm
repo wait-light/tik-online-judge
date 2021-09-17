@@ -1,0 +1,71 @@
+<template>
+    <el-form v-model="newEntity" label-position="right" label-width="80px">
+        #foreach($item in $table.fields)
+            #if($item.name != "id")
+            <el-form-item label="$item.comment">
+                #if($item.columnType.type == "Boolean")
+                <el-switch v-model="newEntity.${item.propertyName}" active-color="#13ce66" inactive-color="#ccc"></el-switch>
+                #elseif($item.columnType.type == "LocalDateTime")
+                <el-date-picker v-model="newEntity.${item.propertyName}" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                #else
+                <el-input v-model="newEntity.${item.propertyName}"></el-input>
+                #end
+            </el-form-item>
+            #end
+        #end
+        <el-form-item>
+            <el-button @click="prepareSave" v-if="!newEntity.id" type="success">保存</el-button>
+            <el-button
+                    @click="prepareUpdate"
+                    v-if="newEntity.id && newEntity.id != 0"
+                    type="warning"
+            >修改</el-button>
+        </el-form-item>
+    </el-form>
+</template>
+
+<script>
+    import {
+        getOne,
+        update,
+        save,
+        deleteById,
+        commonajaxWithData,
+    } from "@/js/backstage/common/common_data_operation.js";
+    export default {
+        props: {
+            entity: Object,
+        },
+        data() {
+            return {
+                newEntity:{
+
+                }
+            };
+        },
+        methods: {
+            async prepareSave(){
+                let result = await save("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end",this.newEntity)
+                if(result.success){
+                    this.$emit("reloadData");
+                }
+            },
+            async prepareUpdate(){
+                let result = await update("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end",this.newEntity.id,this.newEntity)
+                if(result.success){
+                    this.$emit("reloadData");
+                }
+            }
+        },
+        watch: {
+            async entity(newValue, oldValue) {
+                this.newEntity = newValue;
+            },
+        },
+        mounted() {
+            this.newEntity = this.entity
+        },
+    };
+</script>
+
+<style></style>

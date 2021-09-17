@@ -1,0 +1,131 @@
+<template>
+    <div class="buttons">
+        <el-button @click="prepareSave" type="success" size="mini">添加</el-button>
+    </div>
+    <el-table
+            :data="table"
+            height="calc( 100% - 101px )"
+            border
+            style="width: 100%"
+            :header-cell-style="{ textAlign: 'center' }"
+            :cell-style="{ textAlign: 'center' }"
+    >
+        #foreach($item in $table.fields)
+            #if($item.columnType.type == "Boolean")
+            <el-table-column label="$item.comment" width="80">
+                <template #default="scope">
+                    <el-switch
+                            disabled
+                            v-model="scope.row.${item.propertyName}"
+                            active-color="#13ce66"
+                            inactive-color="#ccc"
+                    ></el-switch>
+                </template>
+            </el-table-column>
+            #else
+            <el-table-column prop="$item.propertyName" label="$item.comment"></el-table-column>
+            #end
+        #end
+            <el-table-column label="操作" fixed="right" width="150">
+                <template #default="scope">
+                    <el-button size="mini" @click="prepareUpdate(scope.row)" type="warning">修改</el-button>
+                    <el-button size="mini" @click="prepareDelete(scope.row)" type="danger">删除</el-button>
+                </template>
+            </el-table-column>
+    </el-table>
+    <el-dialog title="添加/修改" v-model="prepareEntity.open">
+        <div class="dialog-message">
+            <${table.entityName}AddOrUpdate @reloadData="loadData" :entity="prepareEntity.entity"></${table.entityName}AddOrUpdate>
+        </div>
+    </el-dialog>
+    <el-pagination
+        :hide-on-single-page="hideOnSinglePage"
+        @size-change="pageSizeChange"
+        @current-change="pageChange"
+        :current-page="pageInfo.page"
+        :page-sizes="pageInfo.pageSizes"
+        :page-size="pageInfo.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pageInfo.total">
+    </el-pagination>
+</template>
+
+<script>
+    #set($packageName = $table.entityName.toLowerCase())
+    import {
+        getOne,
+        update,
+        getList,
+        deleteById,
+        commonajaxWithData,
+    } from "@/js/backstage/common/common_data_operation.js";
+    import ${table.entityName}AddOrUpdate
+        from "@/components/backstage/${packageName}/${table.entityName}AddOrUpdate.vue";
+
+    export default {
+        components: {
+            ${table.entityName}AddOrUpdate,
+        },
+        data() {
+            return {
+                table:[],
+                pageInfo:{
+                  pageSize:10,
+                  page:1,
+                  total:0,
+                  pageSizes:[10,20,30,50,100]
+                },
+                prepareEntity: {
+                    entity: {},
+                    open: false
+                },
+                hideOnSinglePage:true
+            };
+        },
+        methods: {
+            prepareSave() {
+                this.prepareEntity.entity = {}
+                this.prepareEntity.open = true
+            },
+            prepareUpdate(entity) {
+                this.prepareEntity.entity = entity
+                this.prepareEntity.open = true
+            },
+            async prepareDelete(entity) {
+                let result = await deleteById("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end", entity.id);
+                if (result.success) {
+                    this.loadData();
+                }
+            },
+            async pageChange(page){
+                this.pageInfo.page = page
+                this.loadData()
+            },
+            async pageSizeChange(pageSize){
+                this.pageInfo.pageSize = pageSize
+                this.loadData()
+            },
+            async loadData() {
+                this.prepareEntity.open = false
+                let result =await getList("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/list",this.pageInfo.page,this.pageInfo.pageSize);
+                if(result.success){
+                    this.table = result.list;
+                    this.pageInfo.pageSize = result.pageSize
+                    this.pageInfo.page = result.page
+                    this.pageInfo.total = result.total
+                }
+            }
+        },
+        mounted() {
+            this.loadData()
+        }
+    };
+</script>
+
+<style lang="sass" scoped>
+.buttons
+    margin: 10px 5px 25px
+.dialog-message
+    overflow: auto
+    height: 55vh
+</style>

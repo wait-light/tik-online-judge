@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-09-11
  */
 public interface IRoleService extends IService<Role> {
-
+    public boolean deleteRoleWithMenu(Long roleId);
+    public boolean deleteRoleBatchWithMenu(Long[] roleIds);
 }

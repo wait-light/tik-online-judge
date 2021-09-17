@@ -59,7 +59,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable("id") Long id) {
-        return roleService.removeById(id) ?
+        return roleService.deleteRoleWithMenu(id) ?
                 CommonResult.success().setMsg("删除成功") :
                 CommonResult.error().setMsg("删除失败");
     }

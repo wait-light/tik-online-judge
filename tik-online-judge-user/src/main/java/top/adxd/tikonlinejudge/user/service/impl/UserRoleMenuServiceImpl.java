@@ -107,8 +107,8 @@ public class UserRoleMenuServiceImpl implements IUserRoleMenuService {
     @Transactional
     @Override
     public Boolean SaveRoleWithMenu(@Validated RoleWithMenu roleWithMenu) {
-        Role isExistRoleName = roleMapper.selectOne(new QueryWrapper<Role>().eq("name", roleWithMenu.getName()).select("id"));
-        if (isExistRoleName != null) {
+        List<Role> isExistRoleName = roleMapper.selectList(new QueryWrapper<Role>().eq("name", roleWithMenu.getName()).select("id"));
+        if (isExistRoleName != null && isExistRoleName.size() >= 1) {
             return false;
         }
         //TODO 添加的用户信息还没弄
