@@ -10,10 +10,7 @@ import top.adxd.tikonlinejudge.executor.exception.runtime.CmdNotFoundException;
 import top.adxd.tikonlinejudge.executor.util.BeanUtil;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.function.Supplier;
 
@@ -21,12 +18,14 @@ import java.util.function.Supplier;
  * 命令执行类
  */
 @Component
-public class CmdExecutor implements Supplier<ExecuteCMDResult>  {
+public class CmdExecutor implements Supplier<ExecuteCMDResult> {
     private static ExecutorConfig bashExecutorConfig;
+
     @Autowired
-    public void setBashExecutorConfig( ExecutorConfig executorConfig){
+    public void setBashExecutorConfig(ExecutorConfig executorConfig) {
         CmdExecutor.bashExecutorConfig = executorConfig;
     }
+
     private static final Logger logger = LoggerFactory.getLogger(CmdExecutor.class);
     private String cmdWithArgs;
     private String[] input;
@@ -101,6 +100,7 @@ public class CmdExecutor implements Supplier<ExecuteCMDResult>  {
             cmdExecutor.cmdWithArgs = cmdWithArgs;
             cmdExecutor.dir = dir;
             cmdExecutor.envp = envp;
+            cmdExecutor.input = input;
             return cmdExecutor;
         }
     }
@@ -132,41 +132,58 @@ public class CmdExecutor implements Supplier<ExecuteCMDResult>  {
                     }
                     out2Console.close();
                 }
-                boolean b = process.waitFor(config.getMaxExecuteTime(), config.getTimeUnit());
-                executeCMDResult.setExecuteTime(System.currentTimeMillis() - beginTime);
-                // 获取错误输出
-                InputStream errorStream = process.getErrorStream();
-                len = -1;
-                while ((len = errorStream.read(bytes)) != -1) {
-                    resultStr.append(new String(bytes, 0, len, Charset.forName("gbk")));
-                }
-                errorStream.close();
-                executeCMDResult.setErrorOutput(resultStr.toString());
-                if (resultStr.length() > 0) {
-                    executeCMDResult.setSuccess(false);
-                    return executeCMDResult;
-                }
-                //清空
-                len = -1;
-                resultStr.delete(0, resultStr.length());
+//                Thread.sleep(50);
+
+
+                boolean isEnd = process.waitFor(config.getMaxExecuteTime(), config.getTimeUnit());
+
                 // 获取输出
                 InputStream inputStream = process.getInputStream();
-                while ((len = inputStream.read(bytes)) != -1) {
-                    resultStr.append(new String(bytes, 0, len,Charset.forName("gbk")));
+                while (inputStream.available() > 0) {
+                    len = inputStream.read(bytes);
+                    resultStr.append(new String(bytes, 0, len, config.getDefaultCharset() != null ? config.getDefaultCharset() : bashExecutorConfig.getDefaultCharset()));
                 }
                 inputStream.close();
                 executeCMDResult.setSuccess(true);
                 executeCMDResult.setSuccessOutput(resultStr.toString());
+
+                //清空
+                len = -1;
+                resultStr.delete(0, resultStr.length());
+                // 获取错误输出
+                InputStream errorStream = process.getErrorStream();
+                len = -1;
+                while (errorStream.available() != 0) {
+                    len = errorStream.read(bytes);
+                    resultStr.append(new String(bytes, 0, len, config.getDefaultCharset() != null ? config.getDefaultCharset() : bashExecutorConfig.getDefaultCharset()));
+                }
+
+                errorStream.close();
+                executeCMDResult.setErrorOutput(resultStr.toString());
+                if (resultStr.length() > 0) {
+                    executeCMDResult.setSuccess(false);
+                }
+                executeCMDResult.setExecuteTime(System.currentTimeMillis() - beginTime);
+                //超过指定实现还在运行，认为其运行时间超时
+                if (!isEnd) {
+                    executeCMDResult.setExecuteTime(Long.MAX_VALUE);
+                    executeCMDResult.setSuccess(false);
+                    process.destroy();
+                }
+
+                executeCMDResult.setExitCode(process.exitValue());
             }
         } catch (IOException ioException) {
             executeCMDResult.setSuccess(false);
             executeCMDResult.setErrorOutput(resultStr.toString());
             executeCMDResult.setExecuteTime(System.currentTimeMillis() - beginTime);
+            executeCMDResult.setExitCode(-1);
             logger.error(ioException.getMessage());
         } catch (InterruptedException exception) {
             executeCMDResult.setSuccess(false);
             executeCMDResult.setErrorOutput("Time out");
             executeCMDResult.setExecuteTime(System.currentTimeMillis() - beginTime);
+            executeCMDResult.setExitCode(-1);
             logger.error(exception.getMessage());
         }
         return executeCMDResult;

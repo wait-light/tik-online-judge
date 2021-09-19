@@ -2,7 +2,7 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.adxd.tikonlinejudge.executor.config.CppCodeExecuteConfig;
+import top.adxd.tikonlinejudge.executor.config.PythonCodeExecuteConfig;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
 import top.adxd.tikonlinejudge.executor.service.CodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
@@ -14,26 +14,19 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class CPPCodeExecutor implements CodeExecutor {
+public class PythonCodeExecutor implements CodeExecutor {
+
     @Autowired
-    private CppCodeExecuteConfig cppCodeExecuteConfig;
+    private PythonCodeExecuteConfig pythonCodeExecuteConfig;
+
     @Override
     public ExecuteResult execute(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
-
-        File file = new File(cppCodeExecuteConfig.getTargetPath());
-        CmdExecutor compile = new CmdExecutor.CmdExecutorBuilder()
-                .setDir(file)
-                .setCmdWithArgs(cppCodeExecuteConfig.getGppPath() + " " + cppCodeExecuteConfig.getCodeFileName())
+        File desktop = new File(pythonCodeExecuteConfig.getTargetPath());
+        CmdExecutor build = new CmdExecutor.CmdExecutorBuilder()
+                .setDir(desktop)
+                .setCmdWithArgs("python " + pythonCodeExecuteConfig.getCodeFullPath())
                 .build();
-        ExecuteCMDResult result = compile.get();
-        if (result.isSuccess()){
-            CmdExecutor build = new CmdExecutor.CmdExecutorBuilder()
-                    .setDir(file)
-                    .setCmdWithArgs(cppCodeExecuteConfig.getTargetProcessPath())
-                    .build();
-            result = build.get();
-        }
-
+        ExecuteCMDResult result = build.get();
         return ExecuteResult.parse(result);
     }
 

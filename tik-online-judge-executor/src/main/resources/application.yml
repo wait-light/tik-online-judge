@@ -1,7 +1,27 @@
 tik-online-judge.executor:
   java:
-    classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\classTarget\Main.java
+    classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\java\Main.java
+    open: true
+  cpp:
+    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\cpp\main.cpp
+    open: true
+    gppPath: D:\soft\MinGw\bin\g++
+  clanguage:
+    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\CLanguage\main.c
+    open: true
+    gccPath: D:\soft\MinGw\bin\gcc
+  python:
+    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\python\main.py
+    open: true
   threadpool:
     corePoolSize: 1
     maxNumberPoolSize: 2
     keepAliveTime: 10
+server:
+  port: 8600
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.181.129:3306/judge_pms?useUnicode=true&useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
+debug: false
