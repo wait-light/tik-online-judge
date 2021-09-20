@@ -1,8 +1,6 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.adxd.tikonlinejudge.executor.config.CppCodeExecuteConfig;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
 import top.adxd.tikonlinejudge.executor.service.CodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
@@ -15,26 +13,16 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class CPPCodeExecutor implements CodeExecutor {
-    @Autowired
-    private CppCodeExecuteConfig cppCodeExecuteConfig;
     @Override
     public ExecuteResult execute(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
 
-        File file = new File(cppCodeExecuteConfig.getTargetPath());
-        CmdExecutor compile = new CmdExecutor.CmdExecutorBuilder()
-                .setDir(file)
-                .setCmdWithArgs(cppCodeExecuteConfig.getGppPath() + " " + cppCodeExecuteConfig.getCodeFileName())
+        CmdExecutor build = new CmdExecutor.CmdExecutorBuilder()
+//                .setDir(new File("C:\\Users\\light\\Desktop\\cpptest"))
+                .setCmdWithArgs("C:\\Users\\light\\Desktop\\cpptest\\a.exe")
+//                .setCmdWithArgs("java Main")
                 .build();
-        ExecuteCMDResult result = compile.get();
-        if (result.isSuccess()){
-            CmdExecutor build = new CmdExecutor.CmdExecutorBuilder()
-                    .setDir(file)
-                    .setCmdWithArgs(cppCodeExecuteConfig.getTargetProcessPath())
-                    .build();
-            result = build.get();
-        }
-
-        return ExecuteResult.parse(result);
+        ExecuteCMDResult executeCMDResult = build.get();
+        return ExecuteResult.parse(executeCMDResult);
     }
 
     @Override

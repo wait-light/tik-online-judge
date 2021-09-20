@@ -6,7 +6,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteInput;
 
-import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,29 +14,16 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ExecutorConfig implements InitializingBean {
     @Autowired
-    private Environment environment;
+    Environment environment;
     /**
      * 最长执行时间
      */
     private Long maxExecuteTime = 10L;
-    /**
-     * 全局基础执行信息
-     */
-    private static ExecutorConfig globalBaseConfig;
+    private static ExecutorConfig staticConfig;
     /**
      * 最长执行时间单位
      */
     private TimeUnit timeUnit = TimeUnit.SECONDS;
-
-    private Charset defaultCharset;
-
-    public Charset getDefaultCharset() {
-        return defaultCharset;
-    }
-
-    public void setDefaultCharset(Charset defaultCharset) {
-        this.defaultCharset = defaultCharset;
-    }
 
     public Long getMaxExecuteTime() {
         return maxExecuteTime;
@@ -61,22 +47,16 @@ public class ExecutorConfig implements InitializingBean {
         if (maxExecuteTime != null) {
             setMaxExecuteTime(Long.parseLong(maxExecuteTime));
         }
-        globalBaseConfig = this;
-        defaultCharset = Charset.defaultCharset();
+        staticConfig = this;
     }
 
-    /**
-     * 将一个【ExecuteInput】对象转换成【ExecutorConfig】对象
-     * @param executeInput
-     * @return ExecutorConfig
-     */
     public static ExecutorConfig convert(ExecuteInput executeInput) {
         if (executeInput == null) {
-            return globalBaseConfig;
+            return staticConfig;
         }
         ExecutorConfig config = new ExecutorConfig();
         config.setMaxExecuteTime(executeInput.getTime());
-        config.setTimeUnit(globalBaseConfig.getTimeUnit());
+        config.setTimeUnit(staticConfig.getTimeUnit());
         return config;
     }
 }
