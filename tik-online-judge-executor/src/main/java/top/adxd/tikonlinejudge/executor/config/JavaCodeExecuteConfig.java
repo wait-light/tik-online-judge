@@ -40,6 +40,12 @@ public class JavaCodeExecuteConfig implements InitializingBean {
      * 则 targetPath = D:/
      */
     private String targetPath;
+    /**
+     * 代码文件名
+     * 例如 codeFullPath = D:/main.cpp
+     * 则 codeFileName = main.cpp
+     */
+    private String codeFileName;
 
     public String getTargetPath() {
         return targetPath;
@@ -51,6 +57,10 @@ public class JavaCodeExecuteConfig implements InitializingBean {
 
     public void setOpen(Boolean open) {
         this.open = open;
+    }
+
+    public String getCodeFileName() {
+        return codeFileName;
     }
 
     public String getClassFullNamePath() {
@@ -89,5 +99,7 @@ public class JavaCodeExecuteConfig implements InitializingBean {
         int withoutFileNameIndex = classFullNamePath.lastIndexOf(split[split.length - 1]);
         className = split[split.length - 1];
         targetPath = classFullPath.substring(0,withoutFileNameIndex);
+        String[] split1 = classFullPath.split("\\\\");
+        codeFileName = split1[split.length - 1];
     }
 }

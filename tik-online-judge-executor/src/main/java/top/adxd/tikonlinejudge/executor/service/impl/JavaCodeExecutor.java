@@ -31,17 +31,20 @@ public class JavaCodeExecutor implements CodeExecutor {
 
     @Override
     public ExecuteResult execute(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
-        Compile compile = new Compile(executeInput);
-        ExecuteResult executeResult = compile.get();
-        if (!executeResult.success){
-            return executeResult;
-        }
-        CmdExecutor java_main = new CmdExecutor.CmdExecutorBuilder()
-                .setCmdWithArgs("java Main")
-                .setDir(new File("D:\\study\\spring\\cloud\\project\\tik-online-judge\\tik-online-judge-executor\\classTarget"))
+        CmdExecutor build = new CmdExecutor.CmdExecutorBuilder()
+                .setCmdWithArgs("javac " + javaCodeExecuteConfig.getCodeFileName())
+                .setDir(new File(javaCodeExecuteConfig.getTargetPath()))
                 .build();
-        ExecuteCMDResult executeCMDResult = java_main.get();
-        return ExecuteResult.parse(executeCMDResult);
+        ExecuteCMDResult result = build.get();
+        if (result.isSuccess()){
+            CmdExecutor java_main = new CmdExecutor.CmdExecutorBuilder()
+                    .setCmdWithArgs("java " + javaCodeExecuteConfig.getClassName())
+                    .setDir(new File(javaCodeExecuteConfig.getTargetPath()))
+                    .build();
+            result = java_main.get();
+        }
+
+        return ExecuteResult.parse(result);
     }
 
     @Override
@@ -49,45 +52,5 @@ public class JavaCodeExecutor implements CodeExecutor {
         return null;
     }
 
-
-    private class Compile implements Supplier<ExecuteResult> {
-        private ExecuteInput executeInput;
-
-        public Compile(ExecuteInput executeInput) {
-            this.executeInput = executeInput;
-        }
-
-        @Override
-        public ExecuteResult get() {
-            ExecutorConfig config = ExecutorConfig.convert(executeInput);
-            ExecuteResult executeResult = new ExecuteResult();
-            CmdExecutor cmdExecutor = new CmdExecutor.CmdExecutorBuilder()
-                    .setCmdWithArgs("javac " + javaCodeExecuteConfig.getClassFullPath() + " -encoding utf-8")
-                    .build();
-            /**CompletableFuture<ExecuteCMDResult> executeCMDResultCompletableFuture = CompletableFuture.supplyAsync(executeCMD,threadPoolExecutor);
-             * 如果还用线程池执行就会发生死锁
-             * 解决方法:
-             * 1.直接调用 executeCMD.get();
-             * 2.使用CompletableFuture.supplyAsync(executeCMD)
-             * 单参数方法 (会默认使用其自带的线程池,不会发生死锁)
-             */
-            try {
-                ExecuteCMDResult executeCMDResult = cmdExecutor.get();
-                executeResult.setExecuteTime(executeCMDResult.getExecuteTime());
-                if (executeCMDResult.isSuccess()) {
-                    executeResult.setSuccess(true);
-                    executeResult.setExecuteStatus(ExecuteStatus.SUCCESS);
-                    executeResult.setOutputString(executeCMDResult.getSuccessOutput());
-                } else {
-                    executeResult.setSuccess(false);
-                    executeResult.setExecuteStatus(ExecuteStatus.COMPILE_ERROR);
-                    executeResult.setOutputString(executeCMDResult.getErrorOutput());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return executeResult;
-        }
-    }
 }
 

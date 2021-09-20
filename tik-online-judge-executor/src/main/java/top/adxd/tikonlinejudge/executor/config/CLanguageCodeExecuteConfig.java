@@ -99,7 +99,7 @@ public class CLanguageCodeExecuteConfig implements InitializingBean {
         String[] split = codeFullPath.split("\\\\");
         int withoutFileNameIndex = codeFullPath.lastIndexOf(split[split.length - 1]);
         targetPath = codeFullPath.substring(0, withoutFileNameIndex);
-        targetProcessPath = targetProcessPath + "a.exe";
+        targetProcessPath = targetPath + "a.exe";
         codeFileName = split[split.length-1];
     }
 }

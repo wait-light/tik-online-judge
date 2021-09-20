@@ -170,7 +170,6 @@ public class CmdExecutor implements Supplier<ExecuteCMDResult> {
                     executeCMDResult.setSuccess(false);
                     process.destroy();
                 }
-
                 executeCMDResult.setExitCode(process.exitValue());
             }
         } catch (IOException ioException) {
