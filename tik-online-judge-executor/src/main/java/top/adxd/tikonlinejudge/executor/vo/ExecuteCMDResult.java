@@ -5,6 +5,15 @@ public class ExecuteCMDResult{
     private String errorOutput;
     private boolean success;
     private Long executeTime;
+    private int exitCode;
+
+    public int getExitCode() {
+        return exitCode;
+    }
+
+    public void setExitCode(int exitCode) {
+        this.exitCode = exitCode;
+    }
 
     public Long getExecuteTime() {
         return executeTime;
@@ -36,5 +45,16 @@ public class ExecuteCMDResult{
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    @Override
+    public String toString() {
+        return "ExecuteCMDResult{" +
+                "successOutput='" + successOutput + '\'' +
+                ", errorOutput='" + errorOutput + '\'' +
+                ", success=" + success +
+                ", executeTime=" + executeTime +
+                ", exitCode=" + exitCode +
+                '}';
     }
 }
