@@ -4,17 +4,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
+import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
 import top.adxd.tikonlinejudge.executor.service.impl.CLanguageCodeExecutor;
 import top.adxd.tikonlinejudge.executor.service.impl.CPPCodeExecutor;
 import top.adxd.tikonlinejudge.executor.service.impl.JavaCodeExecutor;
 import top.adxd.tikonlinejudge.executor.service.impl.PythonCodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
-import top.adxd.tikonlinejudge.executor.vo.ExecuteResult;
+import top.adxd.tikonlinejudge.executor.vo.JudgeResult;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,19 +37,40 @@ public class TikOnlineJudgeExecutorTest {
     private PythonCodeExecutor pythonCodeExecutor;
     @Autowired
     private CLanguageCodeExecutor cLanguageCodeExecutor;
+    @Autowired
+    private ICodeJudge codeJudge;
+
+    @Test
+    public void judgeTest(){
+        Submit submit = new Submit();
+        submit.setId(0L);
+        submit.setContent("import java.util.Scanner;" +
+                "public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        Scanner in = new Scanner(System.in);\n" +
+                "        while (in.hasNext()){\n" +
+                "            int a = in.nextInt();\n" +
+                "            int b = in.nextInt();\n" +
+                "            System.out.println(a + b);\n" +
+                "        }\n" +
+                "    }}");
+        submit.setLanguageType(1);
+        submit.setProblemId(1L);
+        submit.setUid(1L);
+        List<JudgeResult> results = codeJudge.judge(submit);
+        System.out.println(Arrays.toString(results.toArray()));
+    }
 
     @Test
     public void context2() throws ExecutionException, InterruptedException {
 //        pythonCodeExecutor.execute(null);
 
 //        ExecuteResult execute = cppCodeExecutor.execute(null);
-        ExecuteResult execute = cLanguageCodeExecutor.execute(null);
-        System.out.println(execute.toString());
-    }
-
-    @Test
-    public void test(){
-
+//        ExecuteResult execute = cLanguageCodeExecutor.execute(null);
+//        CompletableFuture<ExecuteResult> executeResultCompletableFuture1 = javaCodeExecutor.executeAsync(null);
+//        ExecuteResult executeResult = executeResultCompletableFuture1.get();
+//        CompletableFuture<ExecuteResult> executeResultCompletableFuture = javaCodeExecutor.executeAsync(null);
+//        System.out.println(executeResult.toString());
     }
 
     final class aaaaa{

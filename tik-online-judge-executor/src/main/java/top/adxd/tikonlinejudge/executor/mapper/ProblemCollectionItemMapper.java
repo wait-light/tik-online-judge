@@ -1,6 +1,6 @@
 package top.adxd.tikonlinejudge.executor.mapper;
 
-import top.adxd.tikonlinejudge.executor.entity.Problem;
+import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author wait_light
  * @since 2021-09-22
  */
-public interface ProblemMapper extends BaseMapper<Problem> {
+public interface ProblemCollectionItemMapper extends BaseMapper<ProblemCollectionItem> {
 
 }

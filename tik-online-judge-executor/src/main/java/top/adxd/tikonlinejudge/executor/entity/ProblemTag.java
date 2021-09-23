@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-18
+ * @since 2021-09-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,7 +31,7 @@ public class ProblemTag implements Serializable {
     /**
      * 问题id
      */
-    private Long problem;
+    private Long problemId;
 
     /**
      * 标签id

@@ -8,13 +8,15 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 
  * </p>
  *
  * @author wait_light
- * @since 2021-09-18
+ * @since 2021-09-21
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -32,16 +34,19 @@ public class Submit implements Serializable {
     /**
      * 用户id
      */
+    @NotNull
     private Long uid;
 
     /**
      * 语言类型
      */
-    private Long languageId;
+    @NotNull
+    private Integer languageType;
 
     /**
      * 内容(编码内容)
      */
+    @NotNull
     private String content;
 
     /**
@@ -53,6 +58,12 @@ public class Submit implements Serializable {
      * 运行结果
      */
     private Integer status;
+
+    /**
+     * 提交的问题
+     */
+    @NotNull
+    private Long problemId;
 
 
 }

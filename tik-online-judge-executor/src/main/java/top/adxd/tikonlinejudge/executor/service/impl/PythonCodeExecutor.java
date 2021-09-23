@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.config.PythonCodeExecuteConfig;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
-import top.adxd.tikonlinejudge.executor.service.CodeExecutor;
+import top.adxd.tikonlinejudge.executor.service.ICodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteInput;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteResult;
@@ -13,14 +13,14 @@ import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-@Service
-public class PythonCodeExecutor implements CodeExecutor {
+@Service("pythonCodeExecutor")
+public class PythonCodeExecutor implements ICodeExecutor {
 
     @Autowired
     private PythonCodeExecuteConfig pythonCodeExecuteConfig;
 
     @Override
-    public ExecuteResult execute(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
+    public ExecuteResult execute(ExecuteInput executeInput,boolean isCompile) {
         File desktop = new File(pythonCodeExecuteConfig.getTargetPath());
         CmdExecutor build = new CmdExecutor.CmdExecutorBuilder()
                 .setDir(desktop)
@@ -31,7 +31,7 @@ public class PythonCodeExecutor implements CodeExecutor {
     }
 
     @Override
-    public CompletableFuture<ExecuteResult> executeAsync(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
+    public CompletableFuture<ExecuteResult> executeAsync(ExecuteInput executeInput,boolean isCompile) {
         return null;
     }
 }

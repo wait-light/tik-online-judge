@@ -65,7 +65,11 @@ public class ExecuteResult {
             executeResult.setOutputString(executeCMDResult.getSuccessOutput());
         } else {
             executeResult.setSuccess(false);
-            executeResult.setExecuteStatus(ExecuteStatus.RUNTIME_ERROR);
+            if ("compileError".equals(executeCMDResult.getErrorOutput())){
+                executeResult.setExecuteStatus(ExecuteStatus.COMPILE_ERROR);
+            }else {
+                executeResult.setExecuteStatus(ExecuteStatus.RUNTIME_ERROR);
+            }
             executeResult.setOutputString(executeCMDResult.getErrorOutput());
         }
         return executeResult;

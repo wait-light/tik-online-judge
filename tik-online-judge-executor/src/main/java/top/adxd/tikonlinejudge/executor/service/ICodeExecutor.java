@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * 代码执行接口
  */
-public interface CodeExecutor {
-    ExecuteResult execute(ExecuteInput executeInput) throws ExecutionException, InterruptedException;
-    CompletableFuture<ExecuteResult> executeAsync(ExecuteInput executeInput) throws ExecutionException, InterruptedException;
+public interface ICodeExecutor {
+    ExecuteResult execute(ExecuteInput executeInput,boolean compile);
+    CompletableFuture<ExecuteResult> executeAsync(ExecuteInput executeInput,boolean compile);
 }

@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.executor.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,40 +14,57 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-21
+ * @since 2021-09-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("pms_problem_data")
-public class ProblemData implements Serializable {
+@TableName("pms_problem_collection")
+public class ProblemCollection implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 问题id
+     * 名称
      */
-    private Long problemId;
+    private String name;
 
     /**
-     * 输入
+     * 创建时间
      */
-    private String input;
+    private LocalDateTime createTime;
 
     /**
-     * 输出
+     * 更新时间
      */
-    private String output;
+    private LocalDateTime updateTime;
 
     /**
-     * 数据提供者
+     * 是否启用
+     */
+    private Boolean status;
+
+    /**
+     * 创建人
      */
     private Long createUserId;
+
+    /**
+     * 是否公开集
+     */
+    private Boolean publicCollection;
+
+    /**
+     * 开启时间
+     */
+    private LocalDateTime beginTime;
+
+    /**
+     * 结束时间
+     */
+    private LocalDateTime endTime;
 
 
 }

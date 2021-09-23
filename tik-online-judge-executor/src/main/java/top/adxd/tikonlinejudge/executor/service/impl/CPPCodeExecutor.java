@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.config.CppCodeExecuteConfig;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
-import top.adxd.tikonlinejudge.executor.service.CodeExecutor;
+import top.adxd.tikonlinejudge.executor.service.ICodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteInput;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteResult;
@@ -13,12 +13,12 @@ import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-@Service
-public class CPPCodeExecutor implements CodeExecutor {
+@Service("cppCodeExecutor")
+public class CPPCodeExecutor implements ICodeExecutor {
     @Autowired
     private CppCodeExecuteConfig cppCodeExecuteConfig;
     @Override
-    public ExecuteResult execute(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
+    public ExecuteResult execute(ExecuteInput executeInput,boolean isCompile)  {
 
         File file = new File(cppCodeExecuteConfig.getTargetPath());
         CmdExecutor compile = new CmdExecutor.CmdExecutorBuilder()
@@ -38,7 +38,7 @@ public class CPPCodeExecutor implements CodeExecutor {
     }
 
     @Override
-    public CompletableFuture<ExecuteResult> executeAsync(ExecuteInput executeInput) throws ExecutionException, InterruptedException {
+    public CompletableFuture<ExecuteResult> executeAsync(ExecuteInput executeInput,boolean isCompile)  {
         return null;
     }
 }

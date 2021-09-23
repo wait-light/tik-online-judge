@@ -1,6 +1,6 @@
 package top.adxd.tikonlinejudge.executor.mapper;
 
-import top.adxd.tikonlinejudge.executor.entity.Language;
+import top.adxd.tikonlinejudge.executor.entity.ProblemCollection;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-18
+ * @since 2021-09-22
  */
-public interface LanguageMapper extends BaseMapper<Language> {
+public interface ProblemCollectionMapper extends BaseMapper<ProblemCollection> {
 
 }

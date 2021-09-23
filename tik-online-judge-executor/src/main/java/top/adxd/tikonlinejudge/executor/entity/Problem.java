@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-18
+ * @since 2021-09-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -73,5 +73,14 @@ public class Problem implements Serializable {
 
     private String outputDescrible;
 
+    /**
+     * 所属合集
+     */
+    private Long collectionId;
+
+    /**
+     * 是否与其他集合共享
+     */
+    private Boolean share;
 
 }

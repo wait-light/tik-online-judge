@@ -11,28 +11,11 @@
  Target Server Version : 50735
  File Encoding         : 65001
 
- Date: 16/09/2021 18:05:06
+ Date: 21/09/2021 12:08:06
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for pms_language
--- ----------------------------
-DROP TABLE IF EXISTS `pms_language`;
-CREATE TABLE `pms_language`  (
-  `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '编程语言名称',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `status` bit(1) NULL DEFAULT b'1' COMMENT '状态(1启动/0关闭)',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pms_language
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for pms_problem
@@ -96,10 +79,11 @@ DROP TABLE IF EXISTS `pms_submit`;
 CREATE TABLE `pms_submit`  (
   `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
   `uid` bigint(10) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `language_id` bigint(10) UNSIGNED NULL DEFAULT NULL COMMENT '语言类型',
+  `language_type` tinyint(3) UNSIGNED NULL DEFAULT NULL COMMENT '语言类型',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL COMMENT '内容(编码内容)',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '提交时间',
   `status` tinyint(4) NULL DEFAULT NULL COMMENT '运行结果',
+  `problem_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '提交的问题',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 

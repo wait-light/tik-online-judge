@@ -1,6 +1,6 @@
 package top.adxd.tikonlinejudge.executor.service;
 
-import top.adxd.tikonlinejudge.executor.entity.Problem;
+import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author wait_light
  * @since 2021-09-22
  */
-public interface IProblemService extends IService<Problem> {
+public interface IProblemCollectionItemService extends IService<ProblemCollectionItem> {
 
 }

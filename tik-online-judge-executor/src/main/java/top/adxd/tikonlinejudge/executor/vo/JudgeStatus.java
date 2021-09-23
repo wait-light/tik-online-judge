@@ -28,5 +28,9 @@ public enum JudgeStatus {
     /**
      * 格式错误
      */
-    PRESENTATION_ERROR
+    PRESENTATION_ERROR,
+    /**
+     *结果错误
+     */
+    WRONG_ANSWER
 }

@@ -2,7 +2,7 @@ server:
   port: 8500
 spring:
   datasource:
-    url: jdbc:mysql://192.168.181.20:3306/judge_ums?useUnicode=true&useSSL=false&characterEncoding=utf8
+    url: jdbc:mysql://192.168.181.128:3306/judge_ums?useUnicode=true&useSSL=false&characterEncoding=utf8
     username: root
     password: root
 debug: false

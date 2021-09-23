@@ -19,7 +19,7 @@ public class JavaCodeExecuteConfig implements InitializingBean {
     /**
      * 要编译的类的全路径，包括类名
      */
-    public String classFullPath;
+    private String classFullPath;
     /**
      * 除了文件类型的全路径
      * 例如 classFullPath = D:/Main.java

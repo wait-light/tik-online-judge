@@ -62,7 +62,7 @@ public class ExecutorConfig implements InitializingBean {
             setMaxExecuteTime(Long.parseLong(maxExecuteTime));
         }
         globalBaseConfig = this;
-        defaultCharset = Charset.defaultCharset();
+        defaultCharset = Charset.forName("gbk");
     }
 
     /**
