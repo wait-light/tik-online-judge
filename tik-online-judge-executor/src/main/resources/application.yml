@@ -1,3 +1,5 @@
+mybatis-plus:
+  type-enums-package: top/adxd/tikonlinejudge/executor/vo
 tik-online-judge.executor:
   java:
     classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\java\Main.java
@@ -13,10 +15,10 @@ tik-online-judge.executor:
   python:
     codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\python\main.py
     open: true
-  threadpool:
-    corePoolSize: 1
-    maxNumberPoolSize: 2
-    keepAliveTime: 10
+#  threadpool:
+#    corePoolSize: 1
+#    maxNumberPoolSize: 2
+#    keepAliveTime: 10
 server:
   port: 8600
 spring:
@@ -25,3 +27,8 @@ spring:
     username: root
     password: root
 debug: false
+logging:
+  file:
+    path: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\log\log.txt
+  level:
+    root: info

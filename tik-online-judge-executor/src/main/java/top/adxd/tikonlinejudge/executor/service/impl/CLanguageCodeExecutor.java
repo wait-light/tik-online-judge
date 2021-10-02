@@ -33,7 +33,11 @@ public class CLanguageCodeExecutor implements ICodeExecutor {
                     .build();
             result = build.get();
         }else {
-            result.setErrorOutput("compileError");
+            /**
+             * 使用 -100代表编译错误
+             *
+             */
+            result.setExitCode(-100);
         }
         return ExecuteResult.parse(result);
     }

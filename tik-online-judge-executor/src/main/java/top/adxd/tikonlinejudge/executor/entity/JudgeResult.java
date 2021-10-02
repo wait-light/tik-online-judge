@@ -1,53 +1,63 @@
-package top.adxd.tikonlinejudge.executor.vo;
+package top.adxd.tikonlinejudge.executor.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
+import java.io.Serializable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import top.adxd.tikonlinejudge.executor.exception.runtime.ParseException;
+import top.adxd.tikonlinejudge.executor.vo.ExecuteResult;
+import top.adxd.tikonlinejudge.executor.vo.ExecuteStatus;
+import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
 
-public class JudgeResult {
-    public Long submitId;
-    public JudgeStatus judgeStatus;
-    public Boolean success;
-    public Long executionTime;
-    public String output;
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author wait_light
+ * @since 2021-09-24
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("pms_judge_result")
+public class JudgeResult implements Serializable {
 
-    public String getOutput() {
-        return output;
-    }
+    private static final long serialVersionUID = 1L;
 
-    public void setOutput(String output) {
-        this.output = output;
-    }
+    /**
+     * id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-    public JudgeStatus getJudgeStatus() {
-        return judgeStatus;
-    }
+    /**
+     * 对应的提交id
+     */
+    private Long submitId;
 
-    public void setJudgeStatus(JudgeStatus judgeStatus) {
-        this.judgeStatus = judgeStatus;
-    }
+    /**
+     * 提交状态
+     */
+    private JudgeStatus judgeStatus;
 
-    public Boolean getSuccess() {
-        return success;
-    }
+    /**
+     * 执行时常
+     */
+    private Long executionTime;
 
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
+    /**
+     * 错误信息
+     */
+    private String errorOutput;
 
-    public Long getExecutionTime() {
-        return executionTime;
-    }
+    /**
+     * 是否成功
+     */
+    private Boolean success;
 
-    public void setExecutionTime(Long executionTime) {
-        this.executionTime = executionTime;
-    }
-
-    public Long getSubmitId() {
-        return submitId;
-    }
-
-    public void setSubmitId(Long submitId) {
-        this.submitId = submitId;
-    }
 
     public static JudgeResult parse(ExecuteResult executeResult, Long submitId, String output, Long executionTime) {
         if (null == executeResult) {
@@ -69,7 +79,7 @@ public class JudgeResult {
                 if (correct) {
                     judgeResult.setJudgeStatus(JudgeStatus.ACCEPT);
                     //运行超时
-                    if (judgeResult.getExecutionTime() > executionTime) {
+                    if (executeResult.getExecuteTime() > executionTime) {
                         judgeResult.setJudgeStatus(JudgeStatus.TIME_LIME_EXCEEDED);
                     }
                 } else {
@@ -111,14 +121,16 @@ public class JudgeResult {
                 judgeResult.setJudgeStatus(JudgeStatus.TIME_LIME_EXCEEDED);
             } else if (ExecuteStatus.COMPILE_ERROR.equals(executeResult.getExecuteStatus())) {
                 judgeResult.setJudgeStatus(JudgeStatus.COMPILE_ERROR);
-            } else if (judgeResult.getExecutionTime() > executionTime) {
+            } else if (executeResult.getExecuteTime() > executionTime) {
                 judgeResult.setJudgeStatus(JudgeStatus.TIME_LIME_EXCEEDED);
             } else {
                 judgeResult.setJudgeStatus(JudgeStatus.RUNTIME_ERROR);
             }
             judgeResult.setSuccess(false);
         }
-        judgeResult.setOutput(executeResult.getOutputString());
+        if (!executeResult.success){
+            judgeResult.setErrorOutput(executeResult.getOutputString());
+        }
         judgeResult.setExecutionTime(executeResult.getExecuteTime());
         return judgeResult;
     }
@@ -130,7 +142,8 @@ public class JudgeResult {
                 ", judgeStatus=" + judgeStatus +
                 ", success=" + success +
                 ", executionTime=" + executionTime +
-                ", output='" + output + '\'' +
+                ", output='" + errorOutput + '\'' +
                 '}';
     }
+
 }

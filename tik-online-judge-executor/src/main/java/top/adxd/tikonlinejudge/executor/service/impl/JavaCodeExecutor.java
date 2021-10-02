@@ -38,6 +38,12 @@ public class JavaCodeExecutor implements ICodeExecutor {
                     .setInput(new String[]{executeInput.getInput()})
                     .build();
             result = java_main.get();
+        }else {
+            /**
+             * 使用 -100代表编译错误
+             *
+             */
+            result.setExitCode(-100);
         }
 
         return ExecuteResult.parse(result);

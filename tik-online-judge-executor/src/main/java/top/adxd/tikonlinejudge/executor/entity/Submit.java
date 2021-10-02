@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
 
 import javax.validation.constraints.NotNull;
 
@@ -22,7 +23,6 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 @TableName("pms_submit")
 public class Submit implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,7 +34,6 @@ public class Submit implements Serializable {
     /**
      * 用户id
      */
-    @NotNull
     private Long uid;
 
     /**
@@ -57,13 +56,11 @@ public class Submit implements Serializable {
     /**
      * 运行结果
      */
-    private Integer status;
+    private JudgeStatus status;
 
     /**
      * 提交的问题
      */
     @NotNull
     private Long problemId;
-
-
 }

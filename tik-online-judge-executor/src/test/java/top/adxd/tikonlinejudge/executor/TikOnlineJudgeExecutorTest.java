@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
 import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
@@ -12,13 +13,11 @@ import top.adxd.tikonlinejudge.executor.service.impl.CPPCodeExecutor;
 import top.adxd.tikonlinejudge.executor.service.impl.JavaCodeExecutor;
 import top.adxd.tikonlinejudge.executor.service.impl.PythonCodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
-import top.adxd.tikonlinejudge.executor.vo.JudgeResult;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 

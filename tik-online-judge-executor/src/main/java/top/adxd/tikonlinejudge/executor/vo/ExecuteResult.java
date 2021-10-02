@@ -65,9 +65,9 @@ public class ExecuteResult {
             executeResult.setOutputString(executeCMDResult.getSuccessOutput());
         } else {
             executeResult.setSuccess(false);
-            if ("compileError".equals(executeCMDResult.getErrorOutput())){
+            if (-100 == executeCMDResult.getExitCode()) {
                 executeResult.setExecuteStatus(ExecuteStatus.COMPILE_ERROR);
-            }else {
+            } else {
                 executeResult.setExecuteStatus(ExecuteStatus.RUNTIME_ERROR);
             }
             executeResult.setOutputString(executeCMDResult.getErrorOutput());
