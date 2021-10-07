@@ -34,7 +34,7 @@ public class SubmitController {
     @Autowired
     private ISubmitService submitService;
     @Autowired
-    private ICodeJudge codeJudge;
+    private ICodeJudge dockerJavaCodeJudge;
     @Autowired
     private ThreadPoolExecutor executor;
 
@@ -54,7 +54,6 @@ public class SubmitController {
 
     @PostMapping("/judge")
     public CommonResult judgeAsync(@RequestBody @Valid Submit submit) {
-        //TODO 攻击检查
         //TODO 用户
         submit.setUid(1L);
         submit.setCreateTime(LocalDateTime.now());
@@ -66,7 +65,7 @@ public class SubmitController {
          * 异步运行
          */
         CompletableFuture.runAsync(() -> {
-            codeJudge.judge(submit);
+            dockerJavaCodeJudge.judge(submit);
         }, executor);
         return CommonResult.success("提交成功");
     }

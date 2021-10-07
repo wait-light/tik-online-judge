@@ -1,20 +1,24 @@
 mybatis-plus:
   type-enums-package: top/adxd/tikonlinejudge/executor/vo
 tik-online-judge.executor:
-  java:
-    classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\java\Main.java
-    open: true
-  cpp:
-    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\cpp\main.cpp
-    open: true
-    gppPath: D:\soft\MinGw\bin\g++
-  clanguage:
-    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\CLanguage\main.c
-    open: true
-    gccPath: D:\soft\MinGw\bin\gcc
-  python:
-    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\python\main.py
-    open: true
+  docker-java:
+    path: /tmp/judge-info/judge-java
+#    runcommond: docker run -it -v /home/light/code/online-judge-docker/docker-java/judge-info:/usr/src/judge/ --rm judge-java
+#runcommond:docker run -it --name judge-java -v /home/light/code/online-judge-docker/docker-java/Main.java:/usr/src/judge/Main.java judge-java
+#  java:
+#    classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\java\Main.java
+#    open: true
+#  cpp:
+#    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\cpp\main.cpp
+#    open: true
+#    gppPath: D:\soft\MinGw\bin\g++
+#  clanguage:
+#    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\CLanguage\main.c
+#    open: true
+#    gccPath: D:\soft\MinGw\bin\gcc
+#  python:
+#    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\python\main.py
+#    open: true
 #  threadpool:
 #    corePoolSize: 1
 #    maxNumberPoolSize: 2
@@ -23,7 +27,7 @@ server:
   port: 8600
 spring:
   datasource:
-    url: jdbc:mysql://192.168.181.128:3306/judge_pms?useUnicode=true&useSSL=false&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/judge_pms?useUnicode=true&useSSL=false&characterEncoding=utf8
     username: root
     password: root
 debug: false

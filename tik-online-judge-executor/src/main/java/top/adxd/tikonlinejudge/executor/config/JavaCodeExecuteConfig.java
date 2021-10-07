@@ -33,7 +33,7 @@ public class JavaCodeExecuteConfig implements InitializingBean {
     /**
      * 是否开启java代码执行器
      */
-    private Boolean open;
+    private Boolean open = false;
     /**
      * 代码所在目录
      * 例如 classFullPath = D:/Main.java

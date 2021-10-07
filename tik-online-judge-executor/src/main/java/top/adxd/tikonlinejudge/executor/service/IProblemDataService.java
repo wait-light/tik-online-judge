@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.executor.service;
 
 import top.adxd.tikonlinejudge.executor.entity.ProblemData;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.adxd.tikonlinejudge.executor.entity.Submit;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ import java.util.List;
  */
 public interface IProblemDataService extends IService<ProblemData> {
     List<ProblemData> getProblemDataList(Long problemId);
+    List<ProblemData> getProblemDataList(Submit submit);
 }

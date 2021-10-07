@@ -1,27 +1,89 @@
 package top.adxd.tikonlinejudge.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.async.ResultCallbackTemplate;
+import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.command.LogContainerCmd;
-import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import com.github.dockerjava.transport.DockerHttpClient;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import top.adxd.tikonlinejudge.executor.config.DockerConfig;
+import top.adxd.tikonlinejudge.executor.config.docker.impl.JavaDockerConfig;
+import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
+import top.adxd.tikonlinejudge.executor.entity.Submit;
+import top.adxd.tikonlinejudge.executor.service.impl.DockerJavaCodeJudge;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 
+@SpringBootTest
 public class DockerApiTest {
+    @Autowired
+    private JavaDockerConfig javaDockerConfig;
+//    @BeforeAll
+//    public void beforeAll(){
+//        System.out.printf("--------------------");
+//    }
+//    @AfterAll
+//    public void  afterAll(){
+//        System.out.printf("-----------");
+//    }
+    @Autowired
+    private DockerClient dockerClient;
+    private static final String TRIM_END_REGEX = "[\\s]*$";
+    private String trimEndsS(String src) {
+        return src.replaceFirst(TRIM_END_REGEX, "");
+    }
+    @Test
+    public void trimTest(){
+        String str = "\r\nasdaasdasd\r\n";
+        String s = trimEndsS(str);
+        System.out.println(s);
+    }
+    @Test
+    public void jjj(){
+//        DockerClientConfig dockerClientConfig = dockerConfig.dockerClientConfig();
+//        List<JudgeResult> judge = dockerJavaCodeJudge.judge(submit);
+//        Volume volume = new Volume();
+//        InspectContainerResponse exec = dockerClient.inspectContainerCmd("judge-java").exec();
+//        VolumeBind[] volumes = exec.getVolumes();
+//        System.out.println(Arrays.toString(volumes));
+//        Volume volume = new Volume(javaDockerConfig.getPath()+"/:/usr/src/judge/");
+//        HostConfig hostConfig = new HostConfig();
+//        Volume inner = new Volume("/usr/src/judge/");
+//        Bind bind = new Bind(javaDockerConfig.getPath(), inner);
+//        hostConfig.setBinds(bind);
+//        try {
+//            CreateContainerResponse exec = dockerClient.createContainerCmd("judge-java")
+//                    .withHostConfig(hostConfig)
+//                    .withName("judge-java")
+//                    .exec();
+//        }catch (Exception ep){
+//            System.out.println(ep.getLocalizedMessage());
+//        }
+        Instant parse = Instant.parse("2021-10-07T13:06:58.089735728Z");
+        Instant parse2 = Instant.parse("2021-10-07T13:06:58.502332363Z");
+        int nano = Duration.between(parse, parse2).getNano();
+        long seconds = Duration.between(parse, parse2).getSeconds();
+        System.out.println(seconds);
+        System.out.println(nano);
+
+    }
     @Test
     public void realTest() {
         System.out.println("开始");

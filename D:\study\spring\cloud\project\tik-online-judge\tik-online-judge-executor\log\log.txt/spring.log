@@ -1,0 +1,31 @@
+2021-10-07 22:32:42.900  INFO 242050 --- [main] .a.t.e.TikOnlineJudgeExecutorApplication : Starting TikOnlineJudgeExecutorApplication using Java 1.8.0_292 on light-w650kjkk with PID 242050 (/home/light/code/tik-online-judge/tik-online-judge-executor/target/classes started by light in /home/light/code/tik-online-judge)
+2021-10-07 22:32:42.937  INFO 242050 --- [main] .a.t.e.TikOnlineJudgeExecutorApplication : No active profile set, falling back to default profiles: default
+2021-10-07 22:32:45.174  INFO 242050 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8600 (http)
+2021-10-07 22:32:45.181  INFO 242050 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-10-07 22:32:45.181  INFO 242050 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.52]
+2021-10-07 22:32:45.248  INFO 242050 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-10-07 22:32:45.249  INFO 242050 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2162 ms
+2021-10-07 22:32:46.335  INFO 242050 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8600 (http) with context path ''
+2021-10-07 22:32:46.345  INFO 242050 --- [main] .a.t.e.TikOnlineJudgeExecutorApplication : Started TikOnlineJudgeExecutorApplication in 4.046 seconds (JVM running for 5.52)
+2021-10-07 22:33:10.081  INFO 242050 --- [http-nio-8600-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-10-07 22:33:10.081  INFO 242050 --- [http-nio-8600-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-10-07 22:33:10.082  INFO 242050 --- [http-nio-8600-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2021-10-07 22:33:10.142  INFO 242050 --- [http-nio-8600-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-10-07 22:33:10.245  INFO 242050 --- [http-nio-8600-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-10-07 22:35:56.664  WARN 242050 --- [http-nio-8600-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "judge"]
+2021-10-07 22:41:01.627  INFO 242050 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-10-07 22:41:01.635  INFO 242050 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2021-10-07 22:41:04.873  INFO 248445 --- [main] .a.t.e.TikOnlineJudgeExecutorApplication : Starting TikOnlineJudgeExecutorApplication using Java 1.8.0_292 on light-w650kjkk with PID 248445 (/home/light/code/tik-online-judge/tik-online-judge-executor/target/classes started by light in /home/light/code/tik-online-judge)
+2021-10-07 22:41:04.875  INFO 248445 --- [main] .a.t.e.TikOnlineJudgeExecutorApplication : No active profile set, falling back to default profiles: default
+2021-10-07 22:41:06.086  INFO 248445 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8600 (http)
+2021-10-07 22:41:06.093  INFO 248445 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-10-07 22:41:06.093  INFO 248445 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.52]
+2021-10-07 22:41:06.148  INFO 248445 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-10-07 22:41:06.148  INFO 248445 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1230 ms
+2021-10-07 22:41:07.078  INFO 248445 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8600 (http) with context path ''
+2021-10-07 22:41:07.086  INFO 248445 --- [main] .a.t.e.TikOnlineJudgeExecutorApplication : Started TikOnlineJudgeExecutorApplication in 2.546 seconds (JVM running for 3.059)
+2021-10-07 22:43:32.425  INFO 248445 --- [http-nio-8600-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-10-07 22:43:32.425  INFO 248445 --- [http-nio-8600-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-10-07 22:43:32.426  INFO 248445 --- [http-nio-8600-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2021-10-07 22:43:39.180  INFO 248445 --- [http-nio-8600-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-10-07 22:43:39.371  INFO 248445 --- [http-nio-8600-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.

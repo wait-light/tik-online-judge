@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import top.adxd.tikonlinejudge.executor.entity.ProblemData;
+import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.mapper.ProblemDataMapper;
 import top.adxd.tikonlinejudge.executor.service.IProblemDataService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -27,5 +28,13 @@ public class ProblemDataServiceImpl extends ServiceImpl<ProblemDataMapper, Probl
             return new ArrayList<>();
         }
         return baseMapper.selectList(new QueryWrapper<ProblemData>().eq("problem_id", problemId));
+    }
+
+    @Override
+    public List<ProblemData> getProblemDataList(Submit submit) {
+        if (submit == null){
+            return new ArrayList<>();
+        }
+        return getProblemDataList(submit.getProblemId());
     }
 }
