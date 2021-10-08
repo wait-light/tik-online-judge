@@ -31,8 +31,3 @@ spring:
     username: root
     password: root
 debug: false
-logging:
-  file:
-    path: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\log\log.txt
-  level:
-    root: info

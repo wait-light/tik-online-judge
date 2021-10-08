@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-09-21
  */
 public interface ISubmitService extends IService<Submit> {
-
 }

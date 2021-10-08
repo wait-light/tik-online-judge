@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.mapper.JudgeResultMapper;
@@ -9,6 +10,7 @@ import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
+import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
 import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, JudgeResult> implements IJudgeResultService {
     @Autowired
     private ISubmitService submitService;
+
 
     @Override
     public SubmitJudgeResult submitJudgeResults(Long submitId) {
@@ -70,6 +73,29 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
             result.add(submitJudgeResult);
         }
         return result;
+    }
+
+    @Transactional
+    @Override
+    public void updateCommitAfterJudge(List<JudgeResult> judgeResults,Submit submit) {
+        if (judgeResults == null || judgeResults.size()<=0 || submit == null){
+            return;
+        }
+        JudgeStatus submitStatus = null;
+        int acceptCount = 0;
+        for (JudgeResult judgeResult : judgeResults){
+            if (judgeResult.getJudgeStatus() == JudgeStatus.ACCEPT){
+                acceptCount ++;
+            }else {
+               submitStatus =  judgeResult.getJudgeStatus();
+            }
+        }
+        if (acceptCount == judgeResults.size()){
+            submitStatus = JudgeStatus.ACCEPT;
+        }
+        this.saveBatch(judgeResults);
+        submit.setStatus(submitStatus);
+        submitService.updateById(submit);
     }
 
     private void fillData(SubmitJudgeResult submitJudgeResult, Submit submit) {

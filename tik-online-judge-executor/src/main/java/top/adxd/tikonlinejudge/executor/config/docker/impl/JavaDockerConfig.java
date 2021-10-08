@@ -26,6 +26,7 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
     private String sourcePath;
     private String compileTime;
     private String compileInfo;
+    private String needCompile;
 
 
     @Override
@@ -85,6 +86,14 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
             compileInfo = path + ICompileAbleConfig.COMPILE_INFO;
         }
         return compileInfo;
+    }
+
+    @Override
+    public String needCompile() {
+        if (needCompile == null){
+            needCompile = path + ICompileAbleConfig.NEED_COMPILE;
+        }
+        return needCompile;
     }
 
     @Override

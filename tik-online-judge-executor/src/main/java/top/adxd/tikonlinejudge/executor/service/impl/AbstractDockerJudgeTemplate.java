@@ -62,14 +62,22 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             problemDataList.add(problemData);
         }
         List<JudgeResult> results = new ArrayList<>();
+        int count = 0;
         for (ProblemData problemData : problemDataList){
             writeInputOutput(problemData);
+            if (count == 0){
+                //第一次需要编译
+                setNeedCompile(true);
+            }else if (count == 1){
+                setNeedCompile(false);
+            }
             JudgeResult judge = judge(problemData,submit.getId());
             results.add(judge);
             //编译错误，后续不在运行
             if (judge.getJudgeStatus() == JudgeStatus.COMPILE_ERROR){
                 return results;
             }
+            count++;
         }
         return results;
     }
@@ -143,10 +151,25 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         return start.awaitStatusCode(time, TimeUnit.MILLISECONDS);
     }
 
-    protected String startContainer(){
-        return dockerClient
+    /**
+     * 设置本次启动是否需要编译
+     * @param needCompile
+     */
+    protected void setNeedCompile(boolean needCompile){
+        if (dockerJudgeConfig instanceof ICompileAbleConfig){
+            String needCompilePath = ((ICompileAbleConfig) dockerJudgeConfig).needCompile();
+            if (needCompile){
+                fileReaderWriter.writer(needCompilePath,"1",false);
+            }else {
+                fileReaderWriter.writer(needCompilePath,"0",false);
+            }
+        }
+    }
+
+    protected void startContainer(){
+        dockerClient
                 .startContainerCmd(dockerJudgeConfig.getContainerName())
-                .getContainerId();
+                .exec();
     }
     protected String getCompileErrorMessage(){
         if (dockerJudgeConfig instanceof ICompileAbleConfig){
@@ -206,7 +229,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     /**
      * 获取程序执行时间
      * 计算公式：程序执行时间 = 容器退出时间 - 容器开始时间 - 编译时间 - 10ms;
-     * 其中10ms为容器的开销
+     * 其中100ms为容器的开销 不稳定开销
      * @return
      */
     protected Long getExecuteTime(){
@@ -220,7 +243,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         Instant startInstant = Instant.parse(startedAt);
         Instant finishedInstant = Instant.parse(finishedAt);
         Duration between = Duration.between(startInstant, finishedInstant);
-        Long executeTime = -compileTime + between.getSeconds() + between.getNano() / 1000000 - 100000;
+        Long executeTime = -compileTime + between.getSeconds() * 1000 + between.getNano() / 1000000 - 100;
         if (executeTime < 0)
         {
             executeTime = 0L;

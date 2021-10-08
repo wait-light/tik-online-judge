@@ -15,6 +15,7 @@ import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
+import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,8 @@ public class SubmitController {
     private ISubmitService submitService;
     @Autowired
     private ICodeJudge dockerJavaCodeJudge;
+    @Autowired
+    private IJudgeResultService judgeResultService;
     @Autowired
     private ThreadPoolExecutor executor;
 
@@ -64,9 +67,13 @@ public class SubmitController {
         /**
          * 异步运行
          */
-        CompletableFuture.runAsync(() -> {
-            dockerJavaCodeJudge.judge(submit);
-        }, executor);
+        CompletableFuture
+                .supplyAsync(() -> {
+                    return dockerJavaCodeJudge.judge(submit);
+                }, executor)
+                .thenAcceptAsync((result) -> {
+                    judgeResultService.updateCommitAfterJudge(result,submit);
+                }, executor);
         return CommonResult.success("提交成功");
     }
 

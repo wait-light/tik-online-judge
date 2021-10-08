@@ -30,7 +30,7 @@ public class FileReaderWriterImpl implements IFileReaderWriter {
                 e.printStackTrace();
             }
         }
-        if (!file.isFile() || !file.canWrite()) {
+        if (!file.isFile()) {
             return;
         }
         try {
