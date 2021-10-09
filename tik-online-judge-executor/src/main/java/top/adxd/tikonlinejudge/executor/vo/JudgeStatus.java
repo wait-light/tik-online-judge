@@ -3,6 +3,10 @@ package top.adxd.tikonlinejudge.executor.vo;
 import com.baomidou.mybatisplus.annotation.IEnum;
 import lombok.Getter;
 
+/**
+ * @author light
+ */
+
 @Getter
 public enum JudgeStatus implements IEnum<Integer> {
     /**

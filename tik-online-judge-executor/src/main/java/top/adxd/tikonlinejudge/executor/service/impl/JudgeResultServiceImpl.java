@@ -75,7 +75,7 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
         return result;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public void updateCommitAfterJudge(List<JudgeResult> judgeResults,Submit submit) {
         if (judgeResults == null || judgeResults.size()<=0 || submit == null){

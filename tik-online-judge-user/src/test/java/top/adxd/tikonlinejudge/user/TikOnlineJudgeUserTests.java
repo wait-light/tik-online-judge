@@ -2,6 +2,8 @@ package top.adxd.tikonlinejudge.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import top.adxd.tikonlinejudge.user.utils.HashUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,16 +17,17 @@ import java.util.Map;
  * @create 2021/9/6
  */
 //@Slf4j
-//@SpringBootTest
+@SpringBootTest
 public class TikOnlineJudgeUserTests {
 
     @Test
     public void aaaaa() {
-        boolean can = true;
-        for (int i = 0; i < 10; i++) {
-            can &= i % 2 == 0;
-        }
-        System.out.println(can);
+        System.out.println(HashUtil.hash("admin"));
+//        boolean can = true;
+//        for (int i = 0; i < 10; i++) {
+//            can &= i % 2 == 0;
+//        }
+//        System.out.println(can);
     }
 
     @Test

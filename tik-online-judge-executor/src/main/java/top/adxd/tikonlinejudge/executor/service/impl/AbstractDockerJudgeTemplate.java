@@ -22,7 +22,6 @@ import top.adxd.tikonlinejudge.executor.service.IFileReaderWriter;
 import top.adxd.tikonlinejudge.executor.service.IProblemDataService;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -31,12 +30,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 使用Docker进行编译、运行的模板类
+ * @author light
  */
-@Slf4j
 public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> implements ICodeJudge {
     private static final Logger logger = LoggerFactory.getLogger(AbstractDockerJudgeTemplate.class);
     private static final String TRIM_END_REGEX = "[\\s]*$";
     //防止直接与默认Long最小值操作的时与所预期的想法不同。（越界）
+
     private static final Long MIN_TIME = Long.MIN_VALUE /2;
     @Autowired
     protected T dockerJudgeConfig;
@@ -51,9 +51,14 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     @Autowired
     protected ISubmitService submitService;
 
+    /**
+     * 防止多个线程同时访问某个语言的评判
+     * @param submit
+     * @return
+     */
     @Override
-    public List<JudgeResult> judge(Submit submit) {
-        writeSource(submit,true);
+    public synchronized List<JudgeResult> judge(Submit submit) {
+        writeSource(submit);
         List<ProblemData> problemDataList = problemDataService.getProblemDataList(submit);
         //保证不报空指针异常
         if (problemDataList.size() == 0){
@@ -142,7 +147,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     /**
      * 等待程序执行完成
      * @param time 等待时间，通常为程序允许运行的最大时间
-     * @return
+     * @return 程序退出码
      */
     protected Integer waitProcess(Long time){
         WaitContainerResultCallback start = dockerClient
@@ -199,13 +204,13 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             logger.error(e.getLocalizedMessage());
         }
         if (success && null != exec ){
-            log.trace("成功创建容器：" + exec.getId());
+            logger.trace("成功创建容器：" + exec.getId());
         }
     }
 
     /**
      * 获取文件中程序执行的输出或者错误
-     * @return
+     * @return 程序执行的输出或者错误
      */
     protected String getOutput(){
         return fileReaderWriter.Reader(dockerJudgeConfig.getOutput());
@@ -266,12 +271,9 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     /**
      * 写入源文件
      */
-    protected void writeSource(Submit submit,Boolean needWriteCode){
+    protected void writeSource(Submit submit){
         if (submit == null){
             return;
-        }
-        if (needWriteCode == null){
-            needWriteCode = true;
         }
         String sourcePath = dockerJudgeConfig.getSourcePath();
         fileReaderWriter.writer(sourcePath,submit.getContent(),false);

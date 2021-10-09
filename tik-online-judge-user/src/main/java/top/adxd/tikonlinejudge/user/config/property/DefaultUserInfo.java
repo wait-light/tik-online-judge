@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties("tik-online-judge-user.user-default")
-public class DefaultInfo {
+public class DefaultUserInfo {
     public String avatar;
 
     public String getAvatar() {

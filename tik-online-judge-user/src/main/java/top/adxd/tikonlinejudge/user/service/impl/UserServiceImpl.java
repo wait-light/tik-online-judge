@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import top.adxd.tikonlinejudge.user.entity.User;
 import top.adxd.tikonlinejudge.user.mapper.UserMapper;
 import top.adxd.tikonlinejudge.user.service.IUserService;
@@ -17,4 +18,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
+    @Override
+    public User getUser(String email) {
+        if (email == null || "".equals(email)){
+            return null;
+        }
+        return getOne(new QueryWrapper<User>().eq("email",email));
+    }
 }

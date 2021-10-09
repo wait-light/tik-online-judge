@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
+import top.adxd.tikonlinejudge.executor.annotation.FrequencyLimit;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
 import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
@@ -56,6 +57,7 @@ public class SubmitController {
 //    }
 
     @PostMapping("/judge")
+//    @FrequencyLimit(value = 12,name = "judgeAsync")
     public CommonResult judgeAsync(@RequestBody @Valid Submit submit) {
         //TODO 用户
         submit.setUid(1L);
