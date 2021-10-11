@@ -13,7 +13,8 @@
 
  Date: 03/10/2021 10:48:08
 */
-
+CREATE DATABASE judge_cms;
+USE judge_cms;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 

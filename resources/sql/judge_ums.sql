@@ -1,3 +1,4 @@
+
 /*
  Navicat Premium Data Transfer
 
@@ -13,9 +14,10 @@
 
  Date: 03/10/2021 10:48:28
 */
-
+CREATE DATABASE judge_ums;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+USE judge_ums;
 
 -- ----------------------------
 -- Table structure for ums_menu
