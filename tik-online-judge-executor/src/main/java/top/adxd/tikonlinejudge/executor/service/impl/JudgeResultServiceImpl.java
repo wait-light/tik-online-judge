@@ -1,8 +1,13 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.mapper.JudgeResultMapper;
@@ -12,7 +17,9 @@ import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
 import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
+import top.adxd.tikonlinejudge.user.api.Token2User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,10 +36,16 @@ import java.util.stream.Collectors;
 public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, JudgeResult> implements IJudgeResultService {
     @Autowired
     private ISubmitService submitService;
-
-
+    @DubboReference
+    private Token2User token2User;
     @Override
     public SubmitJudgeResult submitJudgeResults(Long submitId) {
+        String token = ServletUtils.getHeader("token");
+        Long uid = token2User.uid(token);
+        Submit submit = submitService.getOne(new QueryWrapper<Submit>().eq("id", submitId).eq("uid", uid));
+        if (submit == null){
+           return null;
+        }
         List<JudgeResult> submitResults = baseMapper.selectList(new QueryWrapper<JudgeResult>().eq("submit_id", submitId));
         SubmitJudgeResult submitJudgeResult = new SubmitJudgeResult();
         submitJudgeResult.setJudgeResults(submitResults);

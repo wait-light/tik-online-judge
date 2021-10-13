@@ -128,4 +128,8 @@ public class ServletUtils {
         return StrUtil.containsAnyIgnoreCase(ajax, "json", "xml");
 
     }
+
+    public static String getHeader(String key){
+        return getRequest().getHeader(key);
+    }
 }

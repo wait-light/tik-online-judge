@@ -50,9 +50,7 @@ public class ProblemController {
 
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable("id") Long id){
-        return problemService.removeById(id) ?
-            CommonResult.success().setMsg("删除成功") :
-            CommonResult.error().setMsg("删除失败");
+        return problemService.delete(id);
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,8 @@
 package top.adxd.tikonlinejudge.executor.vo;
 
-public class ExecuteCMDResult{
+import java.io.Serializable;
+
+public class ExecuteCMDResult implements Serializable {
     private String successOutput;
     private String errorOutput;
     private boolean success;

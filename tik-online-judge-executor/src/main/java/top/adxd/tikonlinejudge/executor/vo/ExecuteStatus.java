@@ -1,9 +1,11 @@
 package top.adxd.tikonlinejudge.executor.vo;
 
+import java.io.Serializable;
+
 /**
  * 执行状态
  */
-public enum ExecuteStatus {
+public enum ExecuteStatus implements Serializable {
     /**
      * 执行成功
      */

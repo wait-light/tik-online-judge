@@ -10,10 +10,16 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import top.adxd.tikonlinejudge.user.entity.User;
+import top.adxd.tikonlinejudge.user.service.IUserService;
+
 /**
  * @author light
  **/
 public class PasswordRealm extends AuthorizingRealm {
+    @Autowired
+    private IUserService userService;
 
     public PasswordRealm(CredentialsMatcher credentialsMatcher){
         super(credentialsMatcher);
@@ -30,14 +36,16 @@ public class PasswordRealm extends AuthorizingRealm {
             throw new AuthenticationException("账号密码为空");
         }
         Object principal = authenticationToken.getPrincipal();
+        User user = userService.getUserByUsername((String) authenticationToken.getPrincipal());
+        if (user == null){
+            throw new AuthenticationException("账号或密码不正确");
+        }
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
                 principal,
-                "3fed7a346e430ea4c2aa10250928f4de",
-                ByteSource.Util.bytes("admin"),
+                user.getPassword(),
+                ByteSource.Util.bytes(user.getUsername()),
                 getName()
-
         );
-//        simpleAuthenticationInfo.setPrincipals();
         return simpleAuthenticationInfo;
     }
 

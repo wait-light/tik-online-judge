@@ -1,6 +1,8 @@
 package top.adxd.tikonlinejudge.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.BeanUtils;
+import top.adxd.tikonlinejudge.user.api.Vo.SafeUserVo;
 import top.adxd.tikonlinejudge.user.entity.User;
 import top.adxd.tikonlinejudge.user.mapper.UserMapper;
 import top.adxd.tikonlinejudge.user.service.IUserService;
@@ -24,5 +26,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return null;
         }
         return getOne(new QueryWrapper<User>().eq("email",email));
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        if (username == null || "".equals(username)){
+            return null;
+        }
+        return getOne(new QueryWrapper<User>().eq("username",username));
+    }
+
+    @Override
+    public SafeUserVo getSafeUser(Long uid) {
+        QueryWrapper<User> select = new QueryWrapper<User>()
+                .eq("uid", uid)
+                .select("uid", "username", "nickname", "avatar");
+        User user = getOne(select);
+        SafeUserVo safeUserVo = new SafeUserVo();
+        BeanUtils.copyProperties(user,safeUserVo);
+        return safeUserVo;
     }
 }

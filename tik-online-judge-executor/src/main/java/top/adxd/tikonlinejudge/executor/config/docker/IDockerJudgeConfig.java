@@ -7,12 +7,14 @@ package top.adxd.tikonlinejudge.executor.config.docker;
  */
 public interface IDockerJudgeConfig {
     String INPUT = "/input";
-    String OUTPUT = "/output";
+    String STDOUT = "/stdout";
+    String STDERR = "/stderr";
     String getContainerName();
     String getPath();
     String getImageName();
     String getWorkDir();
-    String getOutput();
+    String getStdout();
+    String getStderr();
     String getInput();
     String getSourcePath();
 }

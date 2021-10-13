@@ -38,6 +38,8 @@ public class UserRealmServiceImpl implements IUserRealmService {
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private DefaultUserInfo defaultUserInfo;
+    @Autowired
+    private UserTokenService userTokenService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -63,6 +65,7 @@ public class UserRealmServiceImpl implements IUserRealmService {
                 user.setNickname(RandomUtil.randomString(15));
                 userService.save(user);
             }
+            userTokenService.issueRenewalToken(user);
         } else {
             throw new AuthenticationException("验证码错误");
         }

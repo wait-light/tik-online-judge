@@ -7,7 +7,7 @@ import com.github.dockerjava.api.command.WaitContainerResultCallback;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
-import lombok.extern.slf4j.Slf4j;
+import com.github.dockerjava.transport.DockerHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +73,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             if (count == 0){
                 //第一次需要编译
                 setNeedCompile(true);
+                clearCompileInfo();
             }else if (count == 1){
                 setNeedCompile(false);
             }
@@ -87,6 +88,12 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         return results;
     }
 
+    protected void clearCompileInfo() {
+        if (dockerJudgeConfig instanceof ICompileAbleConfig) {
+            fileReaderWriter.writer(((ICompileAbleConfig) dockerJudgeConfig).getCompileInfo(), "", false);
+        }
+    }
+
     /**
      *
      * @param problemData 问题数据项
@@ -96,22 +103,21 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         judgeResult.setSubmitId(submitId);
         //启动程序
         startContainer();
-        //等待程序运行
-        Integer exitCode = waitProcess(1500L);
+        //TODO 等待程序强行停止的时间
+        stopProcess(3);
+        String compileErrorMessage = getCompileErrorMessage();
+        if (!"".equals(compileErrorMessage.trim())){
+            judgeResult.setJudgeStatus(JudgeStatus.COMPILE_ERROR);
+            judgeResult.setErrorOutput(compileErrorMessage);
+            judgeResult.setSuccess(false);
+            return judgeResult;
+        }
         //非正常退出
-        if (exitCode != 0){
-            String compileErrorMessage = getCompileErrorMessage();
-            //编译错误
-            if (!"".equals(compileErrorMessage.trim())){
-                judgeResult.setJudgeStatus(JudgeStatus.COMPILE_ERROR);
-                judgeResult.setErrorOutput(compileErrorMessage);
-                judgeResult.setSuccess(false);
-            }else {
-                String output = getOutput();
-                judgeResult.setErrorOutput(output);
-                judgeResult.setJudgeStatus(JudgeStatus.RUNTIME_ERROR);
-                judgeResult.setSuccess(false);
-            }
+        String stderr = getStderr();
+        if (!"".equals(stderr.trim())){
+            judgeResult.setErrorOutput(stderr);
+            judgeResult.setJudgeStatus(JudgeStatus.RUNTIME_ERROR);
+            judgeResult.setSuccess(false);
             return judgeResult;
         }
 
@@ -123,7 +129,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             judgeResult.setSuccess(false);
             return judgeResult;
         }
-        String output = getOutput();
+        String output = getStdout();
         if (output.equals(problemData.getOutput())) {
             judgeResult.setSuccess(true);
             judgeResult.setJudgeStatus(JudgeStatus.ACCEPT);
@@ -144,16 +150,24 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         return src.replaceFirst(TRIM_END_REGEX, "");
     }
 
+//    /**
+//     * 等待程序执行完成
+//     * @param time 等待时间，通常为程序允许运行的最大时间
+//     * @return 程序退出码
+//     */
+//    protected Integer waitProcess(Long time){
+//        WaitContainerResultCallback start = dockerClient
+//                .waitContainerCmd(dockerJudgeConfig.getContainerName())
+//                .start();
+//        return start.awaitStatusCode(time, TimeUnit.MILLISECONDS);
+//    }
+
     /**
-     * 等待程序执行完成
-     * @param time 等待时间，通常为程序允许运行的最大时间
-     * @return 程序退出码
+     * 强行停止容器
+     * @param time 等待时间
      */
-    protected Integer waitProcess(Long time){
-        WaitContainerResultCallback start = dockerClient
-                .waitContainerCmd(dockerJudgeConfig.getContainerName())
-                .start();
-        return start.awaitStatusCode(time, TimeUnit.MILLISECONDS);
+    protected void stopProcess(Integer time){
+        dockerClient.stopContainerCmd(dockerJudgeConfig.getContainerName()).withTimeout(time).exec();
     }
 
     /**
@@ -209,11 +223,15 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     }
 
     /**
-     * 获取文件中程序执行的输出或者错误
-     * @return 程序执行的输出或者错误
+     * 获取文件中程序执行的输出
+     * @return 程序执行的输出
      */
-    protected String getOutput(){
-        return fileReaderWriter.Reader(dockerJudgeConfig.getOutput());
+    protected String getStdout(){
+        return fileReaderWriter.Reader(dockerJudgeConfig.getStdout());
+    }
+
+    protected String getStderr(){
+        return fileReaderWriter.Reader(dockerJudgeConfig.getStderr());
     }
     /**
      * @return 返回可编译语言的编译时间
@@ -262,11 +280,11 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         if (problemData == null){
             return;
         }
-        String outputPath = dockerJudgeConfig.getOutput();
-        String inputPath = dockerJudgeConfig.getInput();
-        fileReaderWriter.writer(inputPath,problemData.getInput(),false);
+        fileReaderWriter.writer(dockerJudgeConfig.getInput(),problemData.getInput(),false);
         //输出文件置空
-        fileReaderWriter.writer(outputPath,"",false);
+        fileReaderWriter.writer( dockerJudgeConfig.getStdout(),"",false);
+        //错误输出文件置空
+        fileReaderWriter.writer(dockerJudgeConfig.getStderr(),"",false);
     }
     /**
      * 写入源文件

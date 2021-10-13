@@ -21,7 +21,8 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
     /**
      * 以下文件不建议配置
      */
-    private String output;
+    private String stdout;
+    private String stderr;
     private String input;
     private String sourcePath;
     private String compileTime;
@@ -49,6 +50,22 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
             workDir = "/usr/src/judge";
         }
         return workDir;
+    }
+
+    @Override
+    public String getStdout() {
+        if (stdout == null || "".equals(stdout.trim())){
+            stdout = path + STDOUT;
+        }
+        return stdout;
+    }
+
+    @Override
+    public String getStderr() {
+        if (stderr == null || "".equals(stderr.trim())){
+            stderr = path + STDERR;
+        }
+        return stderr;
     }
 
     public void setPath(String path) {
@@ -96,13 +113,6 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
         return needCompile;
     }
 
-    @Override
-    public String getOutput() {
-        if (output == null){
-            output = path + IDockerJudgeConfig.OUTPUT;
-        }
-        return output;
-    }
 
     @Override
     public String getInput() {

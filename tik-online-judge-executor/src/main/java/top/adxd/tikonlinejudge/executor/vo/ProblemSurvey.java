@@ -6,10 +6,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.Data;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * @author light
+ */
 @Data
-public class ProblemSurvey {
+public class ProblemSurvey implements Serializable {
     /**
      * id
      */

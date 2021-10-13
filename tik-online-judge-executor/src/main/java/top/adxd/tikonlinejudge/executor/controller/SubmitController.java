@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.controller;
 
 
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
 import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import org.springframework.web.bind.annotation.RestController;
+import top.adxd.tikonlinejudge.user.api.Token2User;
 
 import javax.validation.Valid;
 
@@ -41,26 +43,14 @@ public class SubmitController {
     private IJudgeResultService judgeResultService;
     @Autowired
     private ThreadPoolExecutor executor;
-
-//    @PostMapping("/judge")
-//    public CommonResult judge(@RequestBody @Valid Submit submit) {
-//        //TODO 攻击检查
-//        //TODO 用户
-//        submit.setUid(1L);
-//        submit.setCreateTime(LocalDateTime.now());
-//        boolean submitSuccess = submitService.save(submit);
-//        if (!submitSuccess) {
-//            return CommonResult.error("提交失败");
-//        }
-//        List<JudgeResult> judge = codeJudge.judge(submit);
-//        return CommonResult.success().listData(judge);
-//    }
+    @DubboReference
+    private Token2User token2User;
 
     @PostMapping("/judge")
-//    @FrequencyLimit(value = 12,name = "judgeAsync")
-    public CommonResult judgeAsync(@RequestBody @Valid Submit submit) {
-        //TODO 用户
-        submit.setUid(1L);
+    @FrequencyLimit(value = 12,name = "judgeAsync")
+    public CommonResult judgeAsync(@RequestBody @Valid Submit submit,@RequestHeader("token") String token) {
+
+        submit.setUid(token2User.uid(token));
         submit.setCreateTime(LocalDateTime.now());
         boolean submitSuccess = submitService.save(submit);
         if (!submitSuccess) {
@@ -79,41 +69,6 @@ public class SubmitController {
         return CommonResult.success("提交成功");
     }
 
-    @GetMapping("/list")
-    public CommonResult list() {
-        PageUtils.makePage();
-        List<Submit> list = submitService.list();
-        return CommonResult.success().listData(list);
-    }
-
-    @PostMapping("")
-    public CommonResult save(@RequestBody Submit entity) {
-        return submitService.save(entity) ?
-                CommonResult.success().setMsg("添加成功") :
-                CommonResult.error().setMsg("添加失败");
-    }
-
-    @DeleteMapping("")
-    public CommonResult deleteBatch(@RequestBody Long[] ids) {
-        return submitService.removeByIds(Arrays.asList(ids)) ?
-                CommonResult.success().setMsg("删除成功") :
-                CommonResult.error().setMsg("删除失败");
-    }
-
-    @DeleteMapping("/{id}")
-    public CommonResult delete(@PathVariable("id") Long id) {
-        return submitService.removeById(id) ?
-                CommonResult.success().setMsg("删除成功") :
-                CommonResult.error().setMsg("删除失败");
-    }
-
-    @PutMapping("/{id}")
-    public CommonResult update(@RequestBody Submit entity) {
-        return submitService.updateById(entity) ?
-                CommonResult.success().setMsg("更新成功") :
-                CommonResult.error().setMsg("更新失败");
-    }
-
     @GetMapping("/{id}")
     public CommonResult info(@PathVariable("id") Long id) {
         Submit entity = submitService.getById(id);
@@ -121,6 +76,5 @@ public class SubmitController {
                 CommonResult.success().singleData(entity) :
                 CommonResult.error();
     }
-
 }
 

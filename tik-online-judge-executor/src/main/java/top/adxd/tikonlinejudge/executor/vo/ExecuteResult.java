@@ -2,10 +2,12 @@ package top.adxd.tikonlinejudge.executor.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 运行结果类
  */
-public class ExecuteResult {
+public class ExecuteResult implements Serializable {
     public ExecuteStatus executeStatus;
     public Boolean success;
     public String outputString;

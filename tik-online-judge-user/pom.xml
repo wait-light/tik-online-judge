@@ -17,6 +17,13 @@
             <artifactId>tik-online-judge-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+<!--        作为服务提供方实现服务-->
+        <dependency>
+            <groupId>top.adxd</groupId>
+            <artifactId>tik-online-judge-user-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

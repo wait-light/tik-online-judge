@@ -3,12 +3,14 @@ package top.adxd.tikonlinejudge.executor.vo;
 import com.baomidou.mybatisplus.annotation.IEnum;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 /**
  * @author light
  */
 
 @Getter
-public enum JudgeStatus implements IEnum<Integer> {
+public enum JudgeStatus implements IEnum<Integer>, Serializable {
     /**
      * 评判中
      */

@@ -3,7 +3,10 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import top.adxd.tikonlinejudge.common.exeption.CommonException;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
+import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollection;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
@@ -35,6 +38,9 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
     @Autowired
     private ProblemMapper problemMapper;
 
+
+
+
     @Override
     public List<ProblemSurvey> collectionsItem(Long collectionId) {
         //TODO 权限校验
@@ -55,5 +61,23 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
                     return problemSurvey;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult addProblem(Problem problem, Long collectionId) {
+        problem.setCollectionId(collectionId);
+        int insert = problemMapper.insert(problem);
+        if (insert <=0){
+            throw new CommonException("问题添加失败");
+        }
+        ProblemCollectionItem problemCollectionItem = new ProblemCollectionItem();
+        problemCollectionItem.setCollectionId(collectionId);
+        problemCollectionItem.setProblemId(problem.getId());
+        boolean itemSuccess = problemCollectionItemMapper.insert(problemCollectionItem) >= 0;
+        if (!itemSuccess){
+            throw new CommonException("问题添加失败");
+        }
+        return CommonResult.success("问题添加成功");
     }
 }

@@ -1,9 +1,11 @@
 package top.adxd.tikonlinejudge.executor.vo;
 
+import java.io.Serializable;
+
 /**
  * 执行输入
  */
-public class ExecuteInput {
+public class ExecuteInput implements Serializable {
     public String input;
     public Long time;
 

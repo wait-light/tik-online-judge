@@ -33,27 +33,34 @@ public class ProblemCollectionController {
     @Autowired
     private IProblemCollectionService problemCollectionService;
 
-    @GetMapping("/public")
+    @GetMapping("/list")
     public CommonResult list() {
+        PageUtils.makePage();
+        List<ProblemCollection> list = problemCollectionService.list();
+        return CommonResult.success().add("list", list);
+    }
+
+    @GetMapping("/public")
+    public CommonResult publicCollection() {
 //        PageUtils.makePage();
         List<ProblemCollection> list =
                 problemCollectionService
                         .list(new QueryWrapper<ProblemCollection>()
-                                .eq("public_collection", true));
+                                .eq("public_collection", true)
+                                .eq("status",true));
         return CommonResult.success().add("list", list);
     }
 
     //TODO 个人加入的题集
     @GetMapping("/priate")
     public CommonResult privateList() {
-//        PageUtils.makePage();
         List<ProblemCollection> list =
                 problemCollectionService
                         .list(new QueryWrapper<ProblemCollection>()
-                                .eq("public_collection", true));
+                                .eq("public_collection", true)
+                                .eq("status",true));
         return CommonResult.success().listData(list);
     }
-
     /**
      *
      * @return
@@ -90,6 +97,11 @@ public class ProblemCollectionController {
         return problemCollectionService.updateById(entity) ?
                 CommonResult.success().setMsg("更新成功") :
                 CommonResult.error().setMsg("更新失败");
+    }
+
+    @PostMapping("/problem/{collectionid}")
+    public CommonResult addProblem(@RequestBody Problem problem,@PathVariable("collectionid") Long collectionId){
+        return problemCollectionService.addProblem(problem,collectionId);
     }
 
 }
