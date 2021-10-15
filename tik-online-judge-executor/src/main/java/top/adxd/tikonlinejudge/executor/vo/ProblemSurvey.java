@@ -25,10 +25,10 @@ public class ProblemSurvey implements Serializable {
      */
     private String name;
 
-    /**
-     * 上传人
-     */
-    private Long uid;
+//    /**
+//     * 上传人
+//     */
+//    private Long uid;
     /**
      * 创建时间
      */

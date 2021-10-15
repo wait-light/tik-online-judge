@@ -27,6 +27,16 @@
             <groupId>top.adxd</groupId>
             <artifactId>tik-online-judge-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.cloud</groupId>
+                    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba.cloud</groupId>
+                    <artifactId>spring-cloud-starter-dubbo</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

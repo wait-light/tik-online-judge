@@ -5,12 +5,14 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
-import top.adxd.tikonlinejudge.executor.entity.ProblemData;
-import top.adxd.tikonlinejudge.executor.service.IProblemDataService;
+import top.adxd.tikonlinejudge.executor.entity.Solution;
+import top.adxd.tikonlinejudge.executor.service.ISolutionService;
 import org.springframework.web.bind.annotation.RestController;
 import top.adxd.tikonlinejudge.user.api.Token2User;
 
@@ -20,64 +22,77 @@ import top.adxd.tikonlinejudge.user.api.Token2User;
  * </p>
  *
  * @author wait_light
- * @since 2021-09-21
+ * @since 2021-10-14
  */
 @RestController
-@RequestMapping("/executor/problem-data")
-public class ProblemDataController {
+@RequestMapping("/executor/solution")
+public class SolutionController {
     
     @Autowired
-    private IProblemDataService problemDataService;
+    private ISolutionService solutionService;
     @DubboReference
     private Token2User token2User;
 
-    @GetMapping("/problem/{problemId}")
-    public CommonResult problemDatas(@PathVariable("problemId") Long problemId){
-        return CommonResult.success()
-                .singleData(problemDataService
-                        .getProblemDataList(problemId));
+    @GetMapping("/hasSolution/{problemId}")
+    public CommonResult hasSolution(@PathVariable("problemId")Long problemId,@RequestHeader("token") String token){
+        Long uid = token2User.uid(token);
+        if (uid == null){
+            return CommonResult.success().add("solutionId",0);
+        }
+        return CommonResult.success().add("solutionId",solutionService.hasSolution(uid,problemId));
+    }
+
+    @GetMapping("/solutions/{problemId}")
+    public CommonResult solutionList(@PathVariable("problemId")Long problemId){
+        List<Solution> solutions = solutionService.solutionList(problemId);
+        return CommonResult.success().listData(solutions);
     }
 
     @GetMapping("/list")
     public CommonResult list(){
         PageUtils.makePage();
-        List<ProblemData> list = problemDataService.list();
+        List<Solution> list = solutionService.list();
         return CommonResult.success().listData(list);
     }
 
     @PostMapping("")
-    public CommonResult save(@RequestBody ProblemData entity,@RequestHeader("token")String token) {
+    public CommonResult save(@RequestBody Solution entity,@RequestHeader String token) {
         Long uid = token2User.uid(token);
-        entity.setCreateUserId(uid);
-        return  problemDataService.save(entity) ?
+        LocalDateTime now = LocalDateTime.now();
+        entity.setUid(uid);
+        entity.setCreateTime(now);
+        entity.setUpdateTime(now);
+        return  solutionService.save(entity) ?
             CommonResult.success().setMsg("添加成功") :
             CommonResult.error().setMsg("添加失败");
     }
 
     @DeleteMapping("")
     public CommonResult deleteBatch(@RequestBody Long[] ids){
-        return problemDataService.removeByIds(Arrays.asList(ids)) ?
+        return solutionService.removeByIds(Arrays.asList(ids)) ?
             CommonResult.success().setMsg("删除成功") :
             CommonResult.error().setMsg("删除失败");
     }
 
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable("id") Long id){
-        return problemDataService.removeById(id) ?
+        return solutionService.removeById(id) ?
             CommonResult.success().setMsg("删除成功") :
             CommonResult.error().setMsg("删除失败");
     }
 
     @PutMapping("/{id}")
-    public CommonResult update(@RequestBody ProblemData entity){
-        return problemDataService.updateById(entity) ?
+    public CommonResult update(@RequestBody Solution entity){
+        LocalDateTime now = LocalDateTime.now();
+        entity.setUpdateTime(now);
+        return solutionService.updateById(entity) ?
             CommonResult.success().setMsg("更新成功"):
             CommonResult.error().setMsg("更新失败");
     }
 
     @GetMapping("/{id}")
     public CommonResult info(@PathVariable("id") Long id){
-        ProblemData entity = problemDataService.getById(id);
+        Solution entity = solutionService.getById(id);
         return entity != null ?
             CommonResult.success().singleData(entity):
             CommonResult.error();

@@ -4,6 +4,8 @@ package top.adxd.tikonlinejudge.executor.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
@@ -55,6 +57,7 @@ public class ProblemController {
 
     @PutMapping("/{id}")
     public CommonResult update(@RequestBody Problem entity){
+        entity.setUpdateTime(LocalDateTime.now());
         return problemService.updateById(entity) ?
             CommonResult.success().setMsg("更新成功"):
             CommonResult.error().setMsg("更新失败");
@@ -67,6 +70,9 @@ public class ProblemController {
             CommonResult.success().singleData(entity):
             CommonResult.error();
     }
-
+    @GetMapping("/availableProblem/{collectionId}")
+    public CommonResult getAvailableProblem(@PathVariable("collectionId") Long collectionId){
+        return problemService.getAvailableProblem(collectionId);
+    }
 }
 

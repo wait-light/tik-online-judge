@@ -1,8 +1,10 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
@@ -11,6 +13,11 @@ import top.adxd.tikonlinejudge.executor.mapper.ProblemMapper;
 import top.adxd.tikonlinejudge.executor.service.IProblemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.executor.vo.ProblemSurvey;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -33,5 +40,48 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         problemCollectionItemMapper.delete(new QueryWrapper<ProblemCollectionItem>()
                 .eq("problem_id",problemId));
         return CommonResult.success("删除成功");
+    }
+
+    @Override
+    public CommonResult getAvailableProblem(Long collectionId) {
+        /**
+         * 所有公开或者的本合集私有的问题 的集合
+         */
+        Set<Long> sharedOrSelfProblemId = baseMapper.selectList(new QueryWrapper<Problem>()
+                        .eq("share", true)
+                        .or()
+                        .eq("collection_id", collectionId)
+                        .select("id"))
+                .stream()
+                .map(item -> item.getId())
+                .collect(Collectors.toSet());
+        /**
+         * 本集合已经添加的问题的集合
+         */
+        Set<Long> selfProblemId = problemCollectionItemMapper.selectList(new QueryWrapper<ProblemCollectionItem>()
+                        .eq("collection_id", collectionId)
+                        .select("problem_id"))
+                .stream()
+                .map(item -> item.getProblemId())
+                .collect(Collectors.toSet());
+        //取差集即是剩下可以选择的问题
+        sharedOrSelfProblemId.removeAll(selfProblemId);
+        //防止报空
+        if (sharedOrSelfProblemId.size()==0){
+            sharedOrSelfProblemId.add(0L);
+        }
+        PageUtils.makePage();
+
+        List<ProblemSurvey> collect =
+                baseMapper.selectList(new QueryWrapper<Problem>()
+                        .in("id", sharedOrSelfProblemId)
+                        .select("name", "create_time", "update_time", "id")
+                )
+                .stream().map((problem) -> {
+                    ProblemSurvey problemSurvey = new ProblemSurvey();
+                    BeanUtils.copyProperties(problem, problemSurvey);
+                    return problemSurvey;
+                }).collect(Collectors.toList());
+        return CommonResult.success().listData(collect);
     }
 }

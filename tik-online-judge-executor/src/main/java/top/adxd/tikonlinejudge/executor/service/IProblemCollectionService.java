@@ -17,6 +17,6 @@ import java.util.List;
  * @since 2021-09-22
  */
 public interface IProblemCollectionService extends IService<ProblemCollection> {
-    List<ProblemSurvey> collectionsItem(Long collectionId);
+    List<ProblemSurvey> collectionsItem(Long collectionId,boolean all);
     CommonResult addProblem(Problem problem,Long collectionId);
 }

@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.vo.ProblemSurvey;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,9 +43,12 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
 
 
     @Override
-    public List<ProblemSurvey> collectionsItem(Long collectionId) {
+    public List<ProblemSurvey> collectionsItem(Long collectionId,boolean all) {
         //TODO 权限校验
-        PageUtils.makePage();
+        //是否进行数据分页
+        if(!all){
+            PageUtils.makePage();
+        }
         List<ProblemCollectionItem> problemCollectionItems = problemCollectionItemMapper
                 .selectList(new QueryWrapper<ProblemCollectionItem>()
                         .eq("collection_id", collectionId)
@@ -54,7 +58,10 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         }
         List<Long> problemIds = problemCollectionItems.stream().map((item) -> item.getProblemId()).collect(Collectors.toList());
         return problemMapper
-                .selectList(ProblemSurvey.problemSurveySelect().in("id", problemIds))
+                .selectList(new QueryWrapper<Problem>()
+                .in("id", problemIds)
+                .select("name","create_time","update_time","id")
+                )
                 .stream().map((problem) -> {
                     ProblemSurvey problemSurvey = new ProblemSurvey();
                     BeanUtils.copyProperties(problem, problemSurvey);
@@ -66,6 +73,9 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CommonResult addProblem(Problem problem, Long collectionId) {
+        LocalDateTime now = LocalDateTime.now();
+        problem.setCreateTime(now);
+        problem.setUpdateTime(now);
         problem.setCollectionId(collectionId);
         int insert = problemMapper.insert(problem);
         if (insert <=0){

@@ -63,12 +63,23 @@ public class ProblemCollectionController {
     }
     /**
      *
-     * @return
+     * @return 返回指定问题集的分页数据
      */
     @GetMapping("/{collection-id}")
     public CommonResult collectionItem(@PathVariable("collection-id") Long collectionId){
-        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId);
+        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId,false);
         return CommonResult.success().listData(problems);
+    }
+
+    /**
+     * 返回指定问题集的全部数据
+     * @param collectionId
+     * @return
+     */
+    @GetMapping("/all/{collection-id}")
+    public CommonResult collectionItemAll(@PathVariable("collection-id") Long collectionId){
+        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId,true);
+        return CommonResult.success().singleData(problems);
     }
 
     @PostMapping("")

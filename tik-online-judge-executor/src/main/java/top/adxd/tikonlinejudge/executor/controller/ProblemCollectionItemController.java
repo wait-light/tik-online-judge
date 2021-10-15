@@ -69,6 +69,16 @@ public class ProblemCollectionItemController {
             CommonResult.success().singleData(entity):
             CommonResult.error();
     }
+    @DeleteMapping("/{collectionID}/{problemId}")
+    public CommonResult delete(@PathVariable("collectionID") Long collectionId,@PathVariable("problemId") Long problemID){
+        return problemCollectionItemService.deleteItem(problemID,collectionId);
+    }
+
+    @PostMapping("/{collectionID}/{problemId}")
+    public CommonResult getAvailableProblem(@PathVariable("collectionID") Long collectionId,@PathVariable("problemId") Long problemID){
+        return problemCollectionItemService.addItem(problemID,collectionId);
+    }
+
 
 }
 

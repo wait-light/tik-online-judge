@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.executor.service;
 
+import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-09-22
  */
 public interface IProblemCollectionItemService extends IService<ProblemCollectionItem> {
-
+    CommonResult deleteItem(Long problemID,Long CollectionId);
+    CommonResult addItem(Long problemID,Long CollectionId);
 }
