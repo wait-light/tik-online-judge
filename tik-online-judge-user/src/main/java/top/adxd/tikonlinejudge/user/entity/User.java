@@ -73,6 +73,10 @@ public class User implements Serializable {
      * 头像
      */
     private String avatar;
+    /**
+     * 是否管理员
+     */
+    private Boolean admin;
 
 
 }

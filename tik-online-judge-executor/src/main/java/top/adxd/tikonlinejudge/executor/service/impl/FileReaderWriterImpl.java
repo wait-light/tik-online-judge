@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,10 @@ public class FileReaderWriterImpl implements IFileReaderWriter {
         File file = new File(fileFullPath);
         if (!file.exists()) {
             try {
-                boolean createSuccess = file.createNewFile();
-                if (!createSuccess) {
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                file = FileUtil.touch(file);
+            } catch (Exception e) {
+                logger.error(e.getLocalizedMessage());
+//                e.printStackTrace();
             }
         }
         if (!file.isFile()) {

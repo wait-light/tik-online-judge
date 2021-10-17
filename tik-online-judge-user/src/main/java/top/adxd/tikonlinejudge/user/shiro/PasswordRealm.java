@@ -20,6 +20,8 @@ import top.adxd.tikonlinejudge.user.service.IUserService;
 public class PasswordRealm extends AuthorizingRealm {
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IUserRealmService userRealmService;
 
     public PasswordRealm(CredentialsMatcher credentialsMatcher){
         super(credentialsMatcher);
@@ -56,8 +58,10 @@ public class PasswordRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-
-        return null;
+        Object username = principalCollection.getPrimaryPrincipal();
+        User user = userService.getUserByUsername((String) username);
+        AuthorizationInfo userAuthorizationInfo = userRealmService.getUserAuthorizationInfo(user);
+        return userAuthorizationInfo;
     }
 
     @Override

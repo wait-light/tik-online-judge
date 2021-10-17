@@ -12,6 +12,9 @@ import top.adxd.tikonlinejudge.executor.exception.runtime.ClassFullPathIllegalEx
 
 import java.util.Arrays;
 
+/**
+ * @author light
+ */
 @Component
 @ConfigurationProperties("tik-online-judge.executor.java")
 public class JavaCodeExecuteConfig implements InitializingBean {

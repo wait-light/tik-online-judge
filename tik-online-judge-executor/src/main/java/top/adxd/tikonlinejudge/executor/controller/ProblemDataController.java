@@ -35,7 +35,7 @@ public class ProblemDataController {
     public CommonResult problemDatas(@PathVariable("problemId") Long problemId){
         return CommonResult.success()
                 .singleData(problemDataService
-                        .getProblemDataList(problemId));
+                        .getProblemDataListOnlyId(problemId));
     }
 
     @GetMapping("/list")

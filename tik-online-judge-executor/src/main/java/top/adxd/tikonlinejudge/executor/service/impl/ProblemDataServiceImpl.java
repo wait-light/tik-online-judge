@@ -27,8 +27,7 @@ public class ProblemDataServiceImpl extends ServiceImpl<ProblemDataMapper, Probl
         if (null == problemId || 0L== problemId){
             return new ArrayList<>();
         }
-        return baseMapper.selectList(new QueryWrapper<ProblemData>().eq("problem_id", problemId)
-                .select("id"));
+        return baseMapper.selectList(new QueryWrapper<ProblemData>().eq("problem_id", problemId));
     }
 
     @Override
@@ -37,5 +36,13 @@ public class ProblemDataServiceImpl extends ServiceImpl<ProblemDataMapper, Probl
             return new ArrayList<>();
         }
         return getProblemDataList(submit.getProblemId());
+    }
+
+    @Override
+    public List<ProblemData> getProblemDataListOnlyId(Long problemId) {
+        if (null == problemId || 0L== problemId){
+            return new ArrayList<>();
+        }
+        return baseMapper.selectList(new QueryWrapper<ProblemData>().eq("problem_id", problemId).select("id"));
     }
 }

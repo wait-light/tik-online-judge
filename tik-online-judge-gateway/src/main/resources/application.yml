@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: tik-online-judge-gateway
+  cloud:
+    config:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+      - id: test
+        uri: https://www.baidu.com
+        predicates:
+        - Query=green
+server:
+  port: 10000

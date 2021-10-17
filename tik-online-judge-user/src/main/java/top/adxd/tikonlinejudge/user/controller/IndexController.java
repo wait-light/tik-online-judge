@@ -11,7 +11,7 @@ import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.user.api.Vo.SafeUserVo;
 import top.adxd.tikonlinejudge.user.entity.User;
 import top.adxd.tikonlinejudge.user.service.IMailService;
-import top.adxd.tikonlinejudge.user.service.IUserRealmService;
+import top.adxd.tikonlinejudge.user.shiro.IUserRealmService;
 import top.adxd.tikonlinejudge.user.service.IUserService;
 import top.adxd.tikonlinejudge.user.service.impl.UserTokenService;
 import top.adxd.tikonlinejudge.user.shiro.LoginToken;

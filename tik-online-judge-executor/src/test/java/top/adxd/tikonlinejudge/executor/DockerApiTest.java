@@ -1,14 +1,8 @@
 package top.adxd.tikonlinejudge.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Volume;
-import com.github.dockerjava.api.model.VolumeBind;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
@@ -19,17 +13,11 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import top.adxd.tikonlinejudge.executor.config.DockerConfig;
 import top.adxd.tikonlinejudge.executor.config.docker.impl.JavaDockerConfig;
-import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
-import top.adxd.tikonlinejudge.executor.entity.Submit;
-import top.adxd.tikonlinejudge.executor.service.impl.DockerJavaCodeJudge;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootTest
 public class DockerApiTest {

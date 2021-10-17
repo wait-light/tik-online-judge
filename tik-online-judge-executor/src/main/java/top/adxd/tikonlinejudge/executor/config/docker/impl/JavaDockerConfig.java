@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import top.adxd.tikonlinejudge.executor.config.docker.ICompileAbleConfig;
 import top.adxd.tikonlinejudge.executor.config.docker.IDockerJudgeConfig;
 
+/**
+ * @author light
+ */
 @Configuration
 @ConfigurationProperties("tik-online-judge.executor.docker-java")
 public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,InitializingBean {
@@ -29,6 +32,26 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
     private String compileInfo;
     private String needCompile;
 
+    public JavaDockerConfig(){}
+
+    public JavaDockerConfig(String path, String containerName, String imageName, String workDir) {
+        this.path = path;
+        this.containerName = containerName;
+        this.imageName = imageName;
+        this.workDir = workDir;
+    }
+
+    public void newConfig(String path, String containerName){
+        this.path = path;
+        this.containerName = containerName;
+        this.stderr = null;
+        this.stdout = null;
+        this.input = null;
+        this.sourcePath = null;
+        this.compileTime = null;
+        this.compileInfo = null;
+        this.needCompile = null;
+    }
 
     @Override
     public String getPath() {

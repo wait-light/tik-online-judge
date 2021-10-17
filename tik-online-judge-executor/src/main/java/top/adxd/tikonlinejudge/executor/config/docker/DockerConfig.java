@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.executor.config;
+package top.adxd.tikonlinejudge.executor.config.docker;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;

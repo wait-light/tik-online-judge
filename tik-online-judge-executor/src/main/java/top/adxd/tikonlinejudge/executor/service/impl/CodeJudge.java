@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("codeJudge")
+@Deprecated
 public class CodeJudge implements ICodeJudge {
     @Autowired
     private ICodeExecutor javaCodeExecutor;

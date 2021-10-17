@@ -38,6 +38,11 @@ spring:
     database: 0
     host: 127.0.0.1
     port: 6379
+  rabbitmq:
+    host: 172.17.0.10
+    port: 5672
+    username: executor
+    password: 123456
 debug: false
 dubbo:
   protocol:

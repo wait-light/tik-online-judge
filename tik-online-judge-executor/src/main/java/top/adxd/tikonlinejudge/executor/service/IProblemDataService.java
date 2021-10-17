@@ -17,4 +17,6 @@ import java.util.List;
 public interface IProblemDataService extends IService<ProblemData> {
     List<ProblemData> getProblemDataList(Long problemId);
     List<ProblemData> getProblemDataList(Submit submit);
+
+    List<ProblemData> getProblemDataListOnlyId(Long problemId);
 }

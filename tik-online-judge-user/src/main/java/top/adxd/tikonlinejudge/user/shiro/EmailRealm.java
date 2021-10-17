@@ -8,9 +8,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import top.adxd.tikonlinejudge.user.service.IUserRealmService;
-
-import java.util.ArrayList;
+import top.adxd.tikonlinejudge.user.entity.User;
+import top.adxd.tikonlinejudge.user.service.IUserService;
 
 /**
  * @author light
@@ -18,6 +17,8 @@ import java.util.ArrayList;
 public class EmailRealm extends AuthorizingRealm {
     @Autowired
     private IUserRealmService userRealmService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 鉴权
@@ -40,8 +41,10 @@ public class EmailRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-
-        return null;
+        Object email = principalCollection.getPrimaryPrincipal();
+        User user = userService.getUser((String) email);
+        AuthorizationInfo userAuthorizationInfo = userRealmService.getUserAuthorizationInfo(user);
+        return userAuthorizationInfo;
     }
 
     @Override
