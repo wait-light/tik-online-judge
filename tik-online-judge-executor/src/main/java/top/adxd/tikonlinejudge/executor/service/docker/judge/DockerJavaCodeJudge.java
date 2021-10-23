@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.executor.service.impl;
+package top.adxd.tikonlinejudge.executor.service.docker.judge;
 import top.adxd.tikonlinejudge.executor.config.docker.impl.JavaDockerConfig;
 
 /**

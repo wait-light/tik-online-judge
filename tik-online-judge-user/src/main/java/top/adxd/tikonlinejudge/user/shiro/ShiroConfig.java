@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Primary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author light
@@ -27,10 +28,14 @@ import java.util.List;
 public class ShiroConfig {
     @Autowired
     private EncryptionConfig encryptionConfig;
+    @Autowired
+    private IShiroFilterChainDefinitionService shiroFilterChainDefinitionService;
 
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+        Map<String, String> definitionMap = shiroFilterChainDefinitionService.loadFilterChainDefinitionMap();
+        chainDefinition.addPathDefinitions(definitionMap);
         chainDefinition.addPathDefinition("/**", "anon");
         return chainDefinition;
     }

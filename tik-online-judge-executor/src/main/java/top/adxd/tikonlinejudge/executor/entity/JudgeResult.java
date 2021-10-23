@@ -3,14 +3,14 @@ package top.adxd.tikonlinejudge.executor.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.adxd.tikonlinejudge.executor.exception.runtime.ParseException;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteResult;
-import top.adxd.tikonlinejudge.executor.vo.ExecuteStatus;
-import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
+import top.adxd.tikonlinejudge.executor.single.ExecuteStatus;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 
 /**
  * <p>

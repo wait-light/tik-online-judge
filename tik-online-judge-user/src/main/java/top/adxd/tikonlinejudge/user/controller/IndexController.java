@@ -8,7 +8,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
-import top.adxd.tikonlinejudge.user.api.Vo.SafeUserVo;
+import top.adxd.tikonlinejudge.user.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.user.entity.User;
 import top.adxd.tikonlinejudge.user.service.IMailService;
 import top.adxd.tikonlinejudge.user.shiro.IUserRealmService;
@@ -57,10 +57,10 @@ public class IndexController {
     }
     @GetMapping("/titile-info")
     public CommonResult userTitleInfo(@RequestHeader("token") String token){
-        SafeUserVo safeUserVo = userTokenService.baseUserMessage(token);
-        if (safeUserVo == null){
+        SafeUserDto safeUserDto = userTokenService.baseUserMessage(token);
+        if (safeUserDto == null){
             return CommonResult.error("数据非法/数据过期");
         }
-        return CommonResult.success().add("user",safeUserVo);
+        return CommonResult.success().add("user", safeUserDto);
     }
 }

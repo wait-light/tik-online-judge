@@ -1,6 +1,6 @@
 package top.adxd.tikonlinejudge.executor.vo;
 
-import lombok.Data;
+import top.adxd.tikonlinejudge.executor.single.ExecuteStatus;
 
 import java.io.Serializable;
 

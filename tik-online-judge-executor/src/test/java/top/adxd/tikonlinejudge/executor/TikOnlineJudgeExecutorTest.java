@@ -8,10 +8,6 @@ import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.service.CmdExecutor;
 import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
-import top.adxd.tikonlinejudge.executor.service.impl.CLanguageCodeExecutor;
-import top.adxd.tikonlinejudge.executor.service.impl.CPPCodeExecutor;
-import top.adxd.tikonlinejudge.executor.service.impl.JavaCodeExecutor;
-import top.adxd.tikonlinejudge.executor.service.impl.PythonCodeExecutor;
 import top.adxd.tikonlinejudge.executor.vo.ExecuteCMDResult;
 
 import java.io.*;
@@ -28,37 +24,7 @@ import java.util.concurrent.TimeUnit;
 @SpringBootTest
 @Slf4j
 public class TikOnlineJudgeExecutorTest {
-    @Autowired
-    private JavaCodeExecutor javaCodeExecutor;
-    @Autowired
-    private CPPCodeExecutor cppCodeExecutor;
-    @Autowired
-    private PythonCodeExecutor pythonCodeExecutor;
-    @Autowired
-    private CLanguageCodeExecutor cLanguageCodeExecutor;
-    @Autowired
-    private ICodeJudge codeJudge;
 
-    @Test
-    public void judgeTest(){
-        Submit submit = new Submit();
-        submit.setId(0L);
-        submit.setContent("import java.util.Scanner;" +
-                "public class Main {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        Scanner in = new Scanner(System.in);\n" +
-                "        while (in.hasNext()){\n" +
-                "            int a = in.nextInt();\n" +
-                "            int b = in.nextInt();\n" +
-                "            System.out.println(a + b);\n" +
-                "        }\n" +
-                "    }}");
-        submit.setLanguageType(1);
-        submit.setProblemId(1L);
-        submit.setUid(1L);
-        List<JudgeResult> results = codeJudge.judge(submit);
-        System.out.println(Arrays.toString(results.toArray()));
-    }
 
     @Test
     public void context2() throws ExecutionException, InterruptedException {

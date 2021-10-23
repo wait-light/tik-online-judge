@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.executor.vo;
+package top.adxd.tikonlinejudge.executor.single;
 
 import com.baomidou.mybatisplus.annotation.IEnum;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.executor.vo;
+package top.adxd.tikonlinejudge.executor.single;
 
 import java.io.Serializable;
 

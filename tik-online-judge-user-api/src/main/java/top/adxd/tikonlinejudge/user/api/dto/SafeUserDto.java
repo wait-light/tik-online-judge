@@ -1,11 +1,11 @@
-package top.adxd.tikonlinejudge.user.api.Vo;
+package top.adxd.tikonlinejudge.user.api.dto;
 
 import java.io.Serializable;
 
 /**
  * @author light
  */
-public class SafeUserVo implements Serializable {
+public class SafeUserDto implements Serializable {
     private Long uid;
     /**
      * 用户名

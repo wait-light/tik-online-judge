@@ -5,7 +5,6 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.annotation.FrequencyLimit;
 import top.adxd.tikonlinejudge.executor.exception.UnsupportedValue;
-import top.adxd.tikonlinejudge.user.api.Token2User;
+import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +29,7 @@ public class FrequencyLimitAnnotationProcessor {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @DubboReference
-    private Token2User token2User;
+    private UserInfo userInfo;
     @Around("@annotation(frequencyLimit)")
     public Object frequencyLimit(ProceedingJoinPoint joinPoint, FrequencyLimit frequencyLimit) throws Throwable {
         double value = frequencyLimit.value();
@@ -43,7 +42,7 @@ public class FrequencyLimitAnnotationProcessor {
         if (token == null){
             id = name + ServletUtil.getClientIP(ServletUtils.getRequest());
         }else {
-            Long uid = token2User.uid(token);
+            Long uid = userInfo.uid(token);
             if (uid == null){
                 id = name +ServletUtil.getClientIP(ServletUtils.getRequest());
             }else {

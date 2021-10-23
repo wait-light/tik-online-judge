@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.executor.vo;
 
 import lombok.Data;
 import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

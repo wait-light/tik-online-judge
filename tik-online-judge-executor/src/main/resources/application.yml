@@ -1,8 +1,17 @@
 mybatis-plus:
-  type-enums-package: top/adxd/tikonlinejudge/executor/vo
+  type-enums-package: top/adxd/tikonlinejudge/executor/single
 tik-online-judge.executor:
   docker-java:
     path: /tmp/judge-info/judge-java
+  docker-cpp:
+    path: /tmp/judge-info/judge-cpp
+  language:
+    map:
+      JAVA:
+        open: true
+      CPP:
+        open: true
+
 #    runcommond: docker run -it -v /home/light/code/online-judge-docker/docker-java/judge-info:/usr/src/judge/ --rm judge-java
 #runcommond:docker run -it --name judge-java -v /home/light/code/online-judge-docker/docker-java/Main.java:/usr/src/judge/Main.java judge-java
 #  java:
@@ -39,7 +48,7 @@ spring:
     host: 127.0.0.1
     port: 6379
   rabbitmq:
-    host: 172.17.0.10
+    host: 127.0.0.1
     port: 5672
     username: executor
     password: 123456

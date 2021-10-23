@@ -26,7 +26,7 @@
         <hutool.version>5.7.11</hutool.version>
         <knife4j.version>3.0.3</knife4j.version>
         <spring.cloud.alibaba.version>2021.1</spring.cloud.alibaba.version>
-        <spring.cloud-version>2020.0.0</spring.cloud-version>
+        <spring.cloud.dependencies.version>3.0.1</spring.cloud.dependencies.version>
     </properties>
 
     <modules>
@@ -37,6 +37,7 @@
         <module>tik-online-judge-executor</module>
         <module>tik-online-judge-user-api</module>
         <module>tik-online-judge-gateway</module>
+        <module>tik-online-judge-auth</module>
 
     </modules>
 <!--    统一依赖管理-->
@@ -102,6 +103,16 @@
 <!--                <type>pom</type>-->
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->
+
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-gateway-dependencies</artifactId>
+                <version>${spring.cloud.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

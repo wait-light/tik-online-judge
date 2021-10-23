@@ -14,7 +14,7 @@ import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Solution;
 import top.adxd.tikonlinejudge.executor.service.ISolutionService;
 import org.springframework.web.bind.annotation.RestController;
-import top.adxd.tikonlinejudge.user.api.Token2User;
+import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 /**
  * <p>
@@ -31,11 +31,11 @@ public class SolutionController {
     @Autowired
     private ISolutionService solutionService;
     @DubboReference
-    private Token2User token2User;
+    private UserInfo userInfo;
 
     @GetMapping("/hasSolution/{problemId}")
     public CommonResult hasSolution(@PathVariable("problemId")Long problemId,@RequestHeader("token") String token){
-        Long uid = token2User.uid(token);
+        Long uid = userInfo.uid(token);
         if (uid == null){
             return CommonResult.success().add("solutionId",0);
         }
@@ -57,7 +57,7 @@ public class SolutionController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody Solution entity,@RequestHeader String token) {
-        Long uid = token2User.uid(token);
+        Long uid = userInfo.uid(token);
         LocalDateTime now = LocalDateTime.now();
         entity.setUid(uid);
         entity.setCreateTime(now);

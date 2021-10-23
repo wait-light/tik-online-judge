@@ -1,12 +1,9 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
-import cn.hutool.extra.servlet.ServletUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
@@ -15,14 +12,12 @@ import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
-import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
-import top.adxd.tikonlinejudge.user.api.Token2User;
+import top.adxd.tikonlinejudge.user.api.UserInfo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -37,11 +32,11 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
     @Autowired
     private ISubmitService submitService;
     @DubboReference
-    private Token2User token2User;
+    private UserInfo userInfo;
     @Override
     public SubmitJudgeResult submitJudgeResults(Long submitId) {
         String token = ServletUtils.getHeader("token");
-        Long uid = token2User.uid(token);
+        Long uid = userInfo.uid(token);
         Submit submit = submitService.getOne(new QueryWrapper<Submit>().eq("id", submitId).eq("uid", uid));
         if (submit == null){
            return null;

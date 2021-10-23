@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
-import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import org.springframework.web.bind.annotation.RestController;
 import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
-import top.adxd.tikonlinejudge.user.api.Token2User;
-import top.adxd.tikonlinejudge.user.api.Vo.SafeUserVo;
+import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 /**
  * <p>
@@ -31,18 +29,18 @@ public class JudgeResultController {
     @Autowired
     private IJudgeResultService judgeResultService;
     @DubboReference
-    private Token2User token2User;
+    private UserInfo userInfo;
 
     @GetMapping("/{problem-id}")
     public CommonResult problemJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("token") String token) {
-        Long uid = token2User.uid(token);
+        Long uid = userInfo.uid(token);
         List<SubmitJudgeResult> lists = judgeResultService.problemSubmitsResults(problemId, uid);
         return CommonResult.success().add("array", lists);
     }
 
     @GetMapping("/last/{problem-id}")
     public CommonResult problemLastJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("token") String token) {
-        Long uid = token2User.uid(token);
+        Long uid = userInfo.uid(token);
         SubmitJudgeResult judgeResults = judgeResultService.lastSubmitResults(problemId, uid);
         return CommonResult.success().add("array", judgeResults);
     }

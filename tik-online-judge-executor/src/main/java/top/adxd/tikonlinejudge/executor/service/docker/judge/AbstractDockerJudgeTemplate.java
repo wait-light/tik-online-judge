@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.executor.service.impl;
+package top.adxd.tikonlinejudge.executor.service.docker.judge;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -20,7 +20,7 @@ import top.adxd.tikonlinejudge.executor.service.ICodeJudge;
 import top.adxd.tikonlinejudge.executor.service.IFileReaderWriter;
 import top.adxd.tikonlinejudge.executor.service.IProblemDataService;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
-import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;

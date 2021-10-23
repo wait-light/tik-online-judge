@@ -1,6 +1,6 @@
 package top.adxd.tikonlinejudge.user.service;
 
-import top.adxd.tikonlinejudge.user.api.Vo.SafeUserVo;
+import top.adxd.tikonlinejudge.user.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.user.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,5 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserService extends IService<User> {
     User getUser(String email);
     User getUserByUsername(String username);
-    SafeUserVo getSafeUser(Long uid);
+    SafeUserDto getSafeUser(Long uid);
 }

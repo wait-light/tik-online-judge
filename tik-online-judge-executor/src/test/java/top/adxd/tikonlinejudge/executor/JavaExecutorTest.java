@@ -10,12 +10,8 @@ import java.util.Scanner;
 @Slf4j
 public class JavaExecutorTest {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        while (in.hasNext()){
-            int a = in.nextInt();
-            int b = in.nextInt();
-            System.out.println(a + b);
-        }
+       String a = "asdasd";
+       System.out.println(a.equals("asdasd"));
     }
     @Test
     public void aPlusB(){
@@ -24,6 +20,18 @@ public class JavaExecutorTest {
             int a = in.nextInt();
             int b = in.nextInt();
             System.out.println(a + b);
+        }
+    }
+
+    public class  aaa{
+        protected void aasd(){
+
+        }
+    }
+    public class bbb extends aaa{
+        @Override
+        public void aasd() {
+            super.aasd();
         }
     }
 

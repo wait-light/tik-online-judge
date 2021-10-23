@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.adxd.tikonlinejudge.executor.vo.JudgeStatus;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
+import top.adxd.tikonlinejudge.executor.single.Language;
 
 import javax.validation.constraints.NotNull;
 
@@ -40,7 +41,7 @@ public class Submit implements Serializable {
      * 语言类型
      */
     @NotNull
-    private Integer languageType;
+    private Language languageType;
 
     /**
      * 内容(编码内容)
