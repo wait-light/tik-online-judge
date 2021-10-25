@@ -42,7 +42,8 @@ public class CppDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, 
         this.workDir = workDir;
     }
 
-    public void newConfig(String path, String containerName){
+    @Override
+    public IDockerJudgeConfig newConfig(String path, String containerName){
         this.path = path;
         this.containerName = containerName;
         this.stderr = null;
@@ -52,6 +53,7 @@ public class CppDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, 
         this.compileTime = null;
         this.compileInfo = null;
         this.needCompile = null;
+        return this;
     }
 
     @Override

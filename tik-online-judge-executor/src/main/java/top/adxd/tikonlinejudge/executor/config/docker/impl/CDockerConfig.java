@@ -41,8 +41,8 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
         this.imageName = imageName;
         this.workDir = workDir;
     }
-
-    public void newConfig(String path, String containerName){
+    @Override
+    public IDockerJudgeConfig newConfig(String path, String containerName){
         this.path = path;
         this.containerName = containerName;
         this.stderr = null;
@@ -52,6 +52,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
         this.compileTime = null;
         this.compileInfo = null;
         this.needCompile = null;
+        return this;
     }
 
     @Override

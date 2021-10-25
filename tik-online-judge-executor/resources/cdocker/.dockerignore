@@ -1,4 +1,3 @@
 Dockerfile
-judge-info/
 auto-build-run.sh
 .dockerignore

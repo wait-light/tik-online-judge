@@ -319,6 +319,8 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         //尝试删除失败，容器可能还没有被创建
         }catch (com.github.dockerjava.api.exception.NotFoundException notFoundException){
 
+        }catch (Exception e){
+            logger.error(e.getLocalizedMessage());
         }
         this.ready = false;
     }

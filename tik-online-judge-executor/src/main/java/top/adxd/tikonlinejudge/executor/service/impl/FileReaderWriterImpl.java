@@ -26,7 +26,6 @@ public class FileReaderWriterImpl implements IFileReaderWriter {
                 file = FileUtil.touch(file);
             } catch (Exception e) {
                 logger.error(e.getLocalizedMessage());
-//                e.printStackTrace();
             }
         }
         if (!file.isFile()) {

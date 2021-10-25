@@ -6,6 +6,15 @@ package top.adxd.tikonlinejudge.executor.config;
  */
 public class LanguageConfig {
     private boolean open = false;
+    private String judgeImplementClass;
+
+    public String getJudgeImplementClass() {
+        return judgeImplementClass;
+    }
+
+    public void setJudgeImplementClass(String judgeImplementClass) {
+        this.judgeImplementClass = judgeImplementClass;
+    }
 
     public boolean isOpen() {
         return open;

@@ -17,4 +17,5 @@ public interface IDockerJudgeConfig {
     String getStderr();
     String getInput();
     String getSourcePath();
+    IDockerJudgeConfig newConfig(String path,String containerName);
 }
