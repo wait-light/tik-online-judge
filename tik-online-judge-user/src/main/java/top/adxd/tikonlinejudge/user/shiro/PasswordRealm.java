@@ -23,23 +23,25 @@ public class PasswordRealm extends AuthorizingRealm {
     @Autowired
     private IUserRealmService userRealmService;
 
-    public PasswordRealm(CredentialsMatcher credentialsMatcher){
+    public PasswordRealm(CredentialsMatcher credentialsMatcher) {
         super(credentialsMatcher);
     }
+
     /**
      * 鉴权
+     *
      * @param authenticationToken 账号密码等信息
      * @return 用户实体等
      * @throws AuthenticationException 认证失败
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        if (authenticationToken == null){
+        if (authenticationToken == null) {
             throw new AuthenticationException("账号密码为空");
         }
         Object principal = authenticationToken.getPrincipal();
         User user = userService.getUserByUsername((String) authenticationToken.getPrincipal());
-        if (user == null){
+        if (user == null) {
             throw new AuthenticationException("账号或密码不正确");
         }
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
@@ -53,6 +55,7 @@ public class PasswordRealm extends AuthorizingRealm {
 
     /**
      * 根据已经登录的用户进行权限授权
+     *
      * @param principalCollection 用户信息
      * @return 返回授权信息
      */

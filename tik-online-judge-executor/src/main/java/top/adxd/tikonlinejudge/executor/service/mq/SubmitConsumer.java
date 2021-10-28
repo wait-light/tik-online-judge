@@ -90,8 +90,6 @@ public class SubmitConsumer {
         AtomicInteger atomicInteger = getAtomicInteger(languageType);
         int index = atomicInteger.getAndIncrement();
         List<JudgeResult> judgeResultList  = ((AbstractDockerJudgeTemplate) list.get(index % dockerJavaCodeJudges.size())).judge(submit);
-        System.out.println("线程：" + Thread.currentThread().getName());
-        System.out.println(deliveryTag);
         judgeResultService.updateCommitAfterJudge(judgeResultList,submit);
         try {
             channel.basicAck(deliveryTag,false);

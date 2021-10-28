@@ -1,0 +1,11 @@
+from = TikOnlineJudge@163.com
+host = smtp.163.com
+port = 994
+user = TikOnlineJudge@163.com
+pass = UPDRUHZHKVPWKHJL
+starttlsEnable = true
+sslEnable = true
+socketFactoryClass = javax.net.ssl.SSLSocketFactory
+socketFactoryFallback = true
+socketFactoryPort = 994
+

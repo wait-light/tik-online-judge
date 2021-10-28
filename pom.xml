@@ -38,6 +38,8 @@
         <module>tik-online-judge-user-api</module>
         <module>tik-online-judge-gateway</module>
         <module>tik-online-judge-auth</module>
+        <module>tik-online-judge-message</module>
+        <module>tik-online-judge-message-api</module>
 
     </modules>
 <!--    统一依赖管理-->

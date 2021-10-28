@@ -14,7 +14,6 @@ public class SubmitSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
     public void send(Submit submit){
-        System.out.println("");
         rabbitTemplate.convertAndSend(SubmitSender.SUBMIT_QUERY,submit);
     }
 }
