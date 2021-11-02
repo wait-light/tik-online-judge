@@ -12,6 +12,8 @@ spring:
     port: 5672
     username: executor
     password: 123456
+  application:
+    name: tik-online-judge-auth
 tik-online-judge-auth:
   secure:
     secretKey: A*&*(sd.12+-asBN
@@ -23,3 +25,21 @@ tik-online-judge-auth:
       avatar: https://z3.ax1x.com/2021/09/11/4SEo8O.png
     user-default:
       avatar: https://z3.ax1x.com/2021/09/11/4SEo8O.png
+server:
+  port: 13000
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://127.0.0.1:8848
+  consumer:
+    check: false
+    version: 0.0.1
+  #  cloud:
+  #    #    订阅服务，订阅多个使用 "," 分割
+  #    subscribed-services: tik-online-judge-auth
+  scan:
+    base-packages: top.adxd.tikonlinejudge.auth.api.impl
+  provider:
+    version: 0.0.1

@@ -39,7 +39,6 @@ public class MenuController {
 
     @GetMapping("/tree/")
     public CommonResult treeMenu(){
-
         return CommonResult.success().singleData(userRoleMenuService.menuTree());
     }
 

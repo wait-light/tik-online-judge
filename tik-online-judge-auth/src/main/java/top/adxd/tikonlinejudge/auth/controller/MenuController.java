@@ -27,6 +27,12 @@ public class MenuController {
     @Autowired
     private IMenuService menuService;
 
+
+    @GetMapping("/tree/")
+    public CommonResult treeMenu(){
+        return CommonResult.success().singleData(menuService.menuTree());
+    }
+
     @GetMapping("/list")
     public CommonResult list(){
         PageUtils.makePage();

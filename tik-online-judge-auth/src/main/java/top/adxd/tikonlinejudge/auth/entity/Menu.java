@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.auth.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -56,6 +57,7 @@ public class Menu implements Serializable {
     /**
      * 排序
      */
+    @TableField("`order`")
     private Integer order;
 
     /**
@@ -63,5 +65,9 @@ public class Menu implements Serializable {
      */
     private Long parentId;
 
+    /**
+     * 请求方法
+     */
+    private String requestMethod;
 
 }

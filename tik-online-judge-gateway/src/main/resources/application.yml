@@ -11,5 +11,19 @@ spring:
         uri: https://www.baidu.com
         predicates:
         - Query=green
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://127.0.0.1:8848
+  consumer:
+    check: false
+    version: 0.0.1
+  cloud:
+    #    订阅服务，订阅多个使用 "," 分割
+    subscribed-services: tik-online-judge-auth
+#  scan:
+#    base-packages: top.adxd.tikonlinejudge.executor.api.impl
 server:
   port: 10000

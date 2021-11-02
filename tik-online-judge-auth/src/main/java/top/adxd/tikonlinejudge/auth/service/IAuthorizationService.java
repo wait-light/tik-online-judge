@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.auth.service;
 
+import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 /**
@@ -12,5 +13,5 @@ public interface IAuthorizationService {
      * @param token 认证令牌
      * @return 返回授权结果
      */
-    CommonResult authorization(String token);
+    CommonResult authorization(String token, String path, RequestMethod requestMethod);
 }

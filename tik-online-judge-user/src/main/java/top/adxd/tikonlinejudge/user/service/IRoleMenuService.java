@@ -14,5 +14,5 @@ import java.util.List;
  * @since 2021-09-11
  */
 public interface IRoleMenuService extends IService<RoleMenu> {
-    public List<Long> userMenus(Long id);
+    List<Long> userMenus(Long id);
 }

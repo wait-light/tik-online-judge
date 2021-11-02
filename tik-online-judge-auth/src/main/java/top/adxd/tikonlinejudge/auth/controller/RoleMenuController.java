@@ -27,6 +27,11 @@ public class RoleMenuController {
     @Autowired
     private IRoleMenuService roleMenuService;
 
+    @GetMapping("/menu/{id}")
+    public CommonResult roleMenus(@PathVariable("id") Long roleId) {
+        return CommonResult.success().singleData(roleMenuService.userMenus(roleId));
+    }
+
     @GetMapping("/list")
     public CommonResult list(){
         PageUtils.makePage();

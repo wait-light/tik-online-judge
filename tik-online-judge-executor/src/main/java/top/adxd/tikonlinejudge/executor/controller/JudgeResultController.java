@@ -12,8 +12,6 @@ import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import org.springframework.web.bind.annotation.RestController;
 import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
-import top.adxd.tikonlinejudge.user.api.UserInfo;
-
 /**
  * <p>
  * 前端控制器
@@ -28,19 +26,19 @@ public class JudgeResultController {
 
     @Autowired
     private IJudgeResultService judgeResultService;
-    @DubboReference
-    private UserInfo userInfo;
 
     @GetMapping("/{problem-id}")
     public CommonResult problemJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("token") String token) {
-        Long uid = userInfo.uid(token);
+        //todo 用户id
+        Long uid = 1L;
         List<SubmitJudgeResult> lists = judgeResultService.problemSubmitsResults(problemId, uid);
         return CommonResult.success().add("array", lists);
     }
 
     @GetMapping("/last/{problem-id}")
     public CommonResult problemLastJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("token") String token) {
-        Long uid = userInfo.uid(token);
+        //todo 用户id
+        Long uid = 1L;
         SubmitJudgeResult judgeResults = judgeResultService.lastSubmitResults(problemId, uid);
         return CommonResult.success().add("array", judgeResults);
     }

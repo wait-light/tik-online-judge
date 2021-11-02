@@ -6,6 +6,9 @@ import top.adxd.tikonlinejudge.auth.service.IRoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -17,4 +20,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
 
+
+    @Override
+    public List<Long> userMenus(Long roleId) {
+        if (roleId == null || roleId == 0) {
+            return new ArrayList<>();
+        }
+        return baseMapper.getMenuIdsByRole(roleId);
+    }
 }

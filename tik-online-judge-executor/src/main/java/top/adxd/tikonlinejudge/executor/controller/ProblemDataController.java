@@ -12,7 +12,6 @@ import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.ProblemData;
 import top.adxd.tikonlinejudge.executor.service.IProblemDataService;
 import org.springframework.web.bind.annotation.RestController;
-import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 /**
  * <p>
@@ -28,8 +27,6 @@ public class ProblemDataController {
     
     @Autowired
     private IProblemDataService problemDataService;
-    @DubboReference
-    private UserInfo userInfo;
 
     @GetMapping("/problem/{problemId}")
     public CommonResult problemDatas(@PathVariable("problemId") Long problemId){
@@ -47,7 +44,8 @@ public class ProblemDataController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody ProblemData entity,@RequestHeader("token")String token) {
-        Long uid = userInfo.uid(token);
+        //todo 用户id
+        Long uid = 1L;
         entity.setCreateUserId(uid);
         return  problemDataService.save(entity) ?
             CommonResult.success().setMsg("添加成功") :

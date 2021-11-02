@@ -15,7 +15,6 @@ import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import org.springframework.web.bind.annotation.RestController;
 import top.adxd.tikonlinejudge.executor.service.mq.SubmitSender;
-import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 import javax.validation.Valid;
 
@@ -35,9 +34,6 @@ public class SubmitController {
     @Autowired
     private ThreadPoolExecutor executor;
 
-    @DubboReference
-    private UserInfo userInfo;
-
     @Autowired
     private SubmitSender submitSender;
 
@@ -46,8 +42,8 @@ public class SubmitController {
     @PostMapping("/judge")
 //    @FrequencyLimit(value = 12,name = "judgeAsync")
     public CommonResult judgeAsync(@RequestBody @Valid Submit submit,@RequestHeader("token") String token) {
-
-        submit.setUid(userInfo.uid(token));
+        //todo 用户id
+        Long uid = 1L;
         submit.setCreateTime(LocalDateTime.now());
         boolean submitSuccess = submitService.save(submit);
         if (!submitSuccess) {

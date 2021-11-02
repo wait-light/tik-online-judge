@@ -11,27 +11,6 @@ tik-online-judge.executor:
         open: true
       CPP:
         open: true
-
-#    runcommond: docker run -it -v /home/light/code/online-judge-docker/docker-java/judge-info:/usr/src/judge/ --rm judge-java
-#runcommond:docker run -it --name judge-java -v /home/light/code/online-judge-docker/docker-java/Main.java:/usr/src/judge/Main.java judge-java
-#  java:
-#    classFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\java\Main.java
-#    open: true
-#  cpp:
-#    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\cpp\main.cpp
-#    open: true
-#    gppPath: D:\soft\MinGw\bin\g++
-#  clanguage:
-#    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\CLanguage\main.c
-#    open: true
-#    gccPath: D:\soft\MinGw\bin\gcc
-#  python:
-#    codeFullPath: D:\study\spring\cloud\project\tik-online-judge\tik-online-judge-executor\code\python\main.py
-#    open: true
-#  threadpool:
-#    corePoolSize: 1
-#    maxNumberPoolSize: 2
-#    keepAliveTime: 10
 server:
   port: 8600
 spring:
@@ -64,6 +43,6 @@ dubbo:
     version: 0.0.1
   cloud:
 #    订阅服务，订阅多个使用 "," 分割
-    subscribed-services: tik-online-judge-user
+    subscribed-services: tik-online-judge-auth
   scan:
     base-packages: top.adxd.tikonlinejudge.executor.api.impl

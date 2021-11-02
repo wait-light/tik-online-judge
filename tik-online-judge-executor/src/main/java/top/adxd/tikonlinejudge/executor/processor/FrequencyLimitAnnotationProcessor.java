@@ -14,7 +14,6 @@ import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.annotation.FrequencyLimit;
 import top.adxd.tikonlinejudge.executor.exception.UnsupportedValue;
-import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,8 +27,6 @@ public class FrequencyLimitAnnotationProcessor {
     private final Logger logger = LoggerFactory.getLogger(FrequencyLimitAnnotationProcessor.class);
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    @DubboReference
-    private UserInfo userInfo;
     @Around("@annotation(frequencyLimit)")
     public Object frequencyLimit(ProceedingJoinPoint joinPoint, FrequencyLimit frequencyLimit) throws Throwable {
         double value = frequencyLimit.value();
@@ -42,7 +39,8 @@ public class FrequencyLimitAnnotationProcessor {
         if (token == null){
             id = name + ServletUtil.getClientIP(ServletUtils.getRequest());
         }else {
-            Long uid = userInfo.uid(token);
+            //todo 用户id
+            Long uid = 1L;
             if (uid == null){
                 id = name +ServletUtil.getClientIP(ServletUtils.getRequest());
             }else {

@@ -9,6 +9,9 @@ import top.adxd.tikonlinejudge.common.exeption.CommonException;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.rmi.server.UID;
+import java.time.Instant;
+import java.util.Date;
 
 /*
  * @author wait-light
@@ -19,6 +22,10 @@ public class JWTUtil {
     @Autowired
     private SecureConfig secureConfig;
     private byte[] secretKeyBytes;
+
+    public static final String PAYLOAD_UID = "uid";
+    public static final String PAYLOAD_USERNAME = "username";
+    public static final String PAYLOAD_ADMIN = "admin";
 
     @PostConstruct
     private void initialization() {
@@ -36,8 +43,10 @@ public class JWTUtil {
             throw new CommonException("生成token的用户不能为空");
         }
         return JWT.create()
-                .setPayload("uid", user.getUid())
-                .setPayload("username", user.getUsername())
+                .setPayload(PAYLOAD_UID, user.getUid().toString())
+                .setPayload(PAYLOAD_USERNAME, user.getUsername())
+                .setPayload(PAYLOAD_ADMIN,user.getAdmin())
+                .setIssuedAt(Date.from(Instant.now()))
                 .setKey(secretKeyBytes)
                 .sign();
     }
@@ -62,7 +71,19 @@ public class JWTUtil {
         if (!validate(token)) {
             return null;
         }
-        return Long.getLong(JWT.of(token).setKey(secretKeyBytes).getPayload("uid").toString());
+        return Long.parseLong((String) JWT.of(token).setKey(secretKeyBytes).getPayload(PAYLOAD_UID));
+    }
+
+    /**
+     * 从token返回此用户是否管理员
+     * @param token token
+     * @return 是否管理员
+     */
+    public Boolean isAdmin(String token){
+        if (!validate(token)) {
+            return null;
+        }
+        return (Boolean) JWT.of(token).setKey(secretKeyBytes).getPayload(PAYLOAD_ADMIN);
     }
 
     /**
@@ -75,7 +96,7 @@ public class JWTUtil {
         if (!validate(token)) {
             return null;
         }
-        return JWT.of(token).setKey(secretKeyBytes).getPayload("username").toString();
+        return JWT.of(token).setKey(secretKeyBytes).getPayload(PAYLOAD_USERNAME).toString();
     }
 
 }

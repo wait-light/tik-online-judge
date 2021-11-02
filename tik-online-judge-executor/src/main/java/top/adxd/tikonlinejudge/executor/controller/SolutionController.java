@@ -1,11 +1,8 @@
 package top.adxd.tikonlinejudge.executor.controller;
 
-
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
@@ -14,7 +11,6 @@ import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Solution;
 import top.adxd.tikonlinejudge.executor.service.ISolutionService;
 import org.springframework.web.bind.annotation.RestController;
-import top.adxd.tikonlinejudge.user.api.UserInfo;
 
 /**
  * <p>
@@ -30,12 +26,11 @@ public class SolutionController {
     
     @Autowired
     private ISolutionService solutionService;
-    @DubboReference
-    private UserInfo userInfo;
 
     @GetMapping("/hasSolution/{problemId}")
-    public CommonResult hasSolution(@PathVariable("problemId")Long problemId,@RequestHeader("token") String token){
-        Long uid = userInfo.uid(token);
+    public CommonResult hasSolution(@PathVariable("problemId")Long problemId){
+        //todo 用户id
+        Long uid = 1L;
         if (uid == null){
             return CommonResult.success().add("solutionId",0);
         }
@@ -56,8 +51,9 @@ public class SolutionController {
     }
 
     @PostMapping("")
-    public CommonResult save(@RequestBody Solution entity,@RequestHeader String token) {
-        Long uid = userInfo.uid(token);
+    public CommonResult save(@RequestBody Solution entity) {
+        //todo 用户id
+        Long uid = 1L;
         LocalDateTime now = LocalDateTime.now();
         entity.setUid(uid);
         entity.setCreateTime(now);
