@@ -147,26 +147,6 @@ CREATE TABLE `pms_problem_tag` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `pms_solution`
---
-
-DROP TABLE IF EXISTS `pms_solution`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pms_solution` (
-                                `id` bigint(20) NOT NULL AUTO_INCREMENT,
-                                `uid` bigint(20) DEFAULT NULL,
-                                `title` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-                                `problem_id` bigint(20) DEFAULT NULL,
-                                `create_time` datetime DEFAULT NULL,
-                                `update_time` datetime DEFAULT NULL,
-                                `content` longtext COLLATE utf8_unicode_ci,
-                                `status` bit(1) DEFAULT b'1',
-                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `pms_submit`
 --
 

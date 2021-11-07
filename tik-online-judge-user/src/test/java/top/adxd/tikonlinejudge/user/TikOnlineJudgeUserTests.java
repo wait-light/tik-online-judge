@@ -7,22 +7,58 @@ import top.adxd.tikonlinejudge.user.utils.HashUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wait_light
  * @create 2021/9/6
  */
 //@Slf4j
-@SpringBootTest
+//@SpringBootTest
 public class TikOnlineJudgeUserTests {
+    public boolean isValid (String s) {
+        if(s == null || s.length() <= 1){
+            return false;
+        }
+        // write code here
+        Stack<Character> stack = new Stack();
+        int length = s.length();
+        for(int i = 0 ;i<length;i++){
+            Character c = s.charAt(i);
+            if(c.equals('(')){
+                stack.push(c);
+            }else if(c.equals('{')){
+                stack.push(c);
+            }else if(c.equals('[')){
+                stack.push(c);
+            }else{
+                Character ch = stack.pop();
+                if(ch == null){
+                    return false;
+                }
+                if(c.equals(')')){
+                    if(!ch.equals('(')){
+                        return false;
+                    }
+                }else if(c.equals('}')){
+                    if(!ch.equals('{')){
+                        return false;
+                    }
+                }else if(c.equals(']')){
+                    if(!ch.equals('[')){
+                        return false;
+                    }
+                }
+            }
+        }
+        return stack.empty();
+    }
 
     @Test
     public void aaaaa() {
-        System.out.println(HashUtil.hash("admin"));
+        TikOnlineJudgeUserTests tikOnlineJudgeUserTests = new TikOnlineJudgeUserTests();
+        boolean valid = tikOnlineJudgeUserTests.isValid("[])");
+        System.out.println(valid);
 //        boolean can = true;
 //        for (int i = 0; i < 10; i++) {
 //            can &= i % 2 == 0;

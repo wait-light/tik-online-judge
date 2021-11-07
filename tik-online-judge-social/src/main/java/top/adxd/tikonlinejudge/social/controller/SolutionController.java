@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.executor.controller;
+package top.adxd.tikonlinejudge.social.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Arrays;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
-import top.adxd.tikonlinejudge.executor.entity.Solution;
-import top.adxd.tikonlinejudge.executor.service.ISolutionService;
 import org.springframework.web.bind.annotation.RestController;
+import top.adxd.tikonlinejudge.social.entity.Solution;
+import top.adxd.tikonlinejudge.social.service.ISolutionService;
 
 /**
  * <p>
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-10-14
  */
 @RestController
-@RequestMapping("/executor/solution")
+@RequestMapping("/social/solution")
 public class SolutionController {
-    
+
     @Autowired
     private ISolutionService solutionService;
 
@@ -59,22 +59,22 @@ public class SolutionController {
         entity.setCreateTime(now);
         entity.setUpdateTime(now);
         return  solutionService.save(entity) ?
-            CommonResult.success().setMsg("添加成功") :
-            CommonResult.error().setMsg("添加失败");
+                CommonResult.success().setMsg("添加成功") :
+                CommonResult.error().setMsg("添加失败");
     }
 
     @DeleteMapping("")
     public CommonResult deleteBatch(@RequestBody Long[] ids){
         return solutionService.removeByIds(Arrays.asList(ids)) ?
-            CommonResult.success().setMsg("删除成功") :
-            CommonResult.error().setMsg("删除失败");
+                CommonResult.success().setMsg("删除成功") :
+                CommonResult.error().setMsg("删除失败");
     }
 
     @DeleteMapping("/{id}")
     public CommonResult delete(@PathVariable("id") Long id){
         return solutionService.removeById(id) ?
-            CommonResult.success().setMsg("删除成功") :
-            CommonResult.error().setMsg("删除失败");
+                CommonResult.success().setMsg("删除成功") :
+                CommonResult.error().setMsg("删除失败");
     }
 
     @PutMapping("/{id}")
@@ -82,16 +82,16 @@ public class SolutionController {
         LocalDateTime now = LocalDateTime.now();
         entity.setUpdateTime(now);
         return solutionService.updateById(entity) ?
-            CommonResult.success().setMsg("更新成功"):
-            CommonResult.error().setMsg("更新失败");
+                CommonResult.success().setMsg("更新成功"):
+                CommonResult.error().setMsg("更新失败");
     }
 
     @GetMapping("/{id}")
     public CommonResult info(@PathVariable("id") Long id){
         Solution entity = solutionService.getById(id);
         return entity != null ?
-            CommonResult.success().singleData(entity):
-            CommonResult.error();
+                CommonResult.success().singleData(entity):
+                CommonResult.error();
     }
 
 }

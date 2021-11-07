@@ -36,9 +36,9 @@ dubbo:
   consumer:
     check: false
     version: 0.0.1
-  #  cloud:
-  #    #    订阅服务，订阅多个使用 "," 分割
-  #    subscribed-services: tik-online-judge-auth
+    cloud:
+      #    订阅服务，订阅多个使用 "," 分割
+      subscribed-services: tik-online-judge-message
   scan:
     base-packages: top.adxd.tikonlinejudge.auth.api.impl
   provider:

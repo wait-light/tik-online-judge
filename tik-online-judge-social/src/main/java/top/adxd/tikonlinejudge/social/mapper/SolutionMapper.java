@@ -1,6 +1,6 @@
-package top.adxd.tikonlinejudge.executor.mapper;
+package top.adxd.tikonlinejudge.social.mapper;
 
-import top.adxd.tikonlinejudge.executor.entity.Solution;
+import top.adxd.tikonlinejudge.social.entity.Solution;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author wait_light
- * @since 2021-10-14
+ * @since 2021-11-04
  */
 public interface SolutionMapper extends BaseMapper<Solution> {
 

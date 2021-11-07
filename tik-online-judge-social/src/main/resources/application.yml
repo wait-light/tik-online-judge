@@ -1,0 +1,23 @@
+server:
+  port: 14000
+spring:
+  application:
+    name: tik-online-judge-social
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/judge_cms?useUnicode=true&useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
+dubbo:
+  protocol:
+    # dubbo 协议
+    name: dubbo
+    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+    port: -1
+  registry:
+    address: nacos://127.0.0.1:8848
+  scan:
+    base-packages: top.adxd.tikonlinejudge.social.api.impl
+  provider:
+    version: 0.0.1

@@ -12,6 +12,7 @@ import top.adxd.tikonlinejudge.auth.config.SecureConfig;
 import top.adxd.tikonlinejudge.auth.service.IAuthenticationService;
 import top.adxd.tikonlinejudge.auth.service.IAuthorizationService;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
+import top.adxd.tikonlinejudge.auth.util.RegexUtil;
 import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.message.api.Email;
@@ -22,7 +23,7 @@ import java.nio.charset.StandardCharsets;
  * @author wait-light
  * @date 2021/10/28.
  */
-@SpringBootTest
+//@SpringBootTest
 public class TikOnlineJudgeAuthTestApplication {
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -46,5 +47,9 @@ public class TikOnlineJudgeAuthTestApplication {
 //        Object token = commonResult.get("token");
         CommonResult authorization = authorizationService.authorization((String) token, "/login", RequestMethod.GET);
         System.out.println(authorization);
+    }
+    @Test
+    public void aaab(){
+        System.out.println(RegexUtil.isEmail("9157@qqcom"));
     }
 }

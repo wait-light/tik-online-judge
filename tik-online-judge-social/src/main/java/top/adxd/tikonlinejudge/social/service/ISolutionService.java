@@ -1,6 +1,6 @@
-package top.adxd.tikonlinejudge.executor.service;
+package top.adxd.tikonlinejudge.social.service;
 
-import top.adxd.tikonlinejudge.executor.entity.Solution;
+import top.adxd.tikonlinejudge.social.entity.Solution;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * </p>
  *
  * @author wait_light
- * @since 2021-10-14
+ * @since 2021-11-04
  */
 public interface ISolutionService extends IService<Solution> {
     /**

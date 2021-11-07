@@ -41,7 +41,9 @@ public class EmailConsumer {
             emailSender.send(email.to,email.subject,email.content);
             channel.basicAck(deliveryTag,false);
         }catch (Exception e){
+            System.out.println("-----------------");
             logger.error(e.getLocalizedMessage());
+            System.out.println("-----------------");
             try {
                 channel.basicNack(deliveryTag,false,true);
             } catch (IOException ex) {

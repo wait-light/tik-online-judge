@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.auth;
+package top.adxd.tikonlinejudge.social;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -7,13 +7,13 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author wait-light
- * @date 2021/10/19 下午6:42
+ * @date 2021/11/4.
  */
-@SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("top.adxd.tikonlinejudge.auth.mapper")
-public class TikOnlineJudgeAuthApplication {
+@MapperScan("top.adxd.tikonlinejudge.social.mapper")
+@SpringBootApplication
+public class TikOnlineJudgeSocialApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TikOnlineJudgeAuthApplication.class,args);
+        SpringApplication.run(TikOnlineJudgeSocialApplication.class, args);
     }
 }
