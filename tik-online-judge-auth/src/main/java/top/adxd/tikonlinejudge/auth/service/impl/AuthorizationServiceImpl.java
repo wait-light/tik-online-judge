@@ -1,8 +1,11 @@
 package top.adxd.tikonlinejudge.auth.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
+import top.adxd.tikonlinejudge.auth.api.dto.AuthorizationResult;
 import top.adxd.tikonlinejudge.auth.entity.*;
 import top.adxd.tikonlinejudge.auth.service.*;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
  * @date 2021/10/26 下午5:09
  */
 @Service("authorizationServiceImpl")
+@DubboService
 public class AuthorizationServiceImpl implements IAuthorizationService {
 
     private static final String ADMIN_PERMISSION = "*";
@@ -40,20 +44,20 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
     private IRequestMethodMatcher requestMethodMatcher;
 
     @Override
-    public CommonResult authorization(String token, String path, RequestMethod requestMethod) {
+    public AuthorizationResult authorization(String token, String path, RequestMethod requestMethod) {
         Long uid = jwtUtil.uid(token);
         if (uid == null) {
-            return CommonResult.error("未登录或登录已过期");
+            return new AuthorizationResult(false, null, "未登录或登录已过期");
         }
         Menu matchMenu = pathMatcher.match(path);
         if (matchMenu == null) {
-            return CommonResult.permissionDeny("拒绝访问");
+            return new AuthorizationResult(false, null, "拒绝访问");
         }
         Set<String> permissionSet = userAuthorization(uid);
         if (permissionSet.contains("*") || (permissionSet.contains(matchMenu.getPerms())) && requestMethodMatcher.match(requestMethod, matchMenu.getRequestMethod())) {
-            return CommonResult.success("权限校验成功");
+            return new AuthorizationResult(false, uid, "权限校验成功");
         }
-        return CommonResult.permissionDeny("拒绝访问");
+        return new AuthorizationResult(false, null, "拒绝访问");
     }
 
     public Set<String> userAuthorization(Long uid) {

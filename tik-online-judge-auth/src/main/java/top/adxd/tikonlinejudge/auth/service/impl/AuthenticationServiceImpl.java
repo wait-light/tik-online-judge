@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.auth.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import top.adxd.tikonlinejudge.auth.service.IUserService;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.message.api.Email;
+import top.adxd.tikonlinejudge.message.api.IVerificationCodeService;
+import top.adxd.tikonlinejudge.message.api.VerifyCodeStatus;
 
 import java.time.LocalDateTime;
 
@@ -35,6 +38,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private UserDefaultConfig userDefaultConfig;
     @Autowired
     private JWTUtil jwtUtil;
+    @DubboReference
+    private IVerificationCodeService emailVerificationCodeService;
 
     @Override
     public CommonResult usernameLogin(String username, String password) {
@@ -53,11 +58,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CommonResult emailLogin(String email, String code) {
-        String temporaryCode = redisTemplate.opsForValue().get(EMAIL_VERIFICATION_CODE_KEY + email);
-        if (temporaryCode == null) {
-            return CommonResult.error("验证码错误");
+        if(code == null){
+            return CommonResult.error("验证码为空");
         }
-        if (temporaryCode.equals(code)) {
+        VerifyCodeStatus verifyCodeStatus = emailVerificationCodeService.verifyCode(email, code);
+        if (verifyCodeStatus == VerifyCodeStatus.success) {
             User user = saveUserIfNotExist(email);
             String token = jwtUtil.generate(user);
             return CommonResult.success("登录成功").add("token", token);

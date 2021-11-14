@@ -1,162 +1,220 @@
+-- MySQL dump 10.13  Distrib 5.7.36, for Linux (x86_64)
+--
+-- Host: localhost    Database: judge_ums
+-- ------------------------------------------------------
+-- Server version	5.7.36
 
-/*
- Navicat Premium Data Transfer
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
- Source Server         : 192.168.181.128
- Source Server Type    : MySQL
- Source Server Version : 50735
- Source Host           : 192.168.181.128:3306
- Source Schema         : judge_ums
+--
+-- Table structure for table `ums_menu`
+--
 
- Target Server Type    : MySQL
- Target Server Version : 50735
- File Encoding         : 65001
-
- Date: 03/10/2021 10:48:28
-*/
-CREATE DATABASE judge_ums;
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-USE judge_ums;
-
--- ----------------------------
--- Table structure for ums_menu
--- ----------------------------
 DROP TABLE IF EXISTS `ums_menu`;
-CREATE TABLE `ums_menu`  (
-  `id` bigint(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '权限名称',
-  `perms` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
-  `type` tinyint(4) NULL DEFAULT NULL COMMENT '类型(0:目录 1.菜单 2.按钮)',
-  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '菜单地址',
-  `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '图标',
-  `order` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '排序',
-  `parent_id` bigint(10) UNSIGNED NULL DEFAULT 0 COMMENT '父级id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_menu` (
+                            `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                            `name` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '权限名称',
+                            `perms` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '授权(多个用逗号分隔，如：user:list,user:create)',
+                            `type` tinyint(4) DEFAULT NULL COMMENT '类型(0:目录 1.菜单 2.按钮)',
+                            `url` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '菜单地址',
+                            `icon` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '图标',
+                            `order` int(10) unsigned DEFAULT NULL COMMENT '排序',
+                            `parent_id` bigint(10) unsigned DEFAULT '0' COMMENT '父级id',
+                            `request_method` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求方法',
+                            PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_menu
--- ----------------------------
-INSERT INTO `ums_menu` VALUES (1, '权限管理', 'system:menu:list', 1, '/backstage/menu', 'DocumentDelete', 1, 0);
-INSERT INTO `ums_menu` VALUES (2, '角色管理', 'system:role:list', 0, '/backstage/role', 'Baseball', 5, 0);
-INSERT INTO `ums_menu` VALUES (3, '角色查询', 'system:role:query', 2, NULL, NULL, NULL, 2);
-INSERT INTO `ums_menu` VALUES (4, '角色添加', 'system:role:add', 2, NULL, NULL, 2, 2);
-INSERT INTO `ums_menu` VALUES (5, '角色删除', 'system:role:remove', 2, NULL, NULL, 5, 2);
-INSERT INTO `ums_menu` VALUES (6, '角色修改', 'system:role:edit', 2, NULL, NULL, NULL, 2);
-INSERT INTO `ums_menu` VALUES (7, '角色导出', 'system:role:export', 2, NULL, NULL, NULL, 2);
+--
+-- Dumping data for table `ums_menu`
+--
 
--- ----------------------------
--- Table structure for ums_role
--- ----------------------------
+LOCK TABLES `ums_menu` WRITE;
+/*!40000 ALTER TABLE `ums_menu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ums_menu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ums_role`
+--
+
 DROP TABLE IF EXISTS `ums_role`;
-CREATE TABLE `ums_role`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '角色名',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_user_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '创建用户id',
-  `status` bit(1) NULL DEFAULT b'1' COMMENT '1启用/0关闭',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_role` (
+                            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                            `name` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '角色名',
+                            `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                            `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+                            `remark` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
+                            `create_user_id` bigint(20) unsigned DEFAULT NULL COMMENT '创建用户id',
+                            `status` bit(1) DEFAULT b'1' COMMENT '1启用/0关闭',
+                            PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_role
--- ----------------------------
-INSERT INTO `ums_role` VALUES (14, 'asdasd', '2021-09-15 16:30:53', '2021-09-15 16:30:53', 'asdasd', NULL, b'1');
+--
+-- Dumping data for table `ums_role`
+--
 
--- ----------------------------
--- Table structure for ums_role_menu
--- ----------------------------
+LOCK TABLES `ums_role` WRITE;
+/*!40000 ALTER TABLE `ums_role` DISABLE KEYS */;
+INSERT INTO `ums_role` VALUES (14,'asdasd','2021-09-15 16:30:53','2021-09-15 16:30:53','asdasd',NULL,_binary '');
+/*!40000 ALTER TABLE `ums_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ums_role_menu`
+--
+
 DROP TABLE IF EXISTS `ums_role_menu`;
-CREATE TABLE `ums_role_menu`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `role_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
-  `menu_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '菜单权限id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 53 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_role_menu` (
+                                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                 `role_id` bigint(20) unsigned DEFAULT NULL COMMENT '角色id',
+                                 `menu_id` bigint(20) unsigned DEFAULT NULL COMMENT '菜单权限id',
+                                 PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_role_menu
--- ----------------------------
-INSERT INTO `ums_role_menu` VALUES (47, 14, 2);
-INSERT INTO `ums_role_menu` VALUES (48, 14, 5);
-INSERT INTO `ums_role_menu` VALUES (49, 14, 4);
-INSERT INTO `ums_role_menu` VALUES (50, 14, 3);
-INSERT INTO `ums_role_menu` VALUES (51, 14, 6);
-INSERT INTO `ums_role_menu` VALUES (52, 14, 7);
+--
+-- Dumping data for table `ums_role_menu`
+--
 
--- ----------------------------
--- Table structure for ums_social
--- ----------------------------
+LOCK TABLES `ums_role_menu` WRITE;
+/*!40000 ALTER TABLE `ums_role_menu` DISABLE KEYS */;
+INSERT INTO `ums_role_menu` VALUES (47,14,2),(48,14,5),(49,14,4),(50,14,3),(51,14,6),(52,14,7);
+/*!40000 ALTER TABLE `ums_role_menu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ums_social`
+--
+
 DROP TABLE IF EXISTS `ums_social`;
-CREATE TABLE `ums_social`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '第三方软件的名称',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `status` bit(1) NULL DEFAULT b'1' COMMENT '启用状态(1启用/0关闭)',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_social` (
+                              `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                              `name` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '第三方软件的名称',
+                              `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                              `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+                              `status` bit(1) DEFAULT b'1' COMMENT '启用状态(1启用/0关闭)',
+                              PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_social
--- ----------------------------
+--
+-- Dumping data for table `ums_social`
+--
 
--- ----------------------------
--- Table structure for ums_user
--- ----------------------------
+LOCK TABLES `ums_social` WRITE;
+/*!40000 ALTER TABLE `ums_social` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ums_social` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ums_user`
+--
+
 DROP TABLE IF EXISTS `ums_user`;
-CREATE TABLE `ums_user`  (
-  `uid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '用户名',
-  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '密码',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `status` bit(1) NULL DEFAULT b'1' COMMENT '状态(1启用/0禁用)',
-  `nickname` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '昵称',
-  `telephone` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '手机号',
-  `email` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '电子邮箱',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '头像',
-  PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_user` (
+                            `uid` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户id',
+                            `username` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户名',
+                            `password` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '密码',
+                            `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                            `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+                            `status` bit(1) DEFAULT b'1' COMMENT '状态(1启用/0禁用)',
+                            `nickname` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '昵称',
+                            `telephone` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '手机号',
+                            `email` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '电子邮箱',
+                            `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '头像',
+                            `admin` bit(1) DEFAULT b'0' COMMENT '是否管理员',
+                            PRIMARY KEY (`uid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_user
--- ----------------------------
-INSERT INTO `ums_user` VALUES (1, 'admin', 'admin', '2021-09-11 22:22:36', '2021-09-11 22:22:36', b'1', 'tik-admin', NULL, NULL, 'https://imgtu.com/i/4SEo8O');
+--
+-- Dumping data for table `ums_user`
+--
 
--- ----------------------------
--- Table structure for ums_user_role
--- ----------------------------
+LOCK TABLES `ums_user` WRITE;
+/*!40000 ALTER TABLE `ums_user` DISABLE KEYS */;
+INSERT INTO `ums_user` VALUES (1,'admin','admin','2021-09-11 22:22:36','2021-09-11 22:22:36',_binary '','tik-admin',NULL,NULL,'https://imgtu.com/i/4SEo8O',_binary '\0'),(2,'915779941@qq.com',NULL,'2021-11-08 15:51:03','2021-11-08 15:51:03',_binary '','5s9tycm9',NULL,'915779941@qq.com','https://z3.ax1x.com/2021/09/11/4SEo8O.png',_binary '\0');
+/*!40000 ALTER TABLE `ums_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ums_user_role`
+--
+
 DROP TABLE IF EXISTS `ums_user_role`;
-CREATE TABLE `ums_user_role`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `uid` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `role_id` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '角色id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_user_role` (
+                                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                 `uid` bigint(20) unsigned DEFAULT NULL COMMENT '用户id',
+                                 `role_id` bigint(20) unsigned DEFAULT NULL COMMENT '角色id',
+                                 PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_user_role
--- ----------------------------
+--
+-- Dumping data for table `ums_user_role`
+--
 
--- ----------------------------
--- Table structure for ums_user_social
--- ----------------------------
+LOCK TABLES `ums_user_role` WRITE;
+/*!40000 ALTER TABLE `ums_user_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ums_user_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ums_user_social`
+--
+
 DROP TABLE IF EXISTS `ums_user_social`;
-CREATE TABLE `ums_user_social`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `uid` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `social_type` bigint(20) UNSIGNED NULL DEFAULT NULL COMMENT '社交账号类型',
-  `user_social_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '用户社交账号的唯一id',
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `user_social_id`(`user_social_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ums_user_social` (
+                                   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                   `uid` bigint(20) unsigned DEFAULT NULL COMMENT '用户id',
+                                   `social_type` bigint(20) unsigned DEFAULT NULL COMMENT '社交账号类型',
+                                   `user_social_id` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户社交账号的唯一id',
+                                   PRIMARY KEY (`id`) USING BTREE,
+                                   KEY `user_social_id` (`user_social_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ums_user_social
--- ----------------------------
+--
+-- Dumping data for table `ums_user_social`
+--
 
-SET FOREIGN_KEY_CHECKS = 1;
+LOCK TABLES `ums_user_social` WRITE;
+/*!40000 ALTER TABLE `ums_user_social` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ums_user_social` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-11-08  8:26:30

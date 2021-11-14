@@ -46,3 +46,5 @@ dubbo:
     subscribed-services: tik-online-judge-auth
   scan:
     base-packages: top.adxd.tikonlinejudge.executor.api.impl
+  provider:
+    version: 0.0.1

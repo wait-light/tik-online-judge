@@ -45,17 +45,12 @@ public class SubmitController {
         //todo 用户id
         Long uid = 1L;
         submit.setCreateTime(LocalDateTime.now());
+        submit.setUid(uid);
         boolean submitSuccess = submitService.save(submit);
         if (!submitSuccess) {
             return CommonResult.error("提交失败");
         }
-        /**
-         * 异步运行
-         */
-        CompletableFuture
-                .runAsync(() -> {
-                    submitSender.send(submit);
-                });
+        submitSender.send(submit);
         return CommonResult.success("提交成功");
     }
 

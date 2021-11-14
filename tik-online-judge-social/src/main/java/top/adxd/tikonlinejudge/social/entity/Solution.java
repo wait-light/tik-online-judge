@@ -54,5 +54,14 @@ public class Solution implements Serializable {
      */
     private Boolean status;
 
+    /**
+     * 问题id
+     */
+    private Long problemId;
+
+    /**
+     * 标题
+     */
+    private String title;
 
 }

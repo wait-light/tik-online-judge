@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageInfo;
 import top.adxd.tikonlinejudge.common.constant.PageConstant;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author wait_light
  * @create 2021/9/6
  */
-public class CommonResult extends HashMap {
+public class CommonResult extends HashMap implements Serializable {
     //请求成功
     public static final int SUCCESS_CODE = 200;
     //请求失败

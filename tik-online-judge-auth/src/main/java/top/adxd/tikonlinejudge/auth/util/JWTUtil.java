@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.auth.util;
 
 import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import top.adxd.tikonlinejudge.auth.config.SecureConfig;
@@ -58,7 +59,11 @@ public class JWTUtil {
      * @return token是否合法
      */
     private boolean validate(String token) {
-        return JWT.of(token).setKey(secretKeyBytes).verify();
+        try {
+            return JWT.of(token).setKey(secretKeyBytes).verify();
+        }catch (JWTException jwtException){
+            return false;
+        }
     }
 
     /**

@@ -1,23 +1,15 @@
 package top.adxd.tikonlinejudge.auth;
 
-import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
-import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
 import top.adxd.tikonlinejudge.auth.config.SecureConfig;
 import top.adxd.tikonlinejudge.auth.service.IAuthenticationService;
-import top.adxd.tikonlinejudge.auth.service.IAuthorizationService;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
 import top.adxd.tikonlinejudge.auth.util.RegexUtil;
 import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
-import top.adxd.tikonlinejudge.message.api.Email;
-
-import java.nio.charset.StandardCharsets;
 
 /*
  * @author wait-light
@@ -45,8 +37,8 @@ public class TikOnlineJudgeAuthTestApplication {
         System.out.println(admin);
         System.out.println(commonResult);
 //        Object token = commonResult.get("token");
-        CommonResult authorization = authorizationService.authorization((String) token, "/login", RequestMethod.GET);
-        System.out.println(authorization);
+//        CommonResult authorization = authorizationService.authorization((String) token, "/login", RequestMethod.GET);
+//        System.out.println(authorization);
     }
     @Test
     public void aaab(){

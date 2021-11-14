@@ -1,4 +1,7 @@
 spring:
+  devtools:
+    restart:
+      enabled: true
   application:
     name: tik-online-judge-gateway
   cloud:
@@ -6,11 +9,49 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
     gateway:
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#            allowedMethods:
+#              - GET
+#              - PUT
+#              - DELETE
+#              - POST
+#              - OPTION
+#            allowedHeaders:
+#              - token
+#              - DNT
+#              - X-Mx-ReqToken
+#              - Keep-Alive
+#              - User-Agent
+#              - X-Requested-With
+#              - If-Modified-Since
+#              - Cache-Control
+#              - Content-Type
+#              - Authorization
+#        add-to-simple-url-handler-mapping: true
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
-      - id: test
-        uri: https://www.baidu.com
-        predicates:
-        - Query=green
+        #        - id: test
+        #          uri: https://www.baidu.com
+        #          predicates:
+        #            - Query=green
+        - id: auth
+          uri: lb://tik-online-judge-auth
+          predicates:
+            - Path=/auth/**
+        - id: executor
+          uri: lb://tik-online-judge-executor
+          predicates:
+            - Path=/executor/**
+        - id: social
+          uri: lb://tik-online-judge-social
+          predicates:
+            - Path=/social/**
 dubbo:
   protocol:
     name: dubbo

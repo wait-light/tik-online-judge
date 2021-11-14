@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 #set -eu
 compile_begin_time=$[$(date +%s%N)]
-touch compile.info compile.time input output Main.java needCompile
-chmod 666 compile.info compile.time input output Main.java needCompile
+touch compile.info compile.time input stdout stderr Main.java needCompile
+chmod 766 compile.info compile.time input stdout stderr Main.java needCompile
 #将编译信息输出到/usr/src/judge/compile.info
 #判断是否需要编译
 read isNeedCompile < needCompile
