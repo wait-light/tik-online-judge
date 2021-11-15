@@ -41,7 +41,7 @@ public class GroupUser implements Serializable {
     /**
      * 群组用户类型
      */
-    private Integer userType;
+    private GroupUserType userType;
 
 
 }

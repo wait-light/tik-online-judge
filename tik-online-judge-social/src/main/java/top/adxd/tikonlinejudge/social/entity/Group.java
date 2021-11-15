@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author wait_light
- * @since 2021-11-04
+ * @since 2021-11-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,6 +48,11 @@ public class Group implements Serializable {
      * 状态
      */
     private Integer status;
+
+    /**
+     * 图片
+     */
+    private String avatar;
 
 
 }

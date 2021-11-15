@@ -34,6 +34,7 @@ public class CorsFilterConfig {
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
                 headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
                 headers.add(HttpHeaders.ACCESS_CONTROL_MAX_AGE, MAX_AGE);
+                headers.add(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD,"GET,PUT,POST,OPTIONS,DELETE");
                 if (request.getMethod() == HttpMethod.OPTIONS) {
                     response.setStatusCode(HttpStatus.OK);
                     return Mono.empty();

@@ -1,7 +1,7 @@
 package top.adxd.tikonlinejudge.social.mapper;
 
-import top.adxd.tikonlinejudge.social.entity.Group;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import top.adxd.tikonlinejudge.social.entity.Group;
 
 /**
  * <p>
