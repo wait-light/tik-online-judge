@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-11-04
  */
 public interface IGroupUserService extends IService<GroupUser> {
-
+    boolean isInGroup(Long uid,Long group);
 }

@@ -19,6 +19,11 @@ dubbo:
     address: nacos://127.0.0.1:8848
   scan:
     base-packages: top.adxd.tikonlinejudge.social.api.impl
+  consumer:
+    check: false
+    version: 0.0.1
+    cloud:
+      subscribed-services: tik-online-judge-auth
   provider:
     version: 0.0.1
 mybatis-plus:

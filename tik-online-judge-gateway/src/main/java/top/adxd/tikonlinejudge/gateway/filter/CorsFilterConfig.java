@@ -24,19 +24,20 @@ public class CorsFilterConfig {
     public WebFilter corsFilter() {
         return (ServerWebExchange ctx, WebFilterChain chain) -> {
             ServerHttpRequest request = ctx.getRequest();
+            System.out.println(request.getMethod() + " : " + request.getPath());
             if (CorsUtils.isCorsRequest(request)) {
                 HttpHeaders requestHeaders = request.getHeaders();
                 ServerHttpResponse response = ctx.getResponse();
-                HttpMethod requestMethod = requestHeaders.getAccessControlRequestMethod();
                 HttpHeaders headers = response.getHeaders();
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, requestHeaders.getOrigin());
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
                 headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
                 headers.add(HttpHeaders.ACCESS_CONTROL_MAX_AGE, MAX_AGE);
-                headers.add(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD,"GET,PUT,POST,OPTIONS,DELETE");
+                headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS,"POST,GET,DELETE,PUT,OPTIONS");
                 if (request.getMethod() == HttpMethod.OPTIONS) {
                     response.setStatusCode(HttpStatus.OK);
+
                     return Mono.empty();
                 }
             }

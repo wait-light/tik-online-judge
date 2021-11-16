@@ -4,6 +4,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.auth.dto.LoginEmailDto;
 import top.adxd.tikonlinejudge.auth.dto.LoginUsernameDto;
 import top.adxd.tikonlinejudge.auth.dto.PasswordUpdateByEmailDto;
@@ -57,5 +58,11 @@ public class AnonymousController {
     @PutMapping("/password/username")
     public CommonResult updatePassword(@RequestBody @Validated PasswordUpdateByPasswordDto passwordUpdateByPasswordDto) {
         return userService.updatePassword(passwordUpdateByPasswordDto);
+    }
+
+    @GetMapping("/{id}")
+    public CommonResult userTitle(@PathVariable("id") Long uid) {
+        SafeUserDto safeUser = userService.getSafeUser(uid);
+        return safeUser == null ? CommonResult.error() : CommonResult.success().singleData(safeUser);
     }
 }
