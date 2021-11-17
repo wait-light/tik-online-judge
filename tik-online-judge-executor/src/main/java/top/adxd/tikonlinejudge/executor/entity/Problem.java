@@ -8,6 +8,8 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 
@@ -32,6 +34,7 @@ public class Problem implements Serializable {
     /**
      * 问题名称
      */
+    @NotNull
     private String name;
 
     /**

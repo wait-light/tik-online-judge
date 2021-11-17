@@ -1,9 +1,12 @@
 package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.exeption.CommonException;
+import top.adxd.tikonlinejudge.executor.api.IGroupCollectionService;
 import top.adxd.tikonlinejudge.social.entity.Group;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
 import top.adxd.tikonlinejudge.social.entity.GroupUserType;
@@ -31,10 +34,13 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
 
     @Autowired
     private IGroupUserService groupUserService;
+    @DubboReference
+    private IGroupCollectionService groupCollectionService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean save(Group group) {
+        //储存群组信息
         LocalDateTime now = LocalDateTime.now();
         group.setCreateTime(now);
         //TODO 用户id
@@ -42,15 +48,18 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
         group.setCreateUserId(uid);
         group.setStatus(1);
         boolean saveGroup = super.save(group);
+
+        //储存用户信息
         GroupUser groupUser = new GroupUser();
         groupUser.setGroupId(group.getId());
         groupUser.setUserType(GroupUserType.MASTER);
         groupUser.setUid(uid);
         boolean saveGroupUser = groupUserService.save(groupUser);
-        if (!(saveGroup && saveGroupUser)) {
-            throw new CommonException("创建失败");
-        }
-        return saveGroup && saveGroupUser;
+
+        //储存群组问题集信息
+        boolean collection = groupCollectionService.collectionGroupCreate(group.getId(), group.getName());
+
+        return saveGroup && saveGroupUser & collection;
     }
 
     @Override
@@ -61,7 +70,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
                 .stream()
                 .map((item -> item.getGroupId()))
                 .collect(Collectors.toList());
-        if (groupIds.size() <= 0){
+        if (groupIds.size() <= 0) {
             return new ArrayList<>();
         }
         return listByIds(groupIds);

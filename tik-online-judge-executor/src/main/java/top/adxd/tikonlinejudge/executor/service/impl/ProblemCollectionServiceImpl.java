@@ -40,13 +40,11 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
     private ProblemMapper problemMapper;
 
 
-
-
     @Override
-    public List<ProblemSurvey> collectionsItem(Long collectionId,boolean all) {
+    public List<ProblemSurvey> collectionsItem(Long collectionId, boolean all) {
         //TODO 权限校验
         //是否进行数据分页
-        if(!all){
+        if (!all) {
             PageUtils.makePage();
         }
         List<ProblemCollectionItem> problemCollectionItems = problemCollectionItemMapper
@@ -59,8 +57,8 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         List<Long> problemIds = problemCollectionItems.stream().map((item) -> item.getProblemId()).collect(Collectors.toList());
         return problemMapper
                 .selectList(new QueryWrapper<Problem>()
-                .in("id", problemIds)
-                .select("name","create_time","update_time","id")
+                        .in("id", problemIds)
+                        .select("name", "create_time", "update_time", "id")
                 )
                 .stream().map((problem) -> {
                     ProblemSurvey problemSurvey = new ProblemSurvey();
@@ -77,17 +75,44 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         problem.setCreateTime(now);
         problem.setUpdateTime(now);
         problem.setCollectionId(collectionId);
+        //todo uid
+        Long uid = 1L;
+        problem.setUid(uid);
         int insert = problemMapper.insert(problem);
-        if (insert <=0){
+        if (insert <= 0) {
             throw new CommonException("问题添加失败");
         }
         ProblemCollectionItem problemCollectionItem = new ProblemCollectionItem();
         problemCollectionItem.setCollectionId(collectionId);
         problemCollectionItem.setProblemId(problem.getId());
         boolean itemSuccess = problemCollectionItemMapper.insert(problemCollectionItem) >= 0;
-        if (!itemSuccess){
+        if (!itemSuccess) {
             throw new CommonException("问题添加失败");
         }
         return CommonResult.success("问题添加成功");
+    }
+
+    @Override
+    public boolean isInCollection(Long collectionId, Long problemId) {
+        return problemCollectionItemMapper.selectOne(new QueryWrapper<ProblemCollectionItem>()
+                .eq("collection_id", collectionId)
+                .eq("problem_id", problemId)
+                .select("id")) != null;
+    }
+
+    @Override
+    public CommonResult collectionProblems(Long collectionId) {
+        PageUtils.makePage();
+        List<Long> collect = problemCollectionItemMapper.selectList(new QueryWrapper<ProblemCollectionItem>()
+                        .eq("collection_id", collectionId)
+                        .select("problem_id"))
+                .stream()
+                .map(item -> item.getProblemId())
+                .collect(Collectors.toList());
+        if (collect.size() <= 0) {
+            return CommonResult.success().listData(collect);
+        }
+        List<Problem> problems = problemMapper.selectBatchIds(collect);
+        return CommonResult.success().listData(problems);
     }
 }

@@ -19,4 +19,6 @@ import java.util.List;
 public interface IProblemCollectionService extends IService<ProblemCollection> {
     List<ProblemSurvey> collectionsItem(Long collectionId,boolean all);
     CommonResult addProblem(Problem problem,Long collectionId);
+    boolean isInCollection(Long collectionId,Long problemId);
+    CommonResult collectionProblems(Long collectionId);
 }

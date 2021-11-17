@@ -45,6 +45,6 @@ dubbo:
 #    订阅服务，订阅多个使用 "," 分割
     subscribed-services: tik-online-judge-auth
   scan:
-    base-packages: top.adxd.tikonlinejudge.executor.api.impl
+    base-packages: top.adxd.tikonlinejudge.executor.service
   provider:
     version: 0.0.1

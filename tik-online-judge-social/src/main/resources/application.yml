@@ -23,7 +23,7 @@ dubbo:
     check: false
     version: 0.0.1
     cloud:
-      subscribed-services: tik-online-judge-auth
+      subscribed-services: tik-online-judge-auth,tik-online-judge-executor
   provider:
     version: 0.0.1
 mybatis-plus:

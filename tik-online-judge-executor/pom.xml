@@ -20,6 +20,12 @@
         </dependency>
 
         <dependency>
+            <groupId>top.adxd</groupId>
+            <artifactId>tik-online-judge-executor-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>

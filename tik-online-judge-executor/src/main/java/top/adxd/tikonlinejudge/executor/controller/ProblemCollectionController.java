@@ -33,6 +33,11 @@ public class ProblemCollectionController {
     @Autowired
     private IProblemCollectionService problemCollectionService;
 
+        @GetMapping("/collection/{collectionId}")
+    public CommonResult collectionProblems(@PathVariable("collectionId")Long collectionId){
+        return problemCollectionService.collectionProblems(collectionId);
+    }
+
     @GetMapping("/list")
     public CommonResult list() {
         PageUtils.makePage();

@@ -42,6 +42,7 @@
         <module>tik-online-judge-message-api</module>
         <module>tik-online-judge-auth-api</module>
         <module>tik-online-judge-social</module>
+        <module>tik-online-judge-executor-api</module>
 
     </modules>
 <!--    统一依赖管理-->
