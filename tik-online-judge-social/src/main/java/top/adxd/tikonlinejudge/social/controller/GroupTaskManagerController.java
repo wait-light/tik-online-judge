@@ -12,6 +12,12 @@ public class GroupTaskManagerController {
     @Autowired
     private IGroupTaskManagerService groupTaskManagerService;
 
+
+    @GetMapping("/{groupId}")
+    public CommonResult tasks(@PathVariable("groupId") Long groupId) {
+        return groupTaskManagerService.tasks(groupId);
+    }
+
     @PostMapping("/{groupId}")
     public CommonResult taskAdd(@PathVariable("groupId") Long groupId, @RequestBody GroupTaskDto groupTaskDto) {
         return groupTaskManagerService.addTask(groupId, groupTaskDto);

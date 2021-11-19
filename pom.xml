@@ -43,6 +43,7 @@
         <module>tik-online-judge-auth-api</module>
         <module>tik-online-judge-social</module>
         <module>tik-online-judge-executor-api</module>
+        <module>tik-online-judge-thirdpart</module>
 
     </modules>
 <!--    统一依赖管理-->
@@ -60,6 +61,11 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.github.pagehelper</groupId>-->
+<!--                <artifactId>pagehelper</artifactId>-->
+<!--                <version>${pagehelper.version</version>-->
+<!--            </dependency>-->
 
             <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
             <dependency>

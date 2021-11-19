@@ -2,10 +2,13 @@ package top.adxd.tikonlinejudge.common.vo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import top.adxd.tikonlinejudge.common.constant.PageConstant;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class CommonResult extends HashMap implements Serializable {
     private CommonResult(String msg, int code) {
         this.put("msg", msg);
         this.put("code", code);
-        this.put("success",code == SUCCESS_CODE);
+        this.put("success", code == SUCCESS_CODE);
     }
 
     public static CommonResult success(String msg) {
@@ -89,12 +92,24 @@ public class CommonResult extends HashMap implements Serializable {
         return this;
     }
 
-    public <T> CommonResult listData(T[] list) {
-        return listData(list);
+    public <T> CommonResult listData(List<T> list) {
+        PageInfo pageInfo = new PageInfo(list);
+        add(PageConstant.HAS_PREVIOUS_PAGE, pageInfo.isHasPreviousPage());
+        add(PageConstant.HAS_NEXT_PAGE, pageInfo.isHasNextPage());
+        add(PageConstant.PAGE_SIZE, pageInfo.getPageSize());
+        add(PageConstant.CURRENT_PAGE, pageInfo.getPageNum());
+        add(PageConstant.TOTAL_PAGE, pageInfo.getPages());
+        add(PageConstant.TOTAL, pageInfo.getTotal());
+        return add(PageConstant.LIST_KEY, list);
     }
 
-    public <T> CommonResult listData(List<T> list) {
-        PageInfo<T> pageInfo = new PageInfo<>(list);
+    public <T> CommonResult listData(Page page, List<T> list) {
+        PageInfo pageInfo = null;
+        if (page == null) {
+            pageInfo = new PageInfo(list);
+        } else {
+            pageInfo = new PageInfo(page);
+        }
         add(PageConstant.HAS_PREVIOUS_PAGE, pageInfo.isHasPreviousPage());
         add(PageConstant.HAS_NEXT_PAGE, pageInfo.isHasNextPage());
         add(PageConstant.PAGE_SIZE, pageInfo.getPageSize());

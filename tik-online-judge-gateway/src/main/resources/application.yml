@@ -52,6 +52,10 @@ spring:
           uri: lb://tik-online-judge-social
           predicates:
             - Path=/social/**
+        - id: thirdpart
+          uri: lb://tik-online-judge-thirdpart
+          predicates:
+          - Path=/thirdpart/**
 dubbo:
   protocol:
     name: dubbo

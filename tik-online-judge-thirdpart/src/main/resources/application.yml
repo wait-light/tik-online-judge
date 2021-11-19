@@ -1,0 +1,14 @@
+server:
+  port: 15000
+spring:
+  application:
+    name: tik-online-judge-thirdpart
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+oss:
+  access-key: LTAI5tLNsy79NrWfeqPNRe5x
+  secret-key: G9FhaCbhy2YC6VVY6iltww2VRYw2wO
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  bucket: tik-online-judge

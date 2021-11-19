@@ -68,7 +68,6 @@ public class SubmitConsumer {
         simpleRabbitListenerContainerFactory.setConsumerBatchEnabled(false);
         simpleRabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
         simpleRabbitListenerContainerFactory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-
         return simpleRabbitListenerContainerFactory;
     }
 

@@ -10,7 +10,6 @@ public class GroupTaskDto implements Serializable {
     /**
      * 任务介绍
      */
-    @NotNull
     private String taskIntroduce;
 
     /**
@@ -21,7 +20,6 @@ public class GroupTaskDto implements Serializable {
     /**
      * 状态
      */
-    @NotNull
     private Boolean status;
 
     /**

@@ -1,6 +1,8 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,7 +104,7 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
 
     @Override
     public CommonResult collectionProblems(Long collectionId) {
-        PageUtils.makePage();
+        Page<Long> objects = PageUtils.makePage();
         List<Long> collect = problemCollectionItemMapper.selectList(new QueryWrapper<ProblemCollectionItem>()
                         .eq("collection_id", collectionId)
                         .select("problem_id"))
@@ -110,9 +112,9 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
                 .map(item -> item.getProblemId())
                 .collect(Collectors.toList());
         if (collect.size() <= 0) {
-            return CommonResult.success().listData(collect);
+            return CommonResult.success().listData(objects, collect);
         }
         List<Problem> problems = problemMapper.selectBatchIds(collect);
-        return CommonResult.success().listData(problems);
+        return CommonResult.success().listData(objects, problems);
     }
 }

@@ -16,6 +16,8 @@ import top.adxd.tikonlinejudge.social.service.ITaskItemService;
 import top.adxd.tikonlinejudge.social.service.ITaskService;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("groupTaskManagerServiceImpl")
 public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
@@ -101,5 +103,20 @@ public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
     public CommonResult deleteTask(Long groupId, Long taskId) {
         boolean success = deleteTaskInner(groupId, taskId, true);
         return success ? CommonResult.success("删除成功") : CommonResult.error("删除失败");
+    }
+
+    @Override
+    public CommonResult tasks(Long groupId) {
+        //todo 权限校验
+        List<Long> tasks = groupTaskService.list(new QueryWrapper<GroupTask>()
+                        .eq("group_id", groupId)
+                        .select("task_id"))
+                .stream()
+                .map(item -> item.getTaskId())
+                .collect(Collectors.toList());
+        if (tasks.size() <= 0) {
+            return CommonResult.success().singleData(tasks);
+        }
+        return CommonResult.success().singleData(taskService.listByIds(tasks));
     }
 }

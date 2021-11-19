@@ -14,48 +14,46 @@ public enum JudgeStatus implements IEnum<Integer>, Serializable {
     /**
      * 评判中
      */
-    JUDGING(1, "中"),
+    JUDGING(1),
 
     /**
      * 编译错误
      */
-    COMPILE_ERROR(2, ""),
+    COMPILE_ERROR(2),
 
     /**
      * 运行出错
      */
-    RUNTIME_ERROR(3, ""),
+    RUNTIME_ERROR(3),
 
     /**
      * 运行超时
      */
-    TIME_LIME_EXCEEDED(4, ""),
+    TIME_LIME_EXCEEDED(4),
 
     /**
      * 系统错误
      */
-    SYSTEM_ERROR(5, ""),
+    SYSTEM_ERROR(5),
 
     /**
      * 评判成功
      */
-    ACCEPT(6, ""),
+    ACCEPT(6),
 
     /**
      * 格式错误
      */
-    PRESENTATION_ERROR(7, ""),
+    PRESENTATION_ERROR(7),
 
     /**
      * 结果错误
      */
-    WRONG_ANSWER(8, "");
+    WRONG_ANSWER(8);
     private Integer value;
-    private String message;
 
-    JudgeStatus(Integer value, String message) {
+    JudgeStatus(Integer value) {
         this.value = value;
-        this.message = message;
     }
 
 

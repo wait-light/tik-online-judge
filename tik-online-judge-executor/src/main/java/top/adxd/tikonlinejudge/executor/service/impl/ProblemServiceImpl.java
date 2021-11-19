@@ -15,13 +15,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.vo.ProblemSurvey;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wait_light
@@ -38,7 +37,7 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     public CommonResult delete(Long problemId) {
         this.removeById(problemId);
         problemCollectionItemMapper.delete(new QueryWrapper<ProblemCollectionItem>()
-                .eq("problem_id",problemId));
+                .eq("problem_id", problemId));
         return CommonResult.success("删除成功");
     }
 
@@ -67,21 +66,34 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
         //取差集即是剩下可以选择的问题
         sharedOrSelfProblemId.removeAll(selfProblemId);
         //防止报空
-        if (sharedOrSelfProblemId.size()==0){
+        if (sharedOrSelfProblemId.size() == 0) {
             sharedOrSelfProblemId.add(0L);
         }
         PageUtils.makePage();
 
         List<ProblemSurvey> collect =
                 baseMapper.selectList(new QueryWrapper<Problem>()
-                        .in("id", sharedOrSelfProblemId)
-                        .select("name", "create_time", "update_time", "id")
-                )
-                .stream().map((problem) -> {
-                    ProblemSurvey problemSurvey = new ProblemSurvey();
-                    BeanUtils.copyProperties(problem, problemSurvey);
-                    return problemSurvey;
-                }).collect(Collectors.toList());
+                                .in("id", sharedOrSelfProblemId)
+                                .select("name", "create_time", "update_time", "id")
+                        )
+                        .stream().map((problem) -> {
+                            ProblemSurvey problemSurvey = new ProblemSurvey();
+                            BeanUtils.copyProperties(problem, problemSurvey);
+                            return problemSurvey;
+                        }).collect(Collectors.toList());
         return CommonResult.success().listData(collect);
+    }
+
+    @Override
+    public CommonResult problemNames(Long... problemIds) {
+        if (problemIds.length <= 0) {
+            return CommonResult.success().singleData(new ArrayList<>());
+        }
+        Map<Long, String> problems = list(new QueryWrapper<Problem>()
+                .in("id", problemIds)
+                .select("id", "name"))
+                .stream()
+                .collect(Collectors.toMap(Problem::getId, Problem::getName));
+        return CommonResult.success().singleData(problems);
     }
 }
