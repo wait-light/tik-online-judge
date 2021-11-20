@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.dto.GroupTaskDto;
 import top.adxd.tikonlinejudge.social.entity.GroupTask;
@@ -52,7 +53,7 @@ public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
         if (needCheckAuthority) {
             //todo 权限校验
         }
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         LocalDateTime now = LocalDateTime.now();
         //任务
         Task task = new Task();

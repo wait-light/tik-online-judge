@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.auth.service;
 
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
+import top.adxd.tikonlinejudge.auth.dto.ChangeAvatarDto;
 import top.adxd.tikonlinejudge.auth.dto.ChangeEmailDto;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
@@ -35,4 +36,6 @@ public interface IVerifiedService {
     CommonResult accountMessage(Long uid);
 
     CommonResult changeEmail(ChangeEmailDto changeEmailDto);
+
+    CommonResult changeAvatar(ChangeAvatarDto changeAvatarDto);
 }

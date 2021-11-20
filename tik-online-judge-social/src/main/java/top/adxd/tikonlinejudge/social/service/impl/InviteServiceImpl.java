@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.api.IUserInfoService;
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.common.exeption.CommonException;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.dto.InviteInfo;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
@@ -49,8 +50,7 @@ public class InviteServiceImpl extends ServiceImpl<InviteMapper, Invite> impleme
 
     @Override
     public CommonResult invite(InviteInfo inviteInfo) {
-        //todo uid
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         boolean hasInvitePower = groupUserService.getOne(new QueryWrapper<GroupUser>()
                 .eq("uid", uid)
                 .eq("group_id", inviteInfo.getGroupId())
@@ -79,8 +79,7 @@ public class InviteServiceImpl extends ServiceImpl<InviteMapper, Invite> impleme
     @Transactional(rollbackFor = Exception.class)
     @Override
     public CommonResult consumeInviteInfo(Long inviteId, InviteStatus inviteStatus) {
-        //todo uid
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         Invite inviteInfo = getById(inviteId);
         if (inviteInfo == null) {
             return CommonResult.error("消息有误");
@@ -98,13 +97,15 @@ public class InviteServiceImpl extends ServiceImpl<InviteMapper, Invite> impleme
         LocalDateTime now = LocalDateTime.now();
         inviteInfo.setUpdateTime(now);
         inviteInfo.setStatus(inviteStatus);
-        boolean updateStatus = updateById(inviteInfo);
+        updateById(inviteInfo);
+        if (inviteInfo.getStatus() == InviteStatus.ACCEPT) {
+            GroupUser groupUser = new GroupUser();
+            groupUser.setUid(uid);
+            groupUser.setUserType(GroupUserType.COMMON);
+            groupUser.setGroupId(inviteInfo.getGroupId());
+            groupUserService.save(groupUser);
+        }
 
-        GroupUser groupUser = new GroupUser();
-        groupUser.setUid(uid);
-        groupUser.setUserType(GroupUserType.COMMON);
-        groupUser.setGroupId(inviteInfo.getGroupId());
-        boolean toGroup = groupUserService.save(groupUser);
-        return updateStatus & toGroup ? CommonResult.success("处理成功") : CommonResult.error("处理失败");
+        return CommonResult.success("处理成功");
     }
 }

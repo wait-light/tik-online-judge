@@ -13,6 +13,7 @@ import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,16 +54,33 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
         if (matchMenu == null) {
             return new AuthorizationResult(false, null, "拒绝访问");
         }
-        Set<String> permissionSet = userAuthorization(uid);
+        Set<String> permissionSet = null;
+        if (uid != null){
+            permissionSet = loginedAuthorization(uid);
+        }else {
+            permissionSet = unloginAuthorization();
+        }
         if (permissionSet.contains("*") || (permissionSet.contains(matchMenu.getPerms())) && requestMethodMatcher.match(requestMethod, matchMenu.getRequestMethod())) {
-            return new AuthorizationResult(false, uid, "权限校验成功");
+            return new AuthorizationResult(true, uid, "权限校验成功");
         }
         return new AuthorizationResult(false, null, "拒绝访问");
     }
 
+    public Set<String> loginedAuthorization(Long uid) {
+        Set<String> permissionSet = userAuthorization(uid);
+        permissionSet.add(IPathMatcher.LOGGED);
+        return permissionSet;
+    }
+
+    public Set<String> unloginAuthorization() {
+        LinkedHashSet<String> permissionSet = new LinkedHashSet<>();
+        permissionSet.add(IPathMatcher.ANONYMOUS);
+        return permissionSet;
+    }
+
     public Set<String> userAuthorization(Long uid) {
         User user = userService.getById(uid);
-        Set<String> permissionSet = new HashSet<>();
+        Set<String> permissionSet = new LinkedHashSet<>();
         if (user == null) {
             return permissionSet;
         }

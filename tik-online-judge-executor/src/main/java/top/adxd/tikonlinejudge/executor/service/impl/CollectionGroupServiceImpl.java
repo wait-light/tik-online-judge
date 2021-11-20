@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.Page;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,14 +64,14 @@ public class CollectionGroupServiceImpl extends ServiceImpl<CollectionGroupMappe
     }
 
     @Override
-    public List<Problem> groupProblems(Long groupId) {
+    public CommonResult groupProblems(Long groupId) {
         //todo 权限校验
         CollectionGroup collectionGroup = getOne(new QueryWrapper<CollectionGroup>()
                 .eq("group_id", groupId));
         if (collectionGroup == null) {
-            return new ArrayList<>();
+            return CommonResult.success().listData(new ArrayList<>());
         }
-        PageUtils.makePage();
+        Page<Object> objects = PageUtils.makePage();
         List<Long> problemIds = problemCollectionItemService
                 .list(new QueryWrapper<ProblemCollectionItem>()
                         .eq("collection_id", collectionGroup.getCollectionId()))
@@ -78,9 +79,9 @@ public class CollectionGroupServiceImpl extends ServiceImpl<CollectionGroupMappe
                 .map((item) -> item.getProblemId())
                 .collect(Collectors.toList());
         if (problemIds.size() <= 0) {
-            return new ArrayList<>();
+            return CommonResult.success().listData(objects, problemIds);
         }
-        return problemService.listByIds(problemIds);
+        return CommonResult.success().listData(objects, listByIds(problemIds));
     }
 
     @Transactional

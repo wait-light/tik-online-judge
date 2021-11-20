@@ -16,7 +16,7 @@ import java.util.List;
  * @since 2021-11-17
  */
 public interface ICollectionGroupService extends IService<CollectionGroup> {
-    List<Problem> groupProblems(Long groupId);
+    CommonResult groupProblems(Long groupId);
     CommonResult addProblem(Long groupId, Problem problem);
     boolean deleteProblem(Long groupId, Long problemId);
     CommonResult updateProblem(Long groupId,Problem problem);

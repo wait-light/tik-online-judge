@@ -38,12 +38,9 @@ public class SubmitController {
     private SubmitSender submitSender;
 
 
-
     @PostMapping("/judge")
 //    @FrequencyLimit(value = 12,name = "judgeAsync")
-    public CommonResult judgeAsync(@RequestBody @Valid Submit submit,@RequestHeader("token") String token) {
-        //todo 用户id
-        Long uid = 1L;
+    public CommonResult judgeAsync(@RequestBody @Valid Submit submit, @RequestHeader("uid") Long uid) {
         submit.setCreateTime(LocalDateTime.now());
         submit.setUid(uid);
         boolean submitSuccess = submitService.save(submit);

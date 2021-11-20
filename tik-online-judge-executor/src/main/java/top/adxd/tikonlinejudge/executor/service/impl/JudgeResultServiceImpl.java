@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.mapper.JudgeResultMapper;
@@ -28,13 +29,13 @@ import java.util.List;
 public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, JudgeResult> implements IJudgeResultService {
     @Autowired
     private ISubmitService submitService;
+
     @Override
     public SubmitJudgeResult submitJudgeResults(Long submitId) {
-        //todo 用户id
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         Submit submit = submitService.getOne(new QueryWrapper<Submit>().eq("id", submitId).eq("uid", uid));
-        if (submit == null){
-           return null;
+        if (submit == null) {
+            return null;
         }
         List<JudgeResult> submitResults = baseMapper.selectList(new QueryWrapper<JudgeResult>().eq("submit_id", submitId));
         SubmitJudgeResult submitJudgeResult = new SubmitJudgeResult();
@@ -80,20 +81,20 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateCommitAfterJudge(List<JudgeResult> judgeResults,Submit submit) {
-        if (judgeResults == null || judgeResults.size()<=0 || submit == null){
+    public void updateCommitAfterJudge(List<JudgeResult> judgeResults, Submit submit) {
+        if (judgeResults == null || judgeResults.size() <= 0 || submit == null) {
             return;
         }
         JudgeStatus submitStatus = null;
         int acceptCount = 0;
-        for (JudgeResult judgeResult : judgeResults){
-            if (judgeResult.getJudgeStatus() == JudgeStatus.ACCEPT){
-                acceptCount ++;
-            }else {
-               submitStatus =  judgeResult.getJudgeStatus();
+        for (JudgeResult judgeResult : judgeResults) {
+            if (judgeResult.getJudgeStatus() == JudgeStatus.ACCEPT) {
+                acceptCount++;
+            } else {
+                submitStatus = judgeResult.getJudgeStatus();
             }
         }
-        if (acceptCount == judgeResults.size()){
+        if (acceptCount == judgeResults.size()) {
             submitStatus = JudgeStatus.ACCEPT;
         }
         this.saveBatch(judgeResults);

@@ -38,7 +38,7 @@ public class CollectionGroupController {
 
     @GetMapping("/problems/{groupId}")
     public CommonResult problems(@PathVariable("groupId") Long groupId) {
-        return CommonResult.success().listData(collectionGroupService.groupProblems(groupId));
+        return collectionGroupService.groupProblems(groupId);
     }
 
     @PostMapping("/problems/{groupId}")

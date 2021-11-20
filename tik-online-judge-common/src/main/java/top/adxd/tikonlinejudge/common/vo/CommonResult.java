@@ -96,7 +96,7 @@ public class CommonResult extends HashMap implements Serializable {
         PageInfo pageInfo = new PageInfo(list);
         add(PageConstant.HAS_PREVIOUS_PAGE, pageInfo.isHasPreviousPage());
         add(PageConstant.HAS_NEXT_PAGE, pageInfo.isHasNextPage());
-        add(PageConstant.PAGE_SIZE, pageInfo.getPageSize());
+        add(PageConstant.PAGE_SIZE, pageInfo.getPageSize()!=0?10:pageInfo.getPageSize());
         add(PageConstant.CURRENT_PAGE, pageInfo.getPageNum());
         add(PageConstant.TOTAL_PAGE, pageInfo.getPages());
         add(PageConstant.TOTAL, pageInfo.getTotal());

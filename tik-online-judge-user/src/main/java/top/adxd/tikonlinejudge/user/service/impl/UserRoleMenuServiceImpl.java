@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.validation.annotation.Validated;
+import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.util.TransactionUtil;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.user.dto.MenuTree;
 import top.adxd.tikonlinejudge.user.dto.RoleWithMenu;
 import top.adxd.tikonlinejudge.user.entity.Menu;
@@ -111,10 +113,10 @@ public class UserRoleMenuServiceImpl implements IUserRoleMenuService {
         if (isExistRoleName != null && isExistRoleName.size() >= 1) {
             return false;
         }
-        //TODO 添加的用户信息还没弄
         LocalDateTime now = LocalDateTime.now();
         roleWithMenu.setCreateTime(now);
         roleWithMenu.setUpdateTime(now);
+        roleWithMenu.setCreateUserId(UserInfoUtil.getUid());
         int insert = roleMapper.insert(roleWithMenu);
         //未成功，回滚
         if (insert <= 0) {
@@ -137,9 +139,9 @@ public class UserRoleMenuServiceImpl implements IUserRoleMenuService {
 
     @Override
     public Boolean updateRoleWithMenu(@Validated RoleWithMenu roleWithMenu) {
-        //TODO 添加的用户信息还没弄
         LocalDateTime now = LocalDateTime.now();
         roleWithMenu.setUpdateTime(now);
+        roleWithMenu.setCreateUserId(UserInfoUtil.getUid());
         int update = roleMapper.updateById(roleWithMenu);
         //未成功，回滚
         if (update <= 0) {

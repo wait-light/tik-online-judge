@@ -28,17 +28,13 @@ public class JudgeResultController {
     private IJudgeResultService judgeResultService;
 
     @GetMapping("/{problem-id}")
-    public CommonResult problemJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("token") String token) {
-        //todo 用户id
-        Long uid = 1L;
+    public CommonResult problemJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("uid") Long uid) {
         List<SubmitJudgeResult> lists = judgeResultService.problemSubmitsResults(problemId, uid);
         return CommonResult.success().add("array", lists);
     }
 
     @GetMapping("/last/{problem-id}")
-    public CommonResult problemLastJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("token") String token) {
-        //todo 用户id
-        Long uid = 1L;
+    public CommonResult problemLastJudgeResult(@PathVariable("problem-id") Long problemId,@RequestHeader("uid") Long uid) {
         SubmitJudgeResult judgeResults = judgeResultService.lastSubmitResults(problemId, uid);
         return CommonResult.success().add("array", judgeResults);
     }

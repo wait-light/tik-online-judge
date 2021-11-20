@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
+
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +31,7 @@ public class SolutionController {
 
     @GetMapping("/hasSolution/{problemId}")
     public CommonResult hasSolution(@PathVariable("problemId")Long problemId){
-        //todo 用户id
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         if (uid == null){
             return CommonResult.success().add("solutionId",0);
         }
@@ -52,8 +53,7 @@ public class SolutionController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody Solution entity) {
-        //todo 用户id
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         LocalDateTime now = LocalDateTime.now();
         entity.setUid(uid);
         entity.setCreateTime(now);

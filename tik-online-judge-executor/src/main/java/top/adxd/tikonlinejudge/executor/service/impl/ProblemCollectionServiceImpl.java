@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.exeption.CommonException;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollection;
@@ -77,8 +78,7 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         problem.setCreateTime(now);
         problem.setUpdateTime(now);
         problem.setCollectionId(collectionId);
-        //todo uid
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         problem.setUid(uid);
         int insert = problemMapper.insert(problem);
         if (insert <= 0) {

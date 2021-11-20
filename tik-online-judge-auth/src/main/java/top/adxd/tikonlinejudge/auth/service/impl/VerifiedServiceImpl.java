@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.auth.config.SecureConfig;
+import top.adxd.tikonlinejudge.auth.dto.ChangeAvatarDto;
 import top.adxd.tikonlinejudge.auth.dto.ChangeEmailDto;
 import top.adxd.tikonlinejudge.auth.entity.User;
 import top.adxd.tikonlinejudge.auth.service.IUserService;
 import top.adxd.tikonlinejudge.auth.service.IVerifiedService;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
+import top.adxd.tikonlinejudge.common.util.ServletUtils;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.message.api.IVerificationCodeService;
 import top.adxd.tikonlinejudge.message.api.VerifyCodeStatus;
@@ -71,8 +74,7 @@ public class VerifiedServiceImpl implements IVerifiedService {
         if (verifyCodeStatus != VerifyCodeStatus.success) {
             return CommonResult.error("验证码错误");
         }
-        //todo 获取当前用户
-        User user = userService.getOne(new QueryWrapper<User>().eq("uid", 1L));
+        User user = userService.getOne(new QueryWrapper<User>().eq("uid", ServletUtils.getHeader("uid")));
         if (user == null) {
             return CommonResult.error("未登录");
         }
@@ -92,5 +94,13 @@ public class VerifiedServiceImpl implements IVerifiedService {
             return CommonResult.success("更新成功");
         }
         return CommonResult.error("密码错误");
+    }
+
+    @Override
+    public CommonResult changeAvatar(ChangeAvatarDto changeAvatarDto) {
+        Long uid = UserInfoUtil.getUid();
+        User user = userService.getById(uid);
+        user.setAvatar(changeAvatarDto.getAvatar());
+        return userService.updateById(user) ? CommonResult.success("更新成功") : CommonResult.error("更新失败");
     }
 }

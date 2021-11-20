@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.social.entity.Group;
@@ -32,8 +33,7 @@ public class GroupController {
 
     @GetMapping("/myGroups")
     public CommonResult myGroups() {
-        //TODO 用户id
-        List<Group> groups = groupService.groups(1L);
+        List<Group> groups = groupService.groups(UserInfoUtil.getUid());
         return CommonResult.success().singleData(groups);
     }
 

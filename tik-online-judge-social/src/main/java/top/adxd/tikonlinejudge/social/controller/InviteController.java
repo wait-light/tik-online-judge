@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.social.dto.ConsumeInvite;
@@ -33,8 +34,7 @@ public class InviteController {
 
     @GetMapping("/myInvited")
     public CommonResult myInvited() {
-        //TODO uid
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         return CommonResult.success().singleData(inviteService.inviteMessage(uid));
     }
 

@@ -8,5 +8,6 @@ import top.adxd.tikonlinejudge.auth.entity.Menu;
  */
 public interface IPathMatcher {
     String LOGGED = "logged";
+    String ANONYMOUS = "anon";
     Menu match(String path);
 }

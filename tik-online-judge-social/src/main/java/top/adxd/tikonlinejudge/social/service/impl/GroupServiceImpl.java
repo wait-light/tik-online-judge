@@ -6,6 +6,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.exeption.CommonException;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.executor.api.IGroupCollectionService;
 import top.adxd.tikonlinejudge.social.entity.Group;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
@@ -43,8 +44,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
         //储存群组信息
         LocalDateTime now = LocalDateTime.now();
         group.setCreateTime(now);
-        //TODO 用户id
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         group.setCreateUserId(uid);
         group.setStatus(1);
         boolean saveGroup = super.save(group);

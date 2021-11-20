@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.social.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.entity.Group;
 import top.adxd.tikonlinejudge.social.service.IGroupService;
@@ -16,7 +17,7 @@ public class UserGroupServiceImpl implements IUserGroupService {
     @Override
     public CommonResult addGroup(Group group) {
         //todo 权限校验
-        Long uid = 1L;
+        Long uid = UserInfoUtil.getUid();
         LocalDateTime now = LocalDateTime.now();
         group.setCreateUserId(uid);
         group.setCreateTime(now);

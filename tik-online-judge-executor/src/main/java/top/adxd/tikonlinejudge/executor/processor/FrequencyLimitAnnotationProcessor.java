@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import top.adxd.tikonlinejudge.common.util.ServletUtils;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.annotation.FrequencyLimit;
 import top.adxd.tikonlinejudge.executor.exception.UnsupportedValue;
@@ -39,8 +40,7 @@ public class FrequencyLimitAnnotationProcessor {
         if (token == null){
             id = name + ServletUtil.getClientIP(ServletUtils.getRequest());
         }else {
-            //todo 用户id
-            Long uid = 1L;
+            Long uid = UserInfoUtil.getUid();
             if (uid == null){
                 id = name +ServletUtil.getClientIP(ServletUtils.getRequest());
             }else {

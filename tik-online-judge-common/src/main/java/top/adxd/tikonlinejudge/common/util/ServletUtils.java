@@ -132,4 +132,8 @@ public class ServletUtils {
     public static String getHeader(String key){
         return getRequest().getHeader(key);
     }
+
+    public static Long getHeader2Long(String key){
+        return Long.parseLong(getHeader(key));
+    }
 }
