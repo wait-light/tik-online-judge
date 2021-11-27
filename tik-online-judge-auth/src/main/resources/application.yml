@@ -14,6 +14,10 @@ spring:
     password: 123456
   application:
     name: tik-online-judge-auth
+  cloud:
+    config:
+      discovery:
+        server-addr: 127.0.0.1:8848
 tik-online-judge-auth:
   secure:
     secretKey: A*&*(sd.12+-asBN
@@ -39,7 +43,8 @@ dubbo:
     cloud:
       #    订阅服务，订阅多个使用 "," 分割
       subscribed-services: tik-online-judge-message
+
   scan:
-    base-packages: top.adxd.tikonlinejudge.auth
+    base-packages: top.adxd.tikonlinejudge.auth.service.impl
   provider:
     version: 0.0.1

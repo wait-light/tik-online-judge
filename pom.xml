@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.11</version>
+        <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -18,24 +18,26 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.4.11</spring-boot.version>
         <mybatis.plus.version>3.4.1</mybatis.plus.version>
         <mysql.version>8.0.26</mysql.version>
         <pagehelper.version>1.3.0</pagehelper.version>
         <fastjson.version>1.2.78</fastjson.version>
         <hutool.version>5.7.11</hutool.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <spring.cloud.alibaba.version>2021.1</spring.cloud.alibaba.version>
-        <spring.cloud.dependencies.version>3.0.1</spring.cloud.dependencies.version>
+        <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
+        <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
+        <spring.cloud.dependencies.version>Hoxton.SR9</spring.cloud.dependencies.version>
+        <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <docker.api.version>3.2.12</docker.api.version>
+<!--        <spring.cloud.version>2020.0.3</spring.cloud.version>-->
     </properties>
 
     <modules>
 
         <module>tik-online-judge-common</module>
-        <module>tik-online-judge-user</module>
         <module>tik-online-judge-generator</module>
         <module>tik-online-judge-executor</module>
-        <module>tik-online-judge-user-api</module>
         <module>tik-online-judge-gateway</module>
         <module>tik-online-judge-auth</module>
         <module>tik-online-judge-message</module>
@@ -44,11 +46,30 @@
         <module>tik-online-judge-social</module>
         <module>tik-online-judge-executor-api</module>
         <module>tik-online-judge-thirdpart</module>
+        <module>tik-online-judge-social-api</module>
 
     </modules>
 <!--    统一依赖管理-->
     <dependencyManagement>
         <dependencies>
+
+
+            <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-alibaba-dependencies -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -61,13 +82,7 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>com.github.pagehelper</groupId>-->
-<!--                <artifactId>pagehelper</artifactId>-->
-<!--                <version>${pagehelper.version</version>-->
-<!--            </dependency>-->
 
-            <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
@@ -98,45 +113,39 @@
                 <version>${knife4j.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-alibaba-dependencies -->
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
             </dependency>
 
-<!--            <dependency>-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java</artifactId>
+                <version>${docker.api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java-transport-httpclient5</artifactId>
+                <version>${docker.api.version}</version>
+            </dependency>
+
+<!--                        <dependency>-->
 <!--                <groupId>org.springframework.cloud</groupId>-->
-<!--                <artifactId>spring-cloud-dependencies</artifactId>-->
-<!--                <version>${spring.cloud-version}</version>-->
+<!--                <artifactId>spring-cloud-gateway-dependencies</artifactId>-->
+<!--                <version>${spring.cloud.dependencies.version}</version>-->
 <!--                <type>pom</type>-->
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->
 
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-gateway-dependencies</artifactId>
-                <version>${spring.cloud.dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
-
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

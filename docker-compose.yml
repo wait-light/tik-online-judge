@@ -1,0 +1,122 @@
+version: '3.9'
+services:
+  tik-mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - "./resources/sql/:/docker-entrypoint-initdb.d/"
+      - "./my.cnf:/etc/mysql/conf.d/my.cnf"
+    networks:
+      - tik-online
+  tik-redis:
+    image: redis
+    networks:
+      - tik-online
+  tik-nacos:
+    image: nacos/nacos-server
+    networks:
+      - tik-online
+    environment:
+      MODE: standalone
+    expose:
+      - 8848
+  tik-rabbitmq:
+    image: rabbitmq
+    networks:
+      - tik-online
+    environment:
+      RABBITMQ_DEFAULT_USER: executor
+      RABBITMQ_DEFAULT_PASS: 123456
+  tik-auth:
+    build: ./tik-online-judge-auth
+    networks:
+      - tik-online
+    links:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    depends_on:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+  tik-executor:
+    build: ./tik-online-judge-executor
+    networks:
+      - tik-online
+    links:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    depends_on:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+  tik-message:
+    build: ./tik-online-judge-message
+    networks:
+      - tik-online
+    links:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    depends_on:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+  tik-social:
+    build: ./tik-online-judge-social
+    networks:
+      - tik-online
+    links:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    depends_on:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+  tik-thirdpart:
+    build: ./tik-online-judge-thirdpart
+    networks:
+      - tik-online
+    links:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    depends_on:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+  tik-gateway:
+    build: ./tik-online-judge-gateway
+    networks:
+      - tik-online
+    links:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    depends_on:
+      - tik-mysql
+      - tik-nacos
+      - tik-rabbitmq
+      - tik-redis
+    ports:
+      - "8888:8888"
+networks:
+  tik-online:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.15.0.0/24"

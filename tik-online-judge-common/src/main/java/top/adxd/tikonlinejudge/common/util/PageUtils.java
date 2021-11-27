@@ -2,15 +2,18 @@ package top.adxd.tikonlinejudge.common.util;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.util.StringUtils;
 import top.adxd.tikonlinejudge.common.constant.PageConstant;
+
+import java.util.Map;
 
 /**
  * @author wait_light
  * @create 2021/9/6
  */
 public class PageUtils {
+    protected static final ThreadLocal<Page> LOCAL_PAGE = new ThreadLocal();
+
     //从request中获取分页参数，同时利用pageHelper
     public static <E> Page<E> makePage() {
         Integer page = ServletUtils.getParameterToInt(PageConstant.PAGE_KEY);
@@ -25,9 +28,31 @@ public class PageUtils {
         //注入处理
         String orderBy = SqlUtil.escapeOrderBySql(ServletUtils.getParameter(PageConstant.PAGE_ORDER_BY));
         if (StringUtils.hasLength(orderBy)) {
-            return PageHelper.startPage(page, pageSize, orderBy);
+            Page<E> pageInfo = PageHelper.startPage(page, pageSize, orderBy);
+            LOCAL_PAGE.set(pageInfo);
+            return pageInfo;
         } else {
-            return PageHelper.startPage(page, pageSize);
+            Page<E> pageInfo = PageHelper.startPage(page, pageSize);
+            LOCAL_PAGE.set(pageInfo);
+            return pageInfo;
         }
+    }
+
+    /**
+     * 获取makePage的页面信息
+     * @param <E>
+     * @return
+     */
+
+    public static <E> Page<E> pageInfo() {
+        Page page = LOCAL_PAGE.get();
+        return page;
+    }
+
+    /**
+     * 移除page信息
+     */
+    public static void clear(){
+        LOCAL_PAGE.remove();
     }
 }

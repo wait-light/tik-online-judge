@@ -3,12 +3,11 @@ package top.adxd.tikonlinejudge.common.vo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import top.adxd.tikonlinejudge.common.constant.PageConstant;
+import top.adxd.tikonlinejudge.common.util.PageUtils;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -93,10 +92,16 @@ public class CommonResult extends HashMap implements Serializable {
     }
 
     public <T> CommonResult listData(List<T> list) {
-        PageInfo pageInfo = new PageInfo(list);
+        Page<Object> page = PageUtils.pageInfo();
+        PageInfo pageInfo = null;
+        if (page != null) {
+            pageInfo = new PageInfo(page);
+        } else {
+            pageInfo = new PageInfo(list);
+        }
         add(PageConstant.HAS_PREVIOUS_PAGE, pageInfo.isHasPreviousPage());
         add(PageConstant.HAS_NEXT_PAGE, pageInfo.isHasNextPage());
-        add(PageConstant.PAGE_SIZE, pageInfo.getPageSize()!=0?10:pageInfo.getPageSize());
+        add(PageConstant.PAGE_SIZE, pageInfo.getPageSize() != 0 ? 10 : pageInfo.getPageSize());
         add(PageConstant.CURRENT_PAGE, pageInfo.getPageNum());
         add(PageConstant.TOTAL_PAGE, pageInfo.getPages());
         add(PageConstant.TOTAL, pageInfo.getTotal());

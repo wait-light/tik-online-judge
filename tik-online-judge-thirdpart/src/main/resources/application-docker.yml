@@ -1,0 +1,20 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: tik-online-judge-thirdpart
+#    nacos:
+#      discovery:
+#        server-addr: nacos://127.0.0.1:8848
+  cloud:
+    config:
+      discovery:
+        server-addr: tik-nacos:8848
+    nacos:
+      discovery:
+        server-addr: tik-nacos:8848
+oss:
+  access-key: LTAI5tLNsy79NrWfeqPNRe5x
+  secret-key: G9FhaCbhy2YC6VVY6iltww2VRYw2wO
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  bucket: tik-online-judge

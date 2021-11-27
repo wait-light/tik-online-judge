@@ -10,10 +10,5 @@ import top.adxd.tikonlinejudge.message.service.Sender;
 
 @SpringBootTest
 public class TikOnlineJudgeApplicationTest {
-    @Autowired
-    private Sender sender;
-    @Test
-    public void sendTest(){
-        sender.send("915779941@qq.com","is a test","Can I send this message");
-    }
+
 }

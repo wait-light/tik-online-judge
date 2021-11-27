@@ -35,32 +35,46 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+            <version>${spring.cloud.alibaba.version}</version>
         </dependency>
         <dependency>
             <groupId>top.adxd</groupId>
             <artifactId>tik-online-judge-auth-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <!--devtools热部署-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--            <optional>true</optional>-->
-<!--            <scope>true</scope>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-            <version>${spring.cloud.dependencies.version}</version>
+            <version>${spring.cloud.alibaba.version}</version>
         </dependency>
+
     </dependencies>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

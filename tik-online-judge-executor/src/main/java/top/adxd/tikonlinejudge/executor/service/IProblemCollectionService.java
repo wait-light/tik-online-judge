@@ -21,4 +21,5 @@ public interface IProblemCollectionService extends IService<ProblemCollection> {
     CommonResult addProblem(Problem problem,Long collectionId);
     boolean isInCollection(Long collectionId,Long problemId);
     CommonResult collectionProblems(Long collectionId);
+    CommonResult personCollection();
 }

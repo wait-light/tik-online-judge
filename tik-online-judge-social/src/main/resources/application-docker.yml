@@ -1,0 +1,35 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: tik-online-judge-social
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://tik-mysql:3306/judge_cms?useUnicode=true&useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
+  cloud:
+    config:
+      discovery:
+        server-addr: tik-nacos:8848
+    nacos:
+      discovery:
+        server-addr: tik-nacos:8848
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://tik-nacos:8848
+  scan:
+    base-packages: top.adxd.tikonlinejudge.social.service.impl
+  consumer:
+    check: false
+    version: 0.0.1
+    cloud:
+      subscribed-services: tik-online-judge-auth,tik-online-judge-executor
+  provider:
+    version: 0.0.1
+mybatis-plus:
+  type-enums-package: top.adxd.tikonlinejudge.social.entity

@@ -12,8 +12,12 @@ tik-online-judge.executor:
       CPP:
         open: true
 server:
-  port: 8600
+  port: 15000
 spring:
+  cloud:
+    config:
+      discovery:
+        server-addr: 127.0.0.1:8848
   application:
     name: tik-online-judge-executor
   main:
@@ -31,7 +35,6 @@ spring:
     port: 5672
     username: executor
     password: 123456
-debug: false
 dubbo:
   protocol:
     name: dubbo
@@ -43,7 +46,7 @@ dubbo:
     version: 0.0.1
   cloud:
 #    订阅服务，订阅多个使用 "," 分割
-    subscribed-services: tik-online-judge-auth
+    subscribed-services: tik-online-judge-auth,tik-online-judge-social
   scan:
     base-packages: top.adxd.tikonlinejudge.executor.service
   provider:

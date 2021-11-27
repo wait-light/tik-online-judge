@@ -35,5 +35,10 @@ public class ProblemCollectionItem implements Serializable {
      */
     private Long problemId;
 
+    /**
+     * 是否启用
+     */
+    private Boolean status;
+
 
 }

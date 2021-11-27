@@ -3,8 +3,11 @@ server:
 spring:
   application:
     name: tik-online-judge-thirdpart
+#    nacos:
+#      discovery:
+#        server-addr: nacos://127.0.0.1:8848
   cloud:
-    nacos:
+    config:
       discovery:
         server-addr: 127.0.0.1:8848
 oss:

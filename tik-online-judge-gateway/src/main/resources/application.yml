@@ -9,37 +9,11 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
     gateway:
-#      globalcors:
-#        cors-configurations:
-#          '[/**]':
-#            allowedOrigins: "*"
-#            allowedMethods:
-#              - GET
-#              - PUT
-#              - DELETE
-#              - POST
-#              - OPTION
-#            allowedHeaders:
-#              - token
-#              - DNT
-#              - X-Mx-ReqToken
-#              - Keep-Alive
-#              - User-Agent
-#              - X-Requested-With
-#              - If-Modified-Since
-#              - Cache-Control
-#              - Content-Type
-#              - Authorization
-#        add-to-simple-url-handler-mapping: true
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
       routes:
-        #        - id: test
-        #          uri: https://www.baidu.com
-        #          predicates:
-        #            - Query=green
         - id: auth
           uri: lb://tik-online-judge-auth
           predicates:
@@ -55,7 +29,7 @@ spring:
         - id: thirdpart
           uri: lb://tik-online-judge-thirdpart
           predicates:
-          - Path=/thirdpart/**
+            - Path=/thirdpart/**
 dubbo:
   protocol:
     name: dubbo
@@ -66,9 +40,6 @@ dubbo:
     check: false
     version: 0.0.1
   cloud:
-    #    订阅服务，订阅多个使用 "," 分割
     subscribed-services: tik-online-judge-auth
-#  scan:
-#    base-packages: top.adxd.tikonlinejudge.executor.api.impl
 server:
   port: 10000

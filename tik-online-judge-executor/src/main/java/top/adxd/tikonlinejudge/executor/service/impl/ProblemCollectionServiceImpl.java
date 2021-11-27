@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,21 +11,26 @@ import top.adxd.tikonlinejudge.common.exeption.CommonException;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
+import top.adxd.tikonlinejudge.executor.api.IGroupCollectionService;
+import top.adxd.tikonlinejudge.executor.entity.CollectionGroup;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollection;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
 import top.adxd.tikonlinejudge.executor.mapper.ProblemCollectionItemMapper;
 import top.adxd.tikonlinejudge.executor.mapper.ProblemCollectionMapper;
 import top.adxd.tikonlinejudge.executor.mapper.ProblemMapper;
+import top.adxd.tikonlinejudge.executor.service.ICollectionGroupService;
 import top.adxd.tikonlinejudge.executor.service.IProblemCollectionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.vo.ProblemSurvey;
+import top.adxd.tikonlinejudge.social.api.IUserGroupService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -41,6 +47,10 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
     private ProblemCollectionItemMapper problemCollectionItemMapper;
     @Autowired
     private ProblemMapper problemMapper;
+    @Autowired
+    private ICollectionGroupService collectionGroupService;
+    @DubboReference
+    private IUserGroupService userGroupService;
 
 
     @Override
@@ -53,6 +63,7 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         List<ProblemCollectionItem> problemCollectionItems = problemCollectionItemMapper
                 .selectList(new QueryWrapper<ProblemCollectionItem>()
                         .eq("collection_id", collectionId)
+                        .eq("status",true)
                         .select("problem_id"));
         if (problemCollectionItems.size() <= 0) {
             return new ArrayList<>();
@@ -87,6 +98,7 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         ProblemCollectionItem problemCollectionItem = new ProblemCollectionItem();
         problemCollectionItem.setCollectionId(collectionId);
         problemCollectionItem.setProblemId(problem.getId());
+        problemCollectionItem.setStatus(problem.getStatus());
         boolean itemSuccess = problemCollectionItemMapper.insert(problemCollectionItem) >= 0;
         if (!itemSuccess) {
             throw new CommonException("问题添加失败");
@@ -116,5 +128,23 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         }
         List<Problem> problems = problemMapper.selectBatchIds(collect);
         return CommonResult.success().listData(objects, problems);
+    }
+
+    @Override
+    public CommonResult personCollection() {
+        Long uid = UserInfoUtil.getUid();
+        List<Long> groupIds = userGroupService.userGroups(uid);
+        if (groupIds.size() <= 0) {
+            return CommonResult.success().add("list", new ArrayList<>());
+        }
+        List<Long> collectionIds = collectionGroupService.list(new QueryWrapper<CollectionGroup>()
+                        .in("group_id", groupIds))
+                .stream()
+                .map(CollectionGroup::getCollectionId)
+                .collect(Collectors.toList());
+        if (collectionIds.size() <= 0) {
+            return CommonResult.success().add("list", new ArrayList<>());
+        }
+        return CommonResult.success().add("list", listByIds(collectionIds));
     }
 }

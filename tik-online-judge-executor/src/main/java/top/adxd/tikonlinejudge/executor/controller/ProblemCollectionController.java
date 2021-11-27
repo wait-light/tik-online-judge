@@ -47,7 +47,6 @@ public class ProblemCollectionController {
 
     @GetMapping("/public")
     public CommonResult publicCollection() {
-//        PageUtils.makePage();
         List<ProblemCollection> list =
                 problemCollectionService
                         .list(new QueryWrapper<ProblemCollection>()
@@ -56,15 +55,9 @@ public class ProblemCollectionController {
         return CommonResult.success().add("list", list);
     }
 
-    //TODO 个人加入的题集
     @GetMapping("/priate")
     public CommonResult privateList() {
-        List<ProblemCollection> list =
-                problemCollectionService
-                        .list(new QueryWrapper<ProblemCollection>()
-                                .eq("public_collection", true)
-                                .eq("status",true));
-        return CommonResult.success().listData(list);
+        return problemCollectionService.personCollection();
     }
     /**
      *

@@ -12,6 +12,10 @@ spring:
     port: 6379
   application:
     name: tik-online-judge-message
+  cloud:
+    config:
+      discovery:
+        server-addr: 127.0.0.1:8848
 dubbo:
   protocol:
     name: dubbo

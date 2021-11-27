@@ -61,4 +61,12 @@ public class GroupUserServiceImpl extends ServiceImpl<GroupUserMapper, GroupUser
         }
         return CommonResult.permissionDeny("禁止访问");
     }
+
+    @Override
+    public GroupUserType getUserType(Long groupId, Long uid) {
+        GroupUser groupUser = getOne(new QueryWrapper<GroupUser>()
+                .eq("uid", uid)
+                .eq("group_id", groupId));
+        return groupUser != null ? groupUser.getUserType() : null;
+    }
 }

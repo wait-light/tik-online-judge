@@ -9,16 +9,18 @@ spring:
     url: jdbc:mysql://localhost:3306/judge_cms?useUnicode=true&useSSL=false&characterEncoding=utf8
     username: root
     password: root
+  cloud:
+    config:
+      discovery:
+        server-addr: 127.0.0.1:8848
 dubbo:
   protocol:
-    # dubbo 协议
     name: dubbo
-    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
     port: -1
   registry:
     address: nacos://127.0.0.1:8848
   scan:
-    base-packages: top.adxd.tikonlinejudge.social.api.impl
+    base-packages: top.adxd.tikonlinejudge.social.service.impl
   consumer:
     check: false
     version: 0.0.1

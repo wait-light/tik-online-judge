@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.social.service;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.adxd.tikonlinejudge.social.entity.GroupUserType;
 
 /**
  * <p>
@@ -31,4 +32,12 @@ public interface IGroupUserService extends IService<GroupUser> {
      * @return 操作结果
      */
     CommonResult removeUser(Long groupId, Long uid);
+
+    /**
+     *
+     * @param groupId 群组id
+     * @param uid 用户id
+     * @return 用户类型，若是不在群组中返回空
+     */
+    GroupUserType getUserType(Long groupId,Long uid);
 }

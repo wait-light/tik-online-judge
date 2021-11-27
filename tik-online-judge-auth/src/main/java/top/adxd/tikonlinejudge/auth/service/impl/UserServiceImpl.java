@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Reference;
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.auth.config.SecureConfig;
 import top.adxd.tikonlinejudge.auth.dto.PasswordUpdateByEmailDto;

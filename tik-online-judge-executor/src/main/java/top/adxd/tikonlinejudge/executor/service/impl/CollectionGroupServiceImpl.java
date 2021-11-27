@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.pagehelper.Page;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class CollectionGroupServiceImpl extends ServiceImpl<CollectionGroupMappe
         if (problemIds.size() <= 0) {
             return CommonResult.success().listData(objects, problemIds);
         }
-        return CommonResult.success().listData(objects, listByIds(problemIds));
+        return CommonResult.success().listData(objects, problemService.listByIds(problemIds));
     }
 
     @Transactional
@@ -101,12 +102,18 @@ public class CollectionGroupServiceImpl extends ServiceImpl<CollectionGroupMappe
                 .eq("problem_id", problemId));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public CommonResult updateProblem(Long groupId, Problem problem) {
         Long collection = getCollection(groupId);
         boolean inCollection = problemCollectionService.isInCollection(collection, problem.getId());
         if (!inCollection) {
             return CommonResult.permissionDeny("无权限操作");
+        }
+        if (!problem.getStatus()){
+            problemCollectionItemService.update(new UpdateWrapper<ProblemCollectionItem>()
+                    .eq("problem_id",problem.getId())
+                    .set("status",problem.getStatus()));
         }
         //todo 权限校验
         return problemService.updateById(problem) ? CommonResult.success("更新成功") : CommonResult.error("更新失败");

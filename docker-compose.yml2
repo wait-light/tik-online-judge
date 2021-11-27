@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+  anacos:
+    image: nacos/nacos-server:1.4.1
+    networks:
+      tik_net:
+        ipv4_address: 172.20.0.6
+    environment:
+      MODE: standalone
+  amysql:
+    image: mysql:5.7
+    networks:
+      - tik_net
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - "./resources/sql/:/docker-entrypoint-initdb.d/"
+  aredis:
+    networks:
+      - tik_net
+    image: redis
+  arabbitmq:
+    image: rabbitmq
+    networks:
+      - tik_net
+    environment:
+      RABBITMQ_DEFAULT_USER: executor
+      RABBITMQ_DEFAULT_PASS: 123456
+  tik-gateway:
+    build: ./tik-online-judge-gateway
+    networks:
+      - tik_net
+    links:
+      - anacos
+      - amysql
+      - aredis
+      - arabbitmq
+    depends_on:
+      - anacos
+      - amysql
+      - aredis
+      - arabbitmq
+      - tik-auth
+    ports:
+      - 8888:12000
+  tik-auth:
+    networks:
+      - tik_net
+    build: ./tik-online-judge-auth
+    depends_on:
+      - anacos
+      - arabbitmq
+      - aredis
+      - amysql
+networks:
+  tik_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.20.0.0/24"

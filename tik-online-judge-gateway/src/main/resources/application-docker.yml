@@ -1,0 +1,48 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  application:
+    name: tik-online-judge-gateway
+  cloud:
+    config:
+      discovery:
+        server-addr: tik-nacos:8848
+    nacos:
+      discovery:
+        server-addr: tik-nacos:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: auth
+          uri: lb://tik-online-judge-auth
+          predicates:
+            - Path=/auth/**
+        - id: executor
+          uri: lb://tik-online-judge-executor
+          predicates:
+            - Path=/executor/**
+        - id: social
+          uri: lb://tik-online-judge-social
+          predicates:
+            - Path=/social/**
+        - id: thirdpart
+          uri: lb://tik-online-judge-thirdpart
+          predicates:
+            - Path=/thirdpart/**
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://tik-nacos:8848
+  consumer:
+    check: false
+    version: 0.0.1
+  cloud:
+    subscribed-services: tik-online-judge-auth
+server:
+  port: 8888
