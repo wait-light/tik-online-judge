@@ -1,18 +1,16 @@
 package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sun.org.apache.bcel.internal.generic.FADD;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.api.IUserInfoService;
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
-import top.adxd.tikonlinejudge.common.exeption.CommonException;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.dto.InviteInfo;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
-import top.adxd.tikonlinejudge.social.entity.GroupUserType;
+import top.adxd.tikonlinejudge.social.single.GroupUserType;
 import top.adxd.tikonlinejudge.social.entity.Invite;
 import top.adxd.tikonlinejudge.social.entity.InviteStatus;
 import top.adxd.tikonlinejudge.social.mapper.InviteMapper;

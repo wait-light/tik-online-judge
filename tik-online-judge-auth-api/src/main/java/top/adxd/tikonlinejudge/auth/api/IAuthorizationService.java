@@ -11,4 +11,11 @@ public interface IAuthorizationService {
      * @return 返回授权结果
      */
     AuthorizationResult authorization(String token, String path, RequestMethod requestMethod);
+
+    /**
+     * 是否有能力做某事
+     * @param power
+     * @return
+     */
+    boolean hasPower(String power);
 }

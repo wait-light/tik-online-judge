@@ -2,15 +2,13 @@ package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import top.adxd.tikonlinejudge.common.exeption.CommonException;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.executor.api.IGroupCollectionService;
 import top.adxd.tikonlinejudge.social.entity.Group;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
-import top.adxd.tikonlinejudge.social.entity.GroupUserType;
+import top.adxd.tikonlinejudge.social.single.GroupUserType;
 import top.adxd.tikonlinejudge.social.mapper.GroupMapper;
 import top.adxd.tikonlinejudge.social.service.IGroupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

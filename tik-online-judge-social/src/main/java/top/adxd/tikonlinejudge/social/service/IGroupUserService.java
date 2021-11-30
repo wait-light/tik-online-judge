@@ -3,7 +3,7 @@ package top.adxd.tikonlinejudge.social.service;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.adxd.tikonlinejudge.social.entity.GroupUserType;
+import top.adxd.tikonlinejudge.social.single.GroupUserType;
 
 /**
  * <p>

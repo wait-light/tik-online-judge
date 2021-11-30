@@ -12,6 +12,7 @@ import top.adxd.tikonlinejudge.auth.entity.*;
 import top.adxd.tikonlinejudge.auth.service.*;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
 import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 import java.util.HashSet;
@@ -59,6 +60,12 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
             return new AuthorizationResult(true, uid, "权限校验成功");
         }
         return new AuthorizationResult(false, null, "拒绝访问");
+    }
+
+    @Override
+    public boolean hasPower(String power) {
+        Set<String> powers = authorizationServiceCache.userAuthorization(UserInfoUtil.getUid());
+        return powers.contains(powers);
     }
 
     public Set<String> loginedAuthorization(Long uid) {

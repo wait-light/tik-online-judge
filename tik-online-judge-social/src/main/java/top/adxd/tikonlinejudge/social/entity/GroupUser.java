@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import top.adxd.tikonlinejudge.social.single.GroupUserType;
 
 /**
  * <p>

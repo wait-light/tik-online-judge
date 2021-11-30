@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.auth.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.auth.dto.ChangeAvatarDto;
 import top.adxd.tikonlinejudge.auth.dto.ChangeEmailDto;
@@ -21,6 +22,8 @@ import top.adxd.tikonlinejudge.common.vo.CommonResult;
 public class VerifiedController {
     @Autowired
     private IVerifiedService verifiedService;
+    @Autowired
+    private IAuthorizationService authorizationService;
 
     @GetMapping("/title-info")
     public CommonResult userTitleInfo(@RequestHeader("token") String token) {
@@ -47,7 +50,13 @@ public class VerifiedController {
     }
 
     @PutMapping("/avatar")
-    public CommonResult changeAvatar(@Validated @RequestBody ChangeAvatarDto changeAvatarDto){
+    public CommonResult changeAvatar(@Validated @RequestBody ChangeAvatarDto changeAvatarDto) {
         return verifiedService.changeAvatar(changeAvatarDto);
+    }
+
+    @GetMapping("/power/{power}")
+    public CommonResult hasPower(@PathVariable("power") String power) {
+        boolean hasPower = authorizationService.hasPower(power);
+        return hasPower ? CommonResult.success() : CommonResult.permissionDeny();
     }
 }
