@@ -14,6 +14,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @MapperScan("top.adxd.tikonlinejudge.executor.mapper")
 public class TikOnlineJudgeExecutorApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TikOnlineJudgeExecutorApplication.class,args);
+        SpringApplication.run(TikOnlineJudgeExecutorApplication.class, args);
     }
 }

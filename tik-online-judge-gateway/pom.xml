@@ -39,7 +39,7 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-            <version>${spring.cloud.alibaba.version}</version>
+<!--            <version>${spring.cloud.version}</version>-->
         </dependency>
         <dependency>
             <groupId>top.adxd</groupId>
@@ -50,8 +50,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-            <version>${spring.cloud.alibaba.version}</version>
+<!--            <version>${spring.cloud.version}</version>-->
         </dependency>
+
+
 
     </dependencies>
 

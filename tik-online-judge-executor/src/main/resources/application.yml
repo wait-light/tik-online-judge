@@ -12,10 +12,13 @@ tik-online-judge.executor:
       CPP:
         open: true
 server:
-  port: 15000
+  port: 16000
 spring:
   cloud:
     config:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    nacos:
       discovery:
         server-addr: 127.0.0.1:8848
   application:

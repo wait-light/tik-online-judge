@@ -21,6 +21,8 @@ services:
       MODE: standalone
     expose:
       - 8848
+    ports:
+      - 8849:8848
   tik-rabbitmq:
     image: rabbitmq
     networks:
@@ -42,6 +44,8 @@ services:
       - tik-nacos
       - tik-rabbitmq
       - tik-redis
+    expose:
+      - 23456
   tik-executor:
     build: ./tik-online-judge-executor
     networks:
@@ -56,6 +60,10 @@ services:
       - tik-nacos
       - tik-rabbitmq
       - tik-redis
+    expose:
+      - 23456
+    volumes:
+      - "/tmp/judge-info/:/tmp/judge-info/"
   tik-message:
     build: ./tik-online-judge-message
     networks:
@@ -70,6 +78,8 @@ services:
       - tik-nacos
       - tik-rabbitmq
       - tik-redis
+    expose:
+      - 23456
   tik-social:
     build: ./tik-online-judge-social
     networks:
@@ -84,6 +94,8 @@ services:
       - tik-nacos
       - tik-rabbitmq
       - tik-redis
+    expose:
+      - 23456
   tik-thirdpart:
     build: ./tik-online-judge-thirdpart
     networks:
@@ -98,6 +110,8 @@ services:
       - tik-nacos
       - tik-rabbitmq
       - tik-redis
+    expose:
+      - 23456
   tik-gateway:
     build: ./tik-online-judge-gateway
     networks:
@@ -114,6 +128,8 @@ services:
       - tik-redis
     ports:
       - "8888:8888"
+    expose:
+      - 23456
 networks:
   tik-online:
     ipam:

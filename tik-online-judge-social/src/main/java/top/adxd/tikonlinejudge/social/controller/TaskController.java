@@ -37,6 +37,11 @@ public class TaskController {
         return taskService.taskDetail(groupId, taskId);
     }
 
+    @GetMapping("/manager/{groupId}/{taskId}")
+    public CommonResult taskDetailManager(@PathVariable("groupId") Long groupId, @PathVariable("taskId") Long taskId) {
+        return taskService.managerTaskDetail(groupId, taskId);
+    }
+
     @GetMapping("/group/{groupId}/tasks")
     public CommonResult groupTasks(@PathVariable("groupId") Long groupId) {
         return groupTaskManagerService.tasks(groupId);

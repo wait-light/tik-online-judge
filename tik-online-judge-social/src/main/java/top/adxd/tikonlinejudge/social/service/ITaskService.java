@@ -14,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITaskService extends IService<Task> {
     CommonResult taskDetail(Long groupId,Long taskId);
+    CommonResult managerTaskDetail(Long groupId,Long taskId);
 }

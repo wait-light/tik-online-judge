@@ -59,7 +59,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     /**
      * 当容器被创建完成即准备好了.
      */
-    protected boolean ready;
+    protected volatile boolean ready;
     /**
      * 防止多个线程同时访问某个语言的评判
      * @param submit
@@ -108,6 +108,10 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             count++;
         }
         return results;
+    }
+
+    public void unReady(){
+        this.ready = false;
     }
 
     public boolean isReady() {

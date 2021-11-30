@@ -36,7 +36,7 @@ spring:
 dubbo:
   protocol:
     name: dubbo
-    port: -1
+    port: 23456
   registry:
     address: nacos://tik-nacos:8848
   consumer:

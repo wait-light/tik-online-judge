@@ -11,6 +11,7 @@ import top.adxd.tikonlinejudge.social.service.ITaskService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,28 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     @Override
     public CommonResult taskDetail(Long groupId, Long taskId) {
+        //todo 权限校验
+        Task task = getById(taskId);
+        LocalDateTime now = LocalDateTime.now();
+        if (task.getBeginTime().isAfter(now)){
+            return CommonResult.error("任务还未开始");
+        }
+        if (task == null) {
+            return CommonResult.error("非法访问");
+        }
+        List<Long> problems = taskItemService.list(new QueryWrapper<TaskItem>()
+                        .eq("task_id", taskId)
+                        .select("problem_id"))
+                .stream()
+                .map(TaskItem::getProblemId)
+                .collect(Collectors.toList());
+        return CommonResult.success()
+                .add("task", task)
+                .add("problems", problems);
+    }
+
+    @Override
+    public CommonResult managerTaskDetail(Long groupId, Long taskId) {
         //todo 权限校验
         Task task = getById(taskId);
         if (task == null) {

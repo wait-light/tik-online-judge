@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.4.11</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -24,10 +24,11 @@
         <fastjson.version>1.2.78</fastjson.version>
         <hutool.version>5.7.11</hutool.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
-        <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
-        <spring.cloud.dependencies.version>Hoxton.SR9</spring.cloud.dependencies.version>
-        <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
+        <spring.boot.version>2.4.11</spring.boot.version>
+        <spring-boot.version>2.4.11</spring-boot.version>
+        <spring.cloud.alibaba.version>2021.1</spring.cloud.alibaba.version>
+        <spring.cloud.dependencies.version>3.0.1</spring.cloud.dependencies.version>
+        <spring.cloud.version>3.0.1</spring.cloud.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <docker.api.version>3.2.12</docker.api.version>
 <!--        <spring.cloud.version>2020.0.3</spring.cloud.version>-->
@@ -63,18 +64,18 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-dependencies</artifactId>-->
+<!--                <version>${spring.cloud.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring.boot.version}</version>
             </dependency>
 
             <dependency>
@@ -137,7 +138,20 @@
                 <version>${docker.api.version}</version>
             </dependency>
 
-<!--                        <dependency>-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+                <version>${spring.cloud.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
+                <version>${spring.cloud.version}</version>
+            </dependency>
+
+
+            <!--                        <dependency>-->
 <!--                <groupId>org.springframework.cloud</groupId>-->
 <!--                <artifactId>spring-cloud-gateway-dependencies</artifactId>-->
 <!--                <version>${spring.cloud.dependencies.version}</version>-->
