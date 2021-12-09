@@ -47,6 +47,7 @@ public class SubmitController {
         if (!submitSuccess) {
             return CommonResult.error("提交失败");
         }
+        
         submitSender.send(submit);
         return CommonResult.success("提交成功");
     }
