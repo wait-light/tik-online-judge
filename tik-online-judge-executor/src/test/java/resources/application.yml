@@ -1,0 +1,56 @@
+mybatis-plus:
+  type-enums-package: top/adxd/tikonlinejudge/executor/single
+tik-online-judge.executor:
+  docker-java:
+    path: /tmp/judge-info/judge-java
+  docker-cpp:
+    path: /tmp/judge-info/judge-cpp
+  language:
+    map:
+      JAVA:
+        open: true
+      CPP:
+        open: true
+server:
+  port: 16000
+spring:
+  cloud:
+    config:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: tik-online-judge-executor
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/judge_pms?useUnicode=true&useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: executor
+    password: 123456
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://127.0.0.1:8848
+  consumer:
+    check: false
+    version: 0.0.1
+  cloud:
+#    订阅服务，订阅多个使用 "," 分割
+    subscribed-services: tik-online-judge-auth,tik-online-judge-social
+  scan:
+    base-packages: top.adxd.tikonlinejudge.executor.service
+  provider:
+    version: 0.0.1
