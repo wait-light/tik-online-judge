@@ -17,5 +17,6 @@ public interface IDockerJudgeConfig {
     String getStderr();
     String getInput();
     String getSourcePath();
+    String getDockerfileDir();
     IDockerJudgeConfig newConfig(String path,String containerName);
 }

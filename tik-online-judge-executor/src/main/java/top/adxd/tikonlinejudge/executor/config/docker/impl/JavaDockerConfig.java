@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import top.adxd.tikonlinejudge.executor.config.docker.ICompileAbleConfig;
 import top.adxd.tikonlinejudge.executor.config.docker.IDockerJudgeConfig;
 
+import java.io.File;
+
 /**
  * @author light
  */
@@ -31,6 +33,7 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
     private String compileTime;
     private String compileInfo;
     private String needCompile;
+    private volatile String dockerfileDir;
 
     public JavaDockerConfig(){}
 
@@ -164,5 +167,18 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
             containerName = "judge-java";
         }
         return containerName;
+    }
+
+    @Override
+    public String getDockerfileDir() {
+        if (dockerfileDir == null) {
+            synchronized (this) {
+                dockerfileDir = getClass().getClassLoader().getResource("").getPath()
+                        + File.pathSeparator
+                        + "docker-image"
+                        + "javadocker";
+            }
+        }
+        return dockerfileDir;
     }
 }

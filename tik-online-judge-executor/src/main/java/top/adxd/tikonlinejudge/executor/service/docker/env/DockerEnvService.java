@@ -1,6 +1,5 @@
 package top.adxd.tikonlinejudge.executor.service.docker.env;
 
-import cn.hutool.core.util.StrUtil;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Image;
 import org.slf4j.Logger;
@@ -30,12 +29,16 @@ public class DockerEnvService {
      * @param tar tar包文件
      */
     public void build(File tar, IDockerJudgeConfig dockerJudgeConfig) {
-//        Assert.notNull(tar, "tar包不能为空");
-//        Assert.notNull(dockerJudgeConfig, "配置信息不能为空");
+        Assert.notNull(tar, "tar包不能为空");
+        Assert.notNull(dockerJudgeConfig, "配置信息不能为空");
         Set<String> set = new HashSet<>();
         set.add(dockerJudgeConfig.getImageName());
-        String s = dockerClient.buildImageCmd(tar).withTags(set).start().awaitImageId();
-        System.out.printf(s + "-----------------------");
+        String imageId = dockerClient.buildImageCmd(tar).withTags(set).start().awaitImageId();
+        logger.info("构建镜像成功：" + imageId);
+    }
+
+    public void build(IDockerJudgeConfig dockerJudgeConfig) {
+        build(dockerJudgeConfig.getDockerfileDir(), dockerJudgeConfig);
     }
 
     /**
@@ -43,9 +46,9 @@ public class DockerEnvService {
      *
      * @param tarPath tar包路径
      */
-    public void build(String tarPath) {
+    public void build(String tarPath, IDockerJudgeConfig dockerJudgeConfig) {
         File tar = new File(tarPath);
-//        build(tar);
+        build(tar, dockerJudgeConfig);
     }
 
     /**
@@ -58,7 +61,7 @@ public class DockerEnvService {
     public boolean hasImage(String imageName, String tag) {
         Assert.notNull(imageName, "镜像名不能为空");
         if (tag == null) {
-            tag = "latest";
+            tag = TAG_LATEST;
         }
         String mergeName = imageName + ":" + tag;
         try {

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import top.adxd.tikonlinejudge.executor.config.docker.ICompileAbleConfig;
 import top.adxd.tikonlinejudge.executor.config.docker.IDockerJudgeConfig;
 
+import java.io.File;
+
 /**
  * @author wait-light
  * @date 2021/10/23 下午6:54
@@ -32,6 +34,7 @@ public class CppDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, 
     private String compileTime;
     private String compileInfo;
     private String needCompile;
+    private volatile String dockerfileDir;
 
     public CppDockerConfig(){}
 
@@ -165,5 +168,18 @@ public class CppDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, 
             containerName = "judge-cpp";
         }
         return containerName;
+    }
+
+    @Override
+    public String getDockerfileDir() {
+        if (dockerfileDir == null) {
+            synchronized (this) {
+                dockerfileDir = getClass().getClassLoader().getResource("").getPath()
+                        + File.pathSeparator
+                        + "docker-image"
+                        + "cppdocker";
+            }
+        }
+        return dockerfileDir;
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import top.adxd.tikonlinejudge.executor.config.docker.ICompileAbleConfig;
 import top.adxd.tikonlinejudge.executor.config.docker.IDockerJudgeConfig;
 
+import java.io.File;
+
 /**
  * @author wait-light
  * @date 2021/10/23 下午6:54
@@ -32,8 +34,10 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
     private String compileTime;
     private String compileInfo;
     private String needCompile;
+    private volatile String dockerfileDir;
 
-    public CDockerConfig(){}
+    public CDockerConfig() {
+    }
 
     public CDockerConfig(String path, String containerName, String imageName, String workDir) {
         this.path = path;
@@ -41,8 +45,9 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
         this.imageName = imageName;
         this.workDir = workDir;
     }
+
     @Override
-    public IDockerJudgeConfig newConfig(String path, String containerName){
+    public IDockerJudgeConfig newConfig(String path, String containerName) {
         this.path = path;
         this.containerName = containerName;
         this.stderr = null;
@@ -62,7 +67,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String getImageName() {
-        if (imageName == null || "".equals(imageName.trim())){
+        if (imageName == null || "".equals(imageName.trim())) {
             imageName = "judge-c";
         }
         return imageName;
@@ -71,7 +76,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String getWorkDir() {
-        if (workDir == null || "".equals(workDir.trim())){
+        if (workDir == null || "".equals(workDir.trim())) {
             workDir = "/usr/src/judge";
         }
         return workDir;
@@ -79,7 +84,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String getStdout() {
-        if (stdout == null || "".equals(stdout.trim())){
+        if (stdout == null || "".equals(stdout.trim())) {
             stdout = path + STDOUT;
         }
         return stdout;
@@ -87,7 +92,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String getStderr() {
-        if (stderr == null || "".equals(stderr.trim())){
+        if (stderr == null || "".equals(stderr.trim())) {
             stderr = path + STDERR;
         }
         return stderr;
@@ -106,17 +111,30 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
     }
 
     @Override
-    public String getSourcePath(){
-        if (sourcePath == null){
+    public String getSourcePath() {
+        if (sourcePath == null) {
             sourcePath = path + "/Main.c";
         }
         return sourcePath;
     }
 
+    @Override
+    public String getDockerfileDir() {
+        if (dockerfileDir == null) {
+            synchronized (this) {
+                dockerfileDir = getClass().getClassLoader().getResource("").getPath()
+                        + File.pathSeparator
+                        + "docker-image"
+                        + "cdocker";
+            }
+        }
+        return dockerfileDir;
+    }
+
 
     @Override
     public String getCompileTime() {
-        if (compileTime == null){
+        if (compileTime == null) {
             compileTime = path + ICompileAbleConfig.COMPILE_TIME;
         }
         return compileTime;
@@ -124,7 +142,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String getCompileInfo() {
-        if (compileInfo == null){
+        if (compileInfo == null) {
             compileInfo = path + ICompileAbleConfig.COMPILE_INFO;
         }
         return compileInfo;
@@ -132,7 +150,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String needCompile() {
-        if (needCompile == null){
+        if (needCompile == null) {
             needCompile = path + ICompileAbleConfig.NEED_COMPILE;
         }
         return needCompile;
@@ -141,7 +159,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
 
     @Override
     public String getInput() {
-        if (input == null){
+        if (input == null) {
             input = path + IDockerJudgeConfig.INPUT;
         }
         return input;
@@ -150,17 +168,17 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
     @Override
     public void afterPropertiesSet() throws Exception {
         //处理路径背后的 /
-        if (path == null || "".equals(path.trim())){
+        if (path == null || "".equals(path.trim())) {
             return;
         }
-        if (path.endsWith("/") || path.endsWith("\\")){
-            path = path.substring(0,path.length()-1);
+        if (path.endsWith("/") || path.endsWith("\\")) {
+            path = path.substring(0, path.length() - 1);
         }
     }
 
     @Override
     public String getContainerName() {
-        if (containerName == null || "".equals(containerName.trim())){
+        if (containerName == null || "".equals(containerName.trim())) {
             containerName = "judge-c";
         }
         return containerName;
