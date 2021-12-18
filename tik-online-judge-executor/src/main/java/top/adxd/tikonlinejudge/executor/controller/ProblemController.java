@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.common.annotation.Role;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
@@ -25,8 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/executor/problem")
+@Role(name = "呵呵")
 public class ProblemController {
-
     @Autowired
     private IProblemService problemService;
 

@@ -2,9 +2,9 @@ package top.adxd.tikonlinejudge.auth.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodMatcher;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodResolver;
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 
 import java.util.List;
 

@@ -1,19 +1,15 @@
-package top.adxd.tikonlinejudge.common.singleton;
+package top.adxd.tikonlinejudge.auth.api;
 
 /*
  * @author wait-light
  * @date 2021/10/31.
  */
-
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
  * 请求方法类型
  */
-@Component
+//@Component
 public enum RequestMethod {
     GET,
     POST,

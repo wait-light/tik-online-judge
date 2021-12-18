@@ -76,6 +76,5 @@ public class InviteController {
                 CommonResult.success().singleData(entity) :
                 CommonResult.error();
     }
-
 }
 

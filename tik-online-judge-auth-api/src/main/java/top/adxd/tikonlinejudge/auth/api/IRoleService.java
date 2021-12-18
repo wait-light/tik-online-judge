@@ -38,4 +38,11 @@ public interface IRoleService {
      * @return 是否处理成功
      */
     boolean unGrantRole(Long uid, String roleName);
+
+    /**
+     * 是否存在某个角色
+     * @param roleName 角色名
+     * @return 是否存在
+     */
+    boolean hasRole(String roleName);
 }

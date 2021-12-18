@@ -1,8 +1,6 @@
 package top.adxd.tikonlinejudge.auth.api;
 
 import top.adxd.tikonlinejudge.auth.api.dto.AuthorizationResult;
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
-import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 public interface IAuthorizationService {
     /**

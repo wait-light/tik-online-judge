@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.auth.service;
 
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
+
+import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 
 import java.util.List;
 

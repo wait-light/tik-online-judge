@@ -4,11 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
+import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.entity.Menu;
 import top.adxd.tikonlinejudge.auth.service.IMenuService;
 import top.adxd.tikonlinejudge.auth.service.IPathMatcher;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodResolver;
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
+
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;

@@ -131,4 +131,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
                 .eq("uid", uid)
                 .eq("role_id", role.getId()));
     }
+
+    @Override
+    public boolean hasRole(String roleName) {
+        return getOne(new QueryWrapper<Role>().eq("name",roleName)) != null;
+    }
 }

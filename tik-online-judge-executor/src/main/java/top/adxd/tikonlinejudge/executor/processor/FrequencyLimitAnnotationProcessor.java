@@ -1,7 +1,6 @@
 package top.adxd.tikonlinejudge.executor.processor;
 
-import cn.hutool.extra.servlet.ServletUtil;
-import org.apache.dubbo.config.annotation.DubboReference;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.annotation.FrequencyLimit;

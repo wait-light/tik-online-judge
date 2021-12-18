@@ -8,7 +8,6 @@ import top.adxd.tikonlinejudge.auth.config.SecureConfig;
 import top.adxd.tikonlinejudge.auth.service.IAuthenticationService;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
 import top.adxd.tikonlinejudge.auth.util.RegexUtil;
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 /*

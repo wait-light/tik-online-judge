@@ -1,25 +1,18 @@
 package top.adxd.tikonlinejudge.auth.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
+import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.api.dto.AuthorizationResult;
 import top.adxd.tikonlinejudge.auth.entity.*;
 import top.adxd.tikonlinejudge.auth.service.*;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
-import top.adxd.tikonlinejudge.common.vo.CommonResult;
-
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author wait-light
