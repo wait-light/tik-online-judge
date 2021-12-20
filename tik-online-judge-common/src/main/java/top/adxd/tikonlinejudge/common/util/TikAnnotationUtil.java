@@ -1,25 +1,27 @@
 package top.adxd.tikonlinejudge.common.util;
 
-import cn.hutool.core.util.ClassUtil;
-import org.springframework.util.ClassUtils;
-
-import java.lang.annotation.Annotation;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TikAnnotationUtil {
-    public static List<Annotation> getClassMethodAnnotations(Class cla,Class targetAnnotation){
-        Method[] methods = cla.getMethods();
+    /**
+     * 获取当前类的方法上的合并后的注解
+     *
+     * @param cla              方法
+     * @param targetAnnotation 目标注解
+     * @return 注解列表
+     */
+    public static <T> List<T> getClassMethodAnnotations(Class cla, Class targetAnnotation) {
         Method[] declaredMethods = cla.getDeclaredMethods();
-        for (Method method:declaredMethods){
-            System.out.println(method);
+        List<T> annotations = new ArrayList<>();
+        for (Method method : declaredMethods) {
+            T mergedAnnotation = (T) AnnotatedElementUtils.findMergedAnnotation(method, targetAnnotation);
+            if (mergedAnnotation != null) {
+                annotations.add(mergedAnnotation);
+            }
         }
-        System.out.println("0000000000000000000");
-        for (Method m : methods){
-            System.out.println(m);
-        }
-//        System.out.println(Arrays.toString());
-        return null;
+        return annotations;
     }
 }

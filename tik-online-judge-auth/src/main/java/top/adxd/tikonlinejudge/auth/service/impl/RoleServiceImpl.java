@@ -81,6 +81,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
+    public boolean addRoleWithMenu(String roleName, List<Menu> menus) {
+        return addRoleWithMenu(roleName, menus.toArray(new Menu[menus.size()]));
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteRole(String roleName, boolean deleteRelatedMenu) {
         Role role = getOne(new QueryWrapper<Role>()
@@ -92,8 +97,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         //删除角色对应的权限信息
         if (deleteRelatedMenu) {
             List<Long> menuIds = roleMenuService.list(new QueryWrapper<RoleMenu>()
-                            .eq("role_id", role.getId())
-                            .select("menu_id"))
+                    .eq("role_id", role.getId())
+                    .select("menu_id"))
                     .stream()
                     .map(RoleMenu::getMenuId)
                     .collect(Collectors.toList());
@@ -134,6 +139,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public boolean hasRole(String roleName) {
-        return getOne(new QueryWrapper<Role>().eq("name",roleName)) != null;
+        return getOne(new QueryWrapper<Role>().eq("name", roleName)) != null;
     }
 }

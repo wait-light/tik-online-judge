@@ -8,6 +8,8 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 
@@ -52,6 +54,7 @@ public class Comment implements Serializable {
     /**
      * 评论内容
      */
+    @NotNull
     private String content;
 
     /**
@@ -63,6 +66,5 @@ public class Comment implements Serializable {
      * 状态(1启用/0禁用)
      */
     private Boolean status;
-
 
 }

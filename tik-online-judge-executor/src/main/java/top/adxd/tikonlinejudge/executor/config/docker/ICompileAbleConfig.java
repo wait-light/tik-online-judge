@@ -11,7 +11,6 @@ public interface ICompileAbleConfig {
      * @return 编译时间输出的文件路径
      */
     String getCompileTime();
-
     /**
      * @return 编译信息输出的路径
      */

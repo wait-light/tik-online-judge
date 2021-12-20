@@ -175,8 +175,8 @@ public class CppDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, 
         if (dockerfileDir == null) {
             synchronized (this) {
                 dockerfileDir = getClass().getClassLoader().getResource("").getPath()
-                        + File.pathSeparator
                         + "docker-image"
+                        + File.separator
                         + "cppdocker";
             }
         }

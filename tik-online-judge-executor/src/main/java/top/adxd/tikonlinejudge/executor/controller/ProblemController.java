@@ -13,6 +13,8 @@ import top.adxd.tikonlinejudge.common.annotation.Role;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
+import top.adxd.tikonlinejudge.executor.entity.ProblemData;
+import top.adxd.tikonlinejudge.executor.entity.ProblemTag;
 import top.adxd.tikonlinejudge.executor.service.IProblemService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-09-22
  */
 @RestController
-@RequestMapping("/executor/problem")
-@Role(name = "呵呵")
+@RequestMapping({"/executor/problem","/justtest"})
+@Role(name = "问题管理员", target = {
+        ProblemDataController.class,
+        ProblemTagController.class
+},exclude = {
+        "get:/executor/problem/problem-name"
+})
 public class ProblemController {
     @Autowired
     private IProblemService problemService;

@@ -13,11 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
+import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.api.dto.AuthorizationResult;
-import top.adxd.tikonlinejudge.common.singleton.RequestMethod;
-import top.adxd.tikonlinejudge.common.vo.CommonResult;
-
-import java.util.Arrays;
 import java.util.List;
 
 /*

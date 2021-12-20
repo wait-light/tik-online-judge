@@ -123,8 +123,8 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
         if (dockerfileDir == null) {
             synchronized (this) {
                 dockerfileDir = getClass().getClassLoader().getResource("").getPath()
-                        + File.pathSeparator
                         + "docker-image"
+                        + File.separator
                         + "cdocker";
             }
         }

@@ -2,6 +2,8 @@ package top.adxd.tikonlinejudge.auth.api;
 
 import top.adxd.tikonlinejudge.auth.api.dto.Menu;
 
+import java.util.List;
+
 public interface IRoleService {
     /**
      * 添加角色，并为角色赋予相应权限
@@ -11,6 +13,8 @@ public interface IRoleService {
      * @return 是否处理成功
      */
     boolean addRoleWithMenu(String roleName, Menu... menus);
+
+    boolean addRoleWithMenu(String roleName, List<Menu> menus);
 
     /**
      * 删除角色

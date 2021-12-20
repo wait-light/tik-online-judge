@@ -30,19 +30,39 @@ public class Menu implements Serializable {
      */
     private String requestMethod;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPerms() {
         return perms;
     }
 
+    public void setPerms(String perms) {
+        this.perms = perms;
+    }
+
     public String getUrl() {
         return url;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getRequestMethod() {
         return requestMethod;
+    }
+
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
     }
 }
