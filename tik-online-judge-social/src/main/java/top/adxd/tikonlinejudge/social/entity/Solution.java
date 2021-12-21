@@ -3,14 +3,18 @@ package top.adxd.tikonlinejudge.social.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wait_light
@@ -35,8 +39,9 @@ public class Solution implements Serializable {
     private Long uid;
 
     /**
-     * 题解内容
+     * 题解内容（文章内容）
      */
+    @NotNull
     private String content;
 
     /**
@@ -62,6 +67,12 @@ public class Solution implements Serializable {
     /**
      * 标题
      */
+    @NotNull
     private String title;
+
+    /**
+     * 浏览量
+     */
+    private Long view;
 
 }
