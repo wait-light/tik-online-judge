@@ -1,6 +1,6 @@
 package top.adxd.tikonlinejudge.social.dto;
 
-import top.adxd.tikonlinejudge.social.entity.InviteStatus;
+import top.adxd.tikonlinejudge.social.single.InviteStatus;
 
 import java.io.Serializable;
 

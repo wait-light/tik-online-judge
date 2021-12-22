@@ -4,7 +4,7 @@ import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.social.dto.InviteInfo;
 import top.adxd.tikonlinejudge.social.entity.Invite;
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.adxd.tikonlinejudge.social.entity.InviteStatus;
+import top.adxd.tikonlinejudge.social.single.InviteStatus;
 
 import java.util.List;
 

@@ -78,7 +78,7 @@ public class PostServiceImpl implements IPostService {
         }
         posts.stream().forEach(post -> {
             String content = post.getContent();
-            int len = Math.min(20, content.length());
+            int len = Math.min(64, content.length());
             content = content.substring(0, len);
             content = content.replaceAll(SPECIAL_SYMBOLS, "");
             post.setContent(content);

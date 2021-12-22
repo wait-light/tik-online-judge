@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.social.entity;
+package top.adxd.tikonlinejudge.social.single;
 
 import com.baomidou.mybatisplus.annotation.IEnum;
 

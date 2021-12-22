@@ -12,7 +12,7 @@ import top.adxd.tikonlinejudge.social.dto.InviteInfo;
 import top.adxd.tikonlinejudge.social.entity.GroupUser;
 import top.adxd.tikonlinejudge.social.single.GroupUserType;
 import top.adxd.tikonlinejudge.social.entity.Invite;
-import top.adxd.tikonlinejudge.social.entity.InviteStatus;
+import top.adxd.tikonlinejudge.social.single.InviteStatus;
 import top.adxd.tikonlinejudge.social.mapper.InviteMapper;
 import top.adxd.tikonlinejudge.social.service.IGroupUserService;
 import top.adxd.tikonlinejudge.social.service.IInviteService;
