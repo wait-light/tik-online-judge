@@ -18,7 +18,9 @@ import java.util.List;
 public class PostServiceImpl implements IPostService {
     @Autowired
     private ISolutionService solutionService;
-    private static final String SPECIAL_SYMBOLS = "[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%…‘；：”“’。， 、]";
+    //    private static final String SPECIAL_SYMBOLS = "[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%…‘；：”“’。， 、]";
+//    private static final String REG = "(#+ \\S+\\s)|(\\.+ \\S+\\s)|(```\\S+\\s)";
+    private static final String REG_TITLE = "((#+ )\\S+\\s?)|(```\\S*\\s([^`]*)```)|(!?\\[.*\\]\\(.+\\))";
 
     @Override
     public CommonResult post(Solution post) {
@@ -78,12 +80,25 @@ public class PostServiceImpl implements IPostService {
         }
         posts.stream().forEach(post -> {
             String content = post.getContent();
+            content = content.replaceAll(REG_TITLE, "").trim();
             int len = Math.min(64, content.length());
             content = content.substring(0, len);
-            content = content.replaceAll(SPECIAL_SYMBOLS, "");
             post.setContent(content);
         });
         return CommonResult.success().listData(posts);
+    }
+
+    @Override
+    public CommonResult getPost(Long postId) {
+        Solution post = solutionService.getById(postId);
+        if (post == null) {
+            return CommonResult.permissionDeny("禁止访问");
+        }
+        Long uid = UserInfoUtil.getUid();
+        if (post.getUid() != uid) {
+            return CommonResult.permissionDeny("禁止访问");
+        }
+        return CommonResult.success().singleData(post);
     }
 
     private List<Solution> random() {

@@ -8,4 +8,5 @@ public interface IPostService {
     CommonResult updatePost(Solution post);
     CommonResult deletePost(Long postId);
     CommonResult postList(Integer type);
+    CommonResult getPost(Long postId);
 }

@@ -18,6 +18,11 @@ public class PostController {
         return postService.postList(type);
     }
 
+    @GetMapping("/{postId}")
+    public CommonResult post(@PathVariable("postId") Long postId){
+        return postService.getPost(postId);
+    }
+
     @PostMapping("")
     public CommonResult post(@RequestBody @Validated Solution solution) {
         return postService.post(solution);
