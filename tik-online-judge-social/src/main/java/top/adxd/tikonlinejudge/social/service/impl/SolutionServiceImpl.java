@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> implements ISolutionService {
 
-    private static final String SPECIAL_SYMBOL_REG = "[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*()——+|{}【】‘；：”“’。， 、？]";
+    private static final String REG_TITLE = "((#+ )\\S+\\s?)|(```\\S*\\s([^`]*)```)|(!?\\[.*\\]\\(.+\\))";
 
     @Override
     public Long hasSolution(Long uid, Long problemId) {
@@ -42,14 +42,14 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         List<Solution> collect = baseMapper.selectList(new QueryWrapper<Solution>()
                         .eq("problem_id", problemId)
                         .eq("status", true)
-                        .select("title", "content", "id"))
+                        .select("title", "content", "id","create_time","view"))
                 .stream()
                 .map(solution -> {
                     String content = solution.getContent();
+                    //去除markdown格式
+                    content = content.replaceAll(REG_TITLE, "");
                     //截取一部分数据用于展示
-                    content = content.substring(0, Math.min(content.length(), 30));
-                    //去除特殊符号
-                    content = content.replaceAll(SPECIAL_SYMBOL_REG, "");
+                    content = content.substring(0, Math.min(content.length(), 50));
                     solution.setContent(content);
                     return solution;
                 })
