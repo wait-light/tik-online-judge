@@ -1,4 +1,4 @@
-package top.adxd.tikonlinejudge.social.entity;
+package top.adxd.tikonlinejudge.auth.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.adxd.tikonlinejudge.social.single.GroupCreatorApplyStatus;
 
 /**
  * <p>
@@ -15,12 +14,12 @@ import top.adxd.tikonlinejudge.social.single.GroupCreatorApplyStatus;
  * </p>
  *
  * @author wait_light
- * @since 2021-11-30
+ * @since 2021-12-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("cms_group_creator_apply")
-public class GroupCreatorApply implements Serializable {
+@TableName("ums_role_ask")
+public class RoleAsk implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,9 +27,9 @@ public class GroupCreatorApply implements Serializable {
     private Long id;
 
     /**
-     * 申请者id
+     * 角色名
      */
-    private Long uid;
+    private String name;
 
     /**
      * 申请时间
@@ -38,28 +37,25 @@ public class GroupCreatorApply implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 审核时间
+     * 申请人
+     */
+    private Long uid;
+
+    /**
+     * 处理人
+     */
+    private Long handler;
+
+    /**
+     * 处理时间
      */
     private LocalDateTime updateTime;
 
     /**
-     * 申请状态
+     * 处理状态
      */
-    private GroupCreatorApplyStatus status;
+    private Integer status;
 
-    /**
-     * 审核人
-     */
-    private Long judgeUid;
-
-    /**
-     * 申请人地址
-     */
-    private String address;
-
-    /**
-     * 申请原因
-     */
     private String reason;
 
 

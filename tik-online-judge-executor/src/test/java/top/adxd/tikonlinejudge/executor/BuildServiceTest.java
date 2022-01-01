@@ -16,21 +16,21 @@ public class BuildServiceTest {
     @Autowired
     private IDockerJudgeConfig javaDockerConfig;
 
-    @Test
+//    @Test
     public void antPathtest(){
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         boolean match = antPathMatcher.match("/executor/problem", "/executor/problem/100");
         System.out.println(match);
     }
 
-    @Test
+//    @Test
     public void buildTest() {
 
         File file = new File("/home/wait-light/code/tik-online-judge/tik-online-judge-executor/src/main/resources/docker-image/javadocker");
         dockerEnvService.build(file, javaDockerConfig);
     }
 
-    @Test
+//    @Test
     public void getTar() {
 //        String path = DockerEnvService.class.getClassLoader().getResource("").getPath();
 //        System.out.printf(path);

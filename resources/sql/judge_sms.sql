@@ -1,28 +1,25 @@
--- MySQL dump 10.13  Distrib 5.7.36, for Linux (x86_64)
---
--- Host: localhost    Database: judge_sms
--- ------------------------------------------------------
--- Server version	5.7.36
+/*
+Navicat MySQL Data Transfer
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+Source Server         : 127.0.0.1
+Source Server Version : 50736
+Source Host           : 127.0.0.1:3306
+Source Database       : judge_sms
 
---
--- Table structure for table `sms_config`
---
-CREATE DATABASE IF NOT EXISTS `judge_sms`;
-use judge_sms;
+Target Server Type    : MYSQL
+Target Server Version : 50736
+File Encoding         : 65001
+
+Date: 2021-12-27 21:14:13
+*/
+CREATE DATABASE judge_sms;
+USE judge_sms;
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for sms_config
+-- ----------------------------
 DROP TABLE IF EXISTS `sms_config`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sms_config` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `param_key` varchar(50) DEFAULT NULL COMMENT 'key',
@@ -32,24 +29,15 @@ CREATE TABLE `sms_config` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `param_key` (`param_key`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统配置信息表';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `sms_config`
---
+-- ----------------------------
+-- Records of sms_config
+-- ----------------------------
 
-LOCK TABLES `sms_config` WRITE;
-/*!40000 ALTER TABLE `sms_config` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sms_config` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sms_log`
---
-
+-- ----------------------------
+-- Table structure for sms_log
+-- ----------------------------
 DROP TABLE IF EXISTS `sms_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sms_log` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) DEFAULT NULL COMMENT '用户名',
@@ -61,24 +49,15 @@ CREATE TABLE `sms_log` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='系统日志';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `sms_log`
---
+-- ----------------------------
+-- Records of sms_log
+-- ----------------------------
 
-LOCK TABLES `sms_log` WRITE;
-/*!40000 ALTER TABLE `sms_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sms_log` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sms_oss`
---
-
+-- ----------------------------
+-- Table structure for sms_oss
+-- ----------------------------
 DROP TABLE IF EXISTS `sms_oss`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sms_oss` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `url` varchar(200) DEFAULT NULL COMMENT 'URL地址',
@@ -86,24 +65,15 @@ CREATE TABLE `sms_oss` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='文件上传';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `sms_oss`
---
+-- ----------------------------
+-- Records of sms_oss
+-- ----------------------------
 
-LOCK TABLES `sms_oss` WRITE;
-/*!40000 ALTER TABLE `sms_oss` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sms_oss` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sms_schedule_job`
---
-
+-- ----------------------------
+-- Table structure for sms_schedule_job
+-- ----------------------------
 DROP TABLE IF EXISTS `sms_schedule_job`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sms_schedule_job` (
   `job_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务id',
   `bean_name` varchar(200) DEFAULT NULL COMMENT 'spring bean名称',
@@ -114,24 +84,15 @@ CREATE TABLE `sms_schedule_job` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`job_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='定时任务';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `sms_schedule_job`
---
+-- ----------------------------
+-- Records of sms_schedule_job
+-- ----------------------------
 
-LOCK TABLES `sms_schedule_job` WRITE;
-/*!40000 ALTER TABLE `sms_schedule_job` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sms_schedule_job` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sms_schedule_job_log`
---
-
+-- ----------------------------
+-- Table structure for sms_schedule_job_log
+-- ----------------------------
 DROP TABLE IF EXISTS `sms_schedule_job_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sms_schedule_job_log` (
   `log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务日志id',
   `job_id` bigint(20) NOT NULL COMMENT '任务id',
@@ -144,24 +105,7 @@ CREATE TABLE `sms_schedule_job_log` (
   PRIMARY KEY (`log_id`) USING BTREE,
   KEY `job_id` (`job_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='定时任务日志';
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `sms_schedule_job_log`
---
-
-LOCK TABLES `sms_schedule_job_log` WRITE;
-/*!40000 ALTER TABLE `sms_schedule_job_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sms_schedule_job_log` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2021-11-23 10:59:38
+-- ----------------------------
+-- Records of sms_schedule_job_log
+-- ----------------------------

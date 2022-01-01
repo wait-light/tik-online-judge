@@ -17,6 +17,7 @@ Usage:
     -q | --quiet                Don't output any status messages
     -t TIMEOUT | --timeout=TIMEOUT
                                 Timeout in seconds, zero for no timeout
+    --morewait TIME             Wait $TIME after test success
     -- COMMAND ARGS             Execute command with args after the test finishes
 USAGE
     exit 1
@@ -94,7 +95,7 @@ do
         if [[ $WAITFORIT_HOST == "" ]]; then break; fi
         shift 2
         ;;
-        --host=*)
+        --host=*)15:8848
         WAITFORIT_HOST="${1#*=}"
         shift 1
         ;;
@@ -115,6 +116,16 @@ do
         --timeout=*)
         WAITFORIT_TIMEOUT="${1#*=}"
         shift 1
+        ;;
+        --morewait)
+        MORE_WAIT=$2
+        if [[ $MORE_WAIT =~ [0-9]+ ]] ;
+        then
+            shift 2
+        else
+            echoerr "UnSupport more wait time"
+            usage
+        fi
         ;;
         --)
         shift
@@ -175,6 +186,10 @@ if [[ $WAITFORIT_CLI != "" ]]; then
     if [[ $WAITFORIT_RESULT -ne 0 && $WAITFORIT_STRICT -eq 1 ]]; then
         echoerr "$WAITFORIT_cmdname: strict mode, refusing to execute subprocess"
         exit $WAITFORIT_RESULT
+    fi
+    if [[ $MORE_WAIT =~ [0-9]+ ]]; then
+        echo "sleep $MORE_WAIT second"
+        sleep $MORE_WAIT
     fi
     exec "${WAITFORIT_CLI[@]}"
 else

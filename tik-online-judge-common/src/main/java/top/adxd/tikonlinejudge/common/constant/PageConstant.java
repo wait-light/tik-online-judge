@@ -29,7 +29,7 @@ public class PageConstant {
     //查询的页面大小
     public static final String PAGE_SIZE_KEY = "pageSize";
     //排序
-    public static final String PAGE_ORDER_BY = "oderBy";
+    public static final String PAGE_ORDER_BY = "orderBy";
 //    //升序降序
 //    public static final String PAGE_ORDER_SEQUENCE = "sequence";
 //    //升序

@@ -1,28 +1,25 @@
--- MySQL dump 10.13  Distrib 5.7.36, for Linux (x86_64)
---
--- Host: localhost    Database: judge_ums
--- ------------------------------------------------------
--- Server version	5.7.36
+/*
+Navicat MySQL Data Transfer
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+Source Server         : 127.0.0.1
+Source Server Version : 50736
+Source Host           : 127.0.0.1:3306
+Source Database       : judge_ums
 
---
--- Table structure for table `ums_menu`
---
-CREATE DATABASE IF NOT EXISTS `judge_ums`;
-use judge_ums;
+Target Server Type    : MYSQL
+Target Server Version : 50736
+File Encoding         : 65001
+
+Date: 2021-12-27 21:14:21
+*/
+CREATE DATABASE judge_ums;
+USE judge_ums;
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for ums_menu
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_menu`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_menu` (
   `id` bigint(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '权限名称',
@@ -35,24 +32,15 @@ CREATE TABLE `ums_menu` (
   `request_method` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求方法',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ums_menu`
---
+-- ----------------------------
+-- Records of ums_menu
+-- ----------------------------
 
-LOCK TABLES `ums_menu` WRITE;
-/*!40000 ALTER TABLE `ums_menu` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ums_menu` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ums_role`
---
-
+-- ----------------------------
+-- Table structure for ums_role
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '角色名',
@@ -62,51 +50,57 @@ CREATE TABLE `ums_role` (
   `create_user_id` bigint(20) unsigned DEFAULT NULL COMMENT '创建用户id',
   `status` bit(1) DEFAULT b'1' COMMENT '1启用/0关闭',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
---
--- Dumping data for table `ums_role`
---
+-- ----------------------------
+-- Records of ums_role
+-- ----------------------------
 
-LOCK TABLES `ums_role` WRITE;
-/*!40000 ALTER TABLE `ums_role` DISABLE KEYS */;
-INSERT INTO `ums_role` VALUES (14,'asdasd','2021-09-15 16:30:53','2021-09-15 16:30:53','asdasd',NULL,_binary '');
-/*!40000 ALTER TABLE `ums_role` ENABLE KEYS */;
-UNLOCK TABLES;
+-- ----------------------------
+-- Table structure for ums_role_ask
+-- ----------------------------
+DROP TABLE IF EXISTS `ums_role_ask`;
+CREATE TABLE `ums_role_ask` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '角色名',
+  `create_time` datetime DEFAULT NULL COMMENT '申请时间',
+  `uid` bigint(20) unsigned DEFAULT NULL COMMENT '申请人',
+  `handler` bigint(20) unsigned DEFAULT NULL COMMENT '处理人',
+  `update_time` datetime DEFAULT NULL COMMENT '处理时间',
+  `status` tinyint(3) unsigned zerofill DEFAULT NULL COMMENT '处理状态',
+  `reason` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Table structure for table `ums_role_menu`
---
+-- ----------------------------
+-- Records of ums_role_ask
+-- ----------------------------
 
+-- ----------------------------
+-- Table structure for ums_role_menu
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_role_menu`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_role_menu` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `role_id` bigint(20) unsigned DEFAULT NULL COMMENT '角色id',
   `menu_id` bigint(20) unsigned DEFAULT NULL COMMENT '菜单权限id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ums_role_menu`
---
+-- ----------------------------
+-- Records of ums_role_menu
+-- ----------------------------
+INSERT INTO `ums_role_menu` VALUES ('47', '14', '2');
+INSERT INTO `ums_role_menu` VALUES ('48', '14', '5');
+INSERT INTO `ums_role_menu` VALUES ('49', '14', '4');
+INSERT INTO `ums_role_menu` VALUES ('50', '14', '3');
+INSERT INTO `ums_role_menu` VALUES ('51', '14', '6');
+INSERT INTO `ums_role_menu` VALUES ('52', '14', '7');
 
-LOCK TABLES `ums_role_menu` WRITE;
-/*!40000 ALTER TABLE `ums_role_menu` DISABLE KEYS */;
-INSERT INTO `ums_role_menu` VALUES (47,14,2),(48,14,5),(49,14,4),(50,14,3),(51,14,6),(52,14,7);
-/*!40000 ALTER TABLE `ums_role_menu` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ums_social`
---
-
+-- ----------------------------
+-- Table structure for ums_social
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_social`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_social` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '第三方软件的名称',
@@ -115,24 +109,15 @@ CREATE TABLE `ums_social` (
   `status` bit(1) DEFAULT b'1' COMMENT '启用状态(1启用/0关闭)',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ums_social`
---
+-- ----------------------------
+-- Records of ums_social
+-- ----------------------------
 
-LOCK TABLES `ums_social` WRITE;
-/*!40000 ALTER TABLE `ums_social` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ums_social` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ums_user`
---
-
+-- ----------------------------
+-- Table structure for ums_user
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_user` (
   `uid` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `username` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户名',
@@ -147,49 +132,33 @@ CREATE TABLE `ums_user` (
   `admin` bit(1) DEFAULT b'0' COMMENT '是否管理员',
   PRIMARY KEY (`uid`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ums_user`
---
+-- ----------------------------
+-- Records of ums_user
+-- ----------------------------
+INSERT INTO `ums_user` VALUES ('1', '915779941@qq.com', 'cdaa7da69d09439a0df7e350637eb50d', '2021-11-08 15:51:03', '2021-11-08 15:51:03', '', 'wait-light2', null, '915779941@qq.com', 'https://z3.ax1x.com/2021/09/11/4SEo8O.png', '');
+INSERT INTO `ums_user` VALUES ('2', 'admin', 'admin', '2021-11-18 12:56:33', '2021-11-18 12:56:33', '', 'tik-admin', null, null, 'https://z3.ax1x.com/2021/09/11/4SEo8O.png', '\0');
+INSERT INTO `ums_user` VALUES ('3', 'hy915779941@gmail.com', 'cdaa7da69d09439a0df7e350637eb50d', '2021-11-20 20:09:49', '2021-11-20 20:09:49', '', '说来实在嘲讽', null, 'hy915779941@gmail.com', 'https://tik-online-judge.oss-cn-hangzhou.aliyuncs.com/2021-12-21/b363d240-27a9-45c0-9c16-ce0afa8ce032_透明头像.png', '\0');
 
-LOCK TABLES `ums_user` WRITE;
-/*!40000 ALTER TABLE `ums_user` DISABLE KEYS */;
-INSERT INTO `ums_user` VALUES (1,'915779941@qq.com','cdaa7da69d09439a0df7e350637eb50d','2021-11-08 15:51:03','2021-11-08 15:51:03',_binary '','wait-light2',NULL,'915779941@qq.com','https://z3.ax1x.com/2021/09/11/4SEo8O.png',_binary ''),(2,'admin','admin','2021-11-18 12:56:33','2021-11-18 12:56:33',_binary '','tik-admin',NULL,NULL,'https://z3.ax1x.com/2021/09/11/4SEo8O.png',_binary '\0'),(3,'hy915779941@gmail.com','cdaa7da69d09439a0df7e350637eb50d','2021-11-20 20:09:49','2021-11-20 20:09:49',_binary '','说来实在嘲讽',NULL,'hy915779941@gmail.com','https://tik-online-judge.oss-cn-hangzhou.aliyuncs.com/2021-11-21/7c404aa2-2328-42fa-8009-a7fb6121e393_头像.jpg',_binary '\0');
-/*!40000 ALTER TABLE `ums_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ums_user_role`
---
-
+-- ----------------------------
+-- Table structure for ums_user_role
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_user_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_user_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `uid` bigint(20) unsigned DEFAULT NULL COMMENT '用户id',
   `role_id` bigint(20) unsigned DEFAULT NULL COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ums_user_role`
---
+-- ----------------------------
+-- Records of ums_user_role
+-- ----------------------------
 
-LOCK TABLES `ums_user_role` WRITE;
-/*!40000 ALTER TABLE `ums_user_role` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ums_user_role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `ums_user_social`
---
-
+-- ----------------------------
+-- Table structure for ums_user_social
+-- ----------------------------
 DROP TABLE IF EXISTS `ums_user_social`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ums_user_social` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `uid` bigint(20) unsigned DEFAULT NULL COMMENT '用户id',
@@ -198,24 +167,7 @@ CREATE TABLE `ums_user_social` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `user_social_id` (`user_social_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ums_user_social`
---
-
-LOCK TABLES `ums_user_social` WRITE;
-/*!40000 ALTER TABLE `ums_user_social` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ums_user_social` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2021-11-23 10:59:40
+-- ----------------------------
+-- Records of ums_user_social
+-- ----------------------------

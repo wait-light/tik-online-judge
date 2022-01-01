@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.executor.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class CollectionGroupController {
     }
 
     @PostMapping("/problems/{groupId}")
-    public CommonResult problemAdd(@PathVariable("groupId") Long groupId, @RequestBody Problem problem) {
+    public CommonResult problemAdd(@PathVariable("groupId") Long groupId, @Validated @RequestBody Problem problem) {
         return collectionGroupService.addProblem(groupId, problem);
     }
 

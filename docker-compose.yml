@@ -34,11 +34,6 @@ services:
     build: ./tik-online-judge-auth
     networks:
       - tik-online
-    links:
-      - tik-mysql
-      - tik-nacos
-      - tik-rabbitmq
-      - tik-redis
     depends_on:
       - tik-mysql
       - tik-nacos
@@ -50,11 +45,6 @@ services:
     build: ./tik-online-judge-executor
     networks:
       - tik-online
-    links:
-      - tik-mysql
-      - tik-nacos
-      - tik-rabbitmq
-      - tik-redis
     depends_on:
       - tik-mysql
       - tik-nacos
@@ -68,11 +58,6 @@ services:
     build: ./tik-online-judge-message
     networks:
       - tik-online
-    links:
-      - tik-mysql
-      - tik-nacos
-      - tik-rabbitmq
-      - tik-redis
     depends_on:
       - tik-mysql
       - tik-nacos
@@ -84,11 +69,6 @@ services:
     build: ./tik-online-judge-social
     networks:
       - tik-online
-    links:
-      - tik-mysql
-      - tik-nacos
-      - tik-rabbitmq
-      - tik-redis
     depends_on:
       - tik-mysql
       - tik-nacos
@@ -100,11 +80,6 @@ services:
     build: ./tik-online-judge-thirdpart
     networks:
       - tik-online
-    links:
-      - tik-mysql
-      - tik-nacos
-      - tik-rabbitmq
-      - tik-redis
     depends_on:
       - tik-mysql
       - tik-nacos
@@ -116,11 +91,6 @@ services:
     build: ./tik-online-judge-gateway
     networks:
       - tik-online
-    links:
-      - tik-mysql
-      - tik-nacos
-      - tik-rabbitmq
-      - tik-redis
     depends_on:
       - tik-mysql
       - tik-nacos
