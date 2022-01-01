@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import top.adxd.tikonlinejudge.auth.single.AskStatus;
 
 /**
  * <p>
@@ -54,7 +55,7 @@ public class RoleAsk implements Serializable {
     /**
      * 处理状态
      */
-    private Integer status;
+    private AskStatus status;
 
     private String reason;
 
