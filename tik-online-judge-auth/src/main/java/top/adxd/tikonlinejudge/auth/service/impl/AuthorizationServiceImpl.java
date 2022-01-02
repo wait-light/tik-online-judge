@@ -49,7 +49,7 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
         }else {
             permissionSet = unloginAuthorization();
         }
-        if (permissionSet.contains("*") || (permissionSet.contains(matchMenu.getPerms())) && requestMethodMatcher.match(requestMethod, matchMenu.getRequestMethod())) {
+        if (permissionSet.contains(ADMIN_PERMISSION) || (permissionSet.contains(matchMenu.getPerms())) && requestMethodMatcher.match(requestMethod, matchMenu.getRequestMethod())) {
             return new AuthorizationResult(true, uid, "权限校验成功");
         }
         return new AuthorizationResult(false, null, "拒绝访问");
@@ -58,7 +58,7 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
     @Override
     public boolean hasPower(String power) {
         Set<String> powers = authorizationServiceCache.userAuthorization(UserInfoUtil.getUid());
-        return powers.contains(powers);
+        return powers.contains(power) || powers.contains(ADMIN_PERMISSION);
     }
 
     public Set<String> loginedAuthorization(Long uid) {

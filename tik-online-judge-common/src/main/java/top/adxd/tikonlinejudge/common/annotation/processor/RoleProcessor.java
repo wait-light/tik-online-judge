@@ -59,7 +59,7 @@ public class RoleProcessor implements IRoleProcessor, InitializingBean {
     }
 
     /**
-     * 排除制定路径
+     * 排除指定路径
      *
      * @param role           角色元信息
      * @param methodMappings 需要被过滤的列表
