@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.api.dto.Menu;
+import top.adxd.tikonlinejudge.auth.dto.RoleDto;
 import top.adxd.tikonlinejudge.auth.entity.Role;
 import top.adxd.tikonlinejudge.auth.entity.RoleMenu;
 import top.adxd.tikonlinejudge.auth.entity.UserRole;
@@ -16,10 +17,14 @@ import top.adxd.tikonlinejudge.auth.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.auth.service.IUserRoleService;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
+import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +45,58 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     private IRoleMenuService roleMenuService;
     @Autowired
     private IUserRoleService userRoleService;
+
+    @Override
+    public boolean save(Role entity) {
+        boolean hasRole = hasRole(entity.getName());
+        if (hasRole) {
+            return false;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        entity.setCreateTime(now);
+        entity.setUpdateTime(now);
+        entity.setCreateUserId(UserInfoUtil.getUid());
+        entity.setStatus(true);
+        return super.save(entity);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult updateById(RoleDto roleDto) {
+        Role original = getById(roleDto.getId());
+        if (original == null) {
+            return CommonResult.error("角色不存在");
+        }
+        if (!original.getName().equals(roleDto.getName())) {
+            if (hasRole(roleDto.getName())) {
+                return CommonResult.error("角色名已存在");
+            }
+        }
+        LocalDateTime now = LocalDateTime.now();
+        original.setName(roleDto.getName());
+        original.setUpdateTime(now);
+        original.setStatus(roleDto.getStatus() == null ? original.getStatus() : roleDto.getStatus());
+        original.setRemark(roleDto.getRemark());
+        updateById(original);
+        CommonResult setRoleMenusResult = roleMenuService.setRoleMenus(original.getId(), roleDto.getMenus());
+        if (!setRoleMenusResult.isSuccess()) {
+            return CommonResult.error("更新失败");
+        }
+        return CommonResult.success("更新成功");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult save(RoleDto roleDto) {
+        if (!save((Role) roleDto)) {
+            return CommonResult.error("角色名已存在/系统内部出错");
+        }
+        CommonResult setRoleMenusResult = roleMenuService.setRoleMenus(roleDto.getId(), roleDto.getMenus());
+        if (setRoleMenusResult.isSuccess()) {
+            return CommonResult.success("添加成功");
+        }
+        return CommonResult.error("添加失败");
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -73,7 +130,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             m.setOrder(0);
             BeanUtils.copyProperties(menu, m);
             menuService.save(m);
-
             roleMenu.setMenuId(m.getId());
             roleMenuService.save(roleMenu);
         }

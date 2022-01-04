@@ -52,3 +52,5 @@ dubbo:
   provider:
     version: 0.0.1
 #debug: true
+mybatis-plus:
+  type-enums-package: top.adxd.tikonlinejudge.auth.single

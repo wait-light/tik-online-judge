@@ -49,4 +49,4 @@ dubbo:
   provider:
     version: 0.0.1
 mybatis-plus:
-  type-enums-package: top.adxd.tikonlinejudge.auth.entity
+  type-enums-package: top.adxd.tikonlinejudge.auth.single

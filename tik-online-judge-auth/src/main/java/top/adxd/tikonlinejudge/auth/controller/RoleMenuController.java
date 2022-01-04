@@ -29,7 +29,7 @@ public class RoleMenuController {
 
     @GetMapping("/menu/{id}")
     public CommonResult roleMenus(@PathVariable("id") Long roleId) {
-        return CommonResult.success().singleData(roleMenuService.userMenus(roleId));
+        return CommonResult.success().singleData(roleMenuService.roleMenus(roleId));
     }
 
     @GetMapping("/list")

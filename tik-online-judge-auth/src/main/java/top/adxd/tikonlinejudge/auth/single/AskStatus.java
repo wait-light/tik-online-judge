@@ -10,7 +10,9 @@ public enum AskStatus implements IEnum<Integer>, Serializable {
     //失败
     FAIL,
     //通过
-    ADOPT;
+    ADOPT,
+    //授权失败
+    PRIVILEGE_GRANT_FAILED;
 
     @Override
     public Integer getValue() {

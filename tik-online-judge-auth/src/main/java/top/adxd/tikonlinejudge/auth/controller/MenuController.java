@@ -63,6 +63,9 @@ public class MenuController {
 
     @PutMapping("/{id}")
     public CommonResult update(@RequestBody Menu entity){
+        if (entity.getId() == entity.getParentId()){
+            return CommonResult.error("父子节点不能相同");
+        }
         return menuService.updateById(entity) ?
             CommonResult.success().setMsg("更新成功"):
             CommonResult.error().setMsg("更新失败");
