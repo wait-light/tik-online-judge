@@ -1,5 +1,7 @@
 package top.adxd.tikonlinejudge.auth.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.entity.RoleMenu;
@@ -26,6 +28,10 @@ import java.util.stream.Collectors;
 @Service
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {
 
+    /**
+     * @param roleId
+     * @return 菜单id
+     */
     @Override
     public List<Long> roleMenus(Long roleId) {
         if (roleId == null || roleId == 0) {
@@ -45,7 +51,12 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
         }
         List<Long> originalMenus = roleMenus(role);
         Collection<Long> finalNewMenus = newMenus;
-        List<Long> needDeleteMenus = originalMenus.stream().filter(item -> !finalNewMenus.contains(item)).collect(Collectors.toList());
+        //删除不需要的权限
+        originalMenus.stream().filter(item -> !finalNewMenus.contains(item)).forEach(item -> {
+            remove(new UpdateWrapper<RoleMenu>().eq("role_id", role).eq("menu_id", item));
+        });
+
+        //增加新添加的权限
         List<RoleMenu> needAddMenus = finalNewMenus.stream()
                 .filter(item -> !originalMenus.contains(item))
                 .map(item -> {
@@ -55,9 +66,6 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
                     return roleMenu;
                 })
                 .collect(Collectors.toList());
-        if (needDeleteMenus.size() > 0) {
-            removeByIds(needDeleteMenus);
-        }
         if (needAddMenus.size() > 0) {
             saveBatch(needAddMenus);
         }
