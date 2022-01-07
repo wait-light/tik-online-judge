@@ -11,12 +11,14 @@ import top.adxd.tikonlinejudge.executor.config.docker.IDockerJudgeConfig;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class DockerEnvService {
     private static final Logger logger = LoggerFactory.getLogger(DockerEnvService.class);
     private static final String TAG_LATEST = "latest";
-
+    private static final Long MAX_WAIT_TIME = 10L;
+    private static final TimeUnit WAIT_TIME_UNIT = TimeUnit.MINUTES;
     private DockerEnvService() {
     }
 
@@ -33,7 +35,7 @@ public class DockerEnvService {
         Assert.notNull(dockerJudgeConfig, "配置信息不能为空");
         Set<String> set = new HashSet<>();
         set.add(dockerJudgeConfig.getImageName());
-        String imageId = dockerClient.buildImageCmd(tar).withTags(set).start().awaitImageId();
+        String imageId = dockerClient.buildImageCmd(tar).withTags(set).start().awaitImageId(MAX_WAIT_TIME, WAIT_TIME_UNIT);
         logger.info("构建镜像成功：" + imageId);
     }
 

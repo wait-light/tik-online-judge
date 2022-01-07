@@ -267,6 +267,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         try {
             return Long.parseLong(compileTime);
         } catch (Exception e) {
+            logger.error(e.getLocalizedMessage());
             return MIN_TIME;
         }
     }

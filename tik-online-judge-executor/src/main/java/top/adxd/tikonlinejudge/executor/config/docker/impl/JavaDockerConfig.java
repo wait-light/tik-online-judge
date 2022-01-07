@@ -75,7 +75,7 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
     @Override
     public String getWorkDir() {
         if (workDir == null || "".equals(workDir.trim())){
-            workDir = "/usr/src/judge";
+            workDir = "/home/tik-online-judge";
         }
         return workDir;
     }

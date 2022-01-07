@@ -77,7 +77,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
     @Override
     public String getWorkDir() {
         if (workDir == null || "".equals(workDir.trim())) {
-            workDir = "/usr/src/judge";
+            workDir = "/home/tik-online-judge";
         }
         return workDir;
     }
