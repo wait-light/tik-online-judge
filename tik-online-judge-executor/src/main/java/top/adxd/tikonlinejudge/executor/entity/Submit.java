@@ -64,4 +64,14 @@ public class Submit implements Serializable {
      */
     @NotNull
     private Long problemId;
+
+    /**
+     * 运行时间
+     */
+    private Long runtime;
+
+    /**
+     * 运行内存
+     */
+    private Long runtimeMemory;
 }

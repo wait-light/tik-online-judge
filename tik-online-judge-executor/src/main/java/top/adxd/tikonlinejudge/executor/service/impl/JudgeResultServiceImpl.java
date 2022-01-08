@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
@@ -47,7 +48,7 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
     @Override
     public SubmitJudgeResult lastSubmitResults(Long problemId, Long userid) {
         Submit lastSubmit = submitService.getOne(new QueryWrapper<Submit>()
-                .select("id", "create_time", "status")
+                .select("id", "create_time", "status","runtime_memory","runtime")
                 .eq("uid", userid)
                 .eq("problem_id", problemId)
                 .orderByDesc("create_time")
@@ -63,7 +64,7 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
     @Override
     public List<SubmitJudgeResult> problemSubmitsResults(Long problemId, Long userid) {
         List<Submit> submits = submitService.list(new QueryWrapper<Submit>()
-                .select("id", "create_time", "status")
+                .select("id", "create_time", "status","runtime_memory","runtime")
                 .eq("uid", userid)
                 .eq("problem_id", problemId)
                 .orderByDesc("create_time"));
@@ -87,24 +88,28 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
         }
         JudgeStatus submitStatus = null;
         int acceptCount = 0;
+        Long maxRuntime = Long.MIN_VALUE, maxRuntimeMemory = Long.MIN_VALUE;
         for (JudgeResult judgeResult : judgeResults) {
             if (judgeResult.getJudgeStatus() == JudgeStatus.ACCEPT) {
                 acceptCount++;
             } else {
                 submitStatus = judgeResult.getJudgeStatus();
             }
+            maxRuntime = Math.max(maxRuntime, judgeResult.getExecutionTime());
+            maxRuntimeMemory = Math.max(maxRuntimeMemory, judgeResult.getRuntimeMemory());
         }
         if (acceptCount == judgeResults.size()) {
             submitStatus = JudgeStatus.ACCEPT;
         }
         this.saveBatch(judgeResults);
         submit.setStatus(submitStatus);
+        submit.setRuntimeMemory(maxRuntimeMemory);
+        submit.setRuntime(maxRuntime);
         submitService.updateById(submit);
     }
 
     private void fillData(SubmitJudgeResult submitJudgeResult, Submit submit) {
+        BeanUtils.copyProperties(submit,submitJudgeResult);
         submitJudgeResult.setSubmitId(submit.getId());
-        submitJudgeResult.setCreateTime(submit.getCreateTime());
-        submitJudgeResult.setStatus(submit.getStatus());
     }
 }

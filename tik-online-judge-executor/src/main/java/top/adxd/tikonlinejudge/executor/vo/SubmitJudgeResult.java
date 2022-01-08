@@ -14,4 +14,6 @@ public class SubmitJudgeResult implements Serializable {
     private LocalDateTime createTime;
     private JudgeStatus status;
     private List<JudgeResult> judgeResults;
+    private Long runtime;
+    private Long runtimeMemory;
 }

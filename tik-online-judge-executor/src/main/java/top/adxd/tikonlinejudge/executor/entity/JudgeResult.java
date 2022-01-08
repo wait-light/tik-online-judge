@@ -58,6 +58,11 @@ public class JudgeResult implements Serializable {
      */
     private Boolean success;
 
+    /**
+     * 运行时内存
+     */
+    private Long runtimeMemory;
+
 
     public static JudgeResult parse(ExecuteResult executeResult, Long submitId, String output, Long executionTime) {
         if (null == executeResult) {

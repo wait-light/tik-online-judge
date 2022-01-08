@@ -34,6 +34,7 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
     private String compileInfo;
     private String needCompile;
     private volatile String dockerfileDir;
+    private String runtimeInfo;
 
     public JavaDockerConfig(){}
 
@@ -180,5 +181,13 @@ public class JavaDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig,
             }
         }
         return dockerfileDir;
+    }
+
+    @Override
+    public String getRuntimeAndRuntimeMemory() {
+        if(runtimeInfo == null){
+            runtimeInfo = path + "/time_memory";
+        }
+        return runtimeInfo;
     }
 }

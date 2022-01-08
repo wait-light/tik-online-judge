@@ -35,6 +35,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
     private String compileInfo;
     private String needCompile;
     private volatile String dockerfileDir;
+    private String runtimeInfo;
 
     public CDockerConfig() {
     }
@@ -129,6 +130,14 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
             }
         }
         return dockerfileDir;
+    }
+
+    @Override
+    public String getRuntimeAndRuntimeMemory() {
+        if(runtimeInfo == null){
+            runtimeInfo = path + "/time_memory";
+        }
+        return runtimeInfo;
     }
 
 
