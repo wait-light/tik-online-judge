@@ -21,10 +21,7 @@ import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +42,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     private IRoleMenuService roleMenuService;
     @Autowired
     private IUserRoleService userRoleService;
+    @Autowired
+    private Menu systemAutoGenerator;
 
     @Override
     public boolean save(Role entity) {
@@ -114,7 +113,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         role.setCreateTime(now);
         role.setCreateUserId(-1L);
         role.setName(roleName);
-        role.setRemark("其他系统生成");
+        role.setRemark("系统生成");
         role.setUpdateTime(now);
         role.setStatus(true);
         save(role);
@@ -124,7 +123,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         roleMenu.setRoleId(role.getId());
         //将对应权限添加到角色上
         for (Menu menu : menus) {
-
             m.setParentId(-1L);
             m.setType(2);
             m.setOrder(0);

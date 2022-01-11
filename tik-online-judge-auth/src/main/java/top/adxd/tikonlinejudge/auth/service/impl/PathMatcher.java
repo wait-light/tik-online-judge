@@ -8,6 +8,7 @@ import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.entity.Menu;
 import top.adxd.tikonlinejudge.auth.service.IMenuService;
 import top.adxd.tikonlinejudge.auth.service.IPathMatcher;
+import top.adxd.tikonlinejudge.auth.service.IRequestMethodMatcher;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodResolver;
 
 
@@ -28,6 +29,8 @@ public class PathMatcher implements IPathMatcher {
     private IRequestMethodResolver requestMethodResolver;
     private Map<String, Menu> menus;
     private AntPathMatcher antPathMatcher;
+    @Autowired
+    private IRequestMethodMatcher requestMethodMatcher;
 
     @PostConstruct
     private void initialization() {
@@ -46,21 +49,22 @@ public class PathMatcher implements IPathMatcher {
         Menu logged = new Menu();
         logged.setPerms(LOGGED);
         logged.setRequestMethod(requestMethodResolver.RequestMethods2String(RequestMethod.POST,
-                                                                            RequestMethod.DELETE,
-                                                                            RequestMethod.GET,
-                                                                            RequestMethod.PUT,
-                                                                            RequestMethod.OPTION));
+                RequestMethod.DELETE,
+                RequestMethod.GET,
+                RequestMethod.PUT,
+                RequestMethod.OPTION));
         menuMap.put("/**", logged);
         return menuMap;
     }
 
     @Override
-    public Menu match(String path) {
+    public Menu match(String path, RequestMethod requestMethod) {
         Iterator<Map.Entry<String, Menu>> iterator = menus.entrySet().iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<String, Menu> next = iterator.next();
             String key = next.getKey();
-            if (antPathMatcher.match(key,path)){
+            Menu value = next.getValue();
+            if (antPathMatcher.match(key, path) && requestMethodMatcher.match(requestMethod, value.getRequestMethod())) {
                 return next.getValue();
             }
         }

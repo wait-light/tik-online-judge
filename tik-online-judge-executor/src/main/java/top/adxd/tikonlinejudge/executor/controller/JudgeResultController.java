@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import top.adxd.tikonlinejudge.common.annotation.Role;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
  * @author wait_light
  * @since 2021-09-24
  */
+@Role(name = "judge")
 @RestController
 @RequestMapping("/executor/judge-result")
 public class JudgeResultController {

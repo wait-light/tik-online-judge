@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.auth.service;
 
+import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.entity.Menu;
 
 /*
@@ -9,5 +10,5 @@ import top.adxd.tikonlinejudge.auth.entity.Menu;
 public interface IPathMatcher {
     String LOGGED = "logged";
     String ANONYMOUS = "anon";
-    Menu match(String path);
+    Menu match(String path, RequestMethod requestMethod);
 }

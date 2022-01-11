@@ -13,6 +13,7 @@ import top.adxd.tikonlinejudge.auth.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     private UserRoleMapper userRoleMapper;
     @Autowired
     private RoleMenuMapper roleMenuMapper;
+
+    @Override
+    public boolean removeById(Serializable id) {
+
+        return super.removeById(id);
+    }
 
     /**
      * @return 返回组装成树的菜单

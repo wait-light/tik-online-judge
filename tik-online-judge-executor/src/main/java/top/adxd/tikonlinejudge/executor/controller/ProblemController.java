@@ -27,13 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-09-22
  */
 @RestController
-@RequestMapping({"/executor/problem","/justtest"})
-@Role(name = "问题管理员", target = {
-        ProblemDataController.class,
-        ProblemTagController.class
-},exclude = {
-        "get:/executor/problem/problem-name"
-})
+@RequestMapping({"/executor/problem"})
 public class ProblemController {
     @Autowired
     private IProblemService problemService;

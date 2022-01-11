@@ -30,8 +30,7 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
     private JWTUtil jwtUtil;
     @Autowired
     private IPathMatcher pathMatcher;
-    @Autowired
-    private IRequestMethodMatcher requestMethodMatcher;
+
 
     @Override
     public AuthorizationResult authorization(String token, String path, RequestMethod requestMethod) {
@@ -39,7 +38,7 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
         if (uid == null) {
             return new AuthorizationResult(false, null, "未登录或登录已过期");
         }
-        Menu matchMenu = pathMatcher.match(path);
+        Menu matchMenu = pathMatcher.match(path,requestMethod);
         if (matchMenu == null) {
             return new AuthorizationResult(false, null, "拒绝访问");
         }
@@ -49,7 +48,7 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
         }else {
             permissionSet = unloginAuthorization();
         }
-        if (permissionSet.contains(ADMIN_PERMISSION) || (permissionSet.contains(matchMenu.getPerms())) && requestMethodMatcher.match(requestMethod, matchMenu.getRequestMethod())) {
+        if (permissionSet.contains(ADMIN_PERMISSION) || (permissionSet.contains(matchMenu.getPerms()))) {
             return new AuthorizationResult(true, uid, "权限校验成功");
         }
         return new AuthorizationResult(false, null, "拒绝访问");
