@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author wait_light
@@ -60,17 +60,17 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
             BeanUtils.copyProperties(item, menuTree);
             map.put(menuTree.getId(), menuTree);
             return menuTree;
-        }).map((item) -> {
+        }).collect(Collectors.toList());
+        menuTrees.forEach((item) -> {
             //子菜单，组装到父菜单中
             if (item.getParentId() != null && item.getParentId() != 0) {
                 MenuTree menuTree = map.get(item.getParentId());
                 menuTree.getChildren().add(item);
             }
-            return item;
-            //过滤成只有根菜单的列表，便于转成json
-        }).filter(item ->
-                item.getParentId() == null || item.getParentId() == 0
-        ).collect(Collectors.toList());
-        return menuTrees;
+        });
+        return menuTrees     //过滤成只有根菜单的列表，便于转成json
+                .stream()
+                .filter(item -> item.getParentId() == null || item.getParentId() == 0)
+                .collect(Collectors.toList());
     }
 }

@@ -5,6 +5,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import top.adxd.tikonlinejudge.auth.api.constant.SystemMenu;
 import top.adxd.tikonlinejudge.auth.api.dto.Menu;
 import top.adxd.tikonlinejudge.auth.dto.RoleDto;
 import top.adxd.tikonlinejudge.auth.entity.Role;
@@ -43,7 +44,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     @Autowired
     private IUserRoleService userRoleService;
     @Autowired
-    private Menu systemAutoGenerator;
+    private top.adxd.tikonlinejudge.auth.entity.Menu systemAutoGenerator;
 
     @Override
     public boolean save(Role entity) {
@@ -55,6 +56,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         entity.setCreateTime(now);
         entity.setUpdateTime(now);
         entity.setCreateUserId(UserInfoUtil.getUid());
+        entity.setStatus(true);
+        return super.save(entity);
+    }
+
+    public boolean systemSave(Role entity){
+        boolean hasRole = hasRole(entity.getName());
+        if (hasRole) {
+            return false;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        entity.setCreateTime(now);
+        entity.setUpdateTime(now);
+        entity.setCreateUserId(1L);
         entity.setStatus(true);
         return super.save(entity);
     }
@@ -116,15 +130,24 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         role.setRemark("系统生成");
         role.setUpdateTime(now);
         role.setStatus(true);
-        save(role);
+        systemSave(role);
 
+        //为自动生成的权限设置一个根菜单，便于分类
         top.adxd.tikonlinejudge.auth.entity.Menu m = new top.adxd.tikonlinejudge.auth.entity.Menu();
         RoleMenu roleMenu = new RoleMenu();
         roleMenu.setRoleId(role.getId());
+        top.adxd.tikonlinejudge.auth.entity.Menu root = new top.adxd.tikonlinejudge.auth.entity.Menu();
+        root.setName(roleName);
+        root.setType(SystemMenu.MENU_TYPE);
+        root.setPerms(roleName);
+        root.setParentId(systemAutoGenerator.getId());
+        menuService.save(root);
+        roleMenu.setMenuId(root.getId());
+        roleMenuService.save(roleMenu);
         //将对应权限添加到角色上
         for (Menu menu : menus) {
-            m.setParentId(-1L);
-            m.setType(2);
+            m.setParentId(root.getId());
+            m.setType(SystemMenu.MENU_TYPE);
             m.setOrder(0);
             BeanUtils.copyProperties(menu, m);
             menuService.save(m);

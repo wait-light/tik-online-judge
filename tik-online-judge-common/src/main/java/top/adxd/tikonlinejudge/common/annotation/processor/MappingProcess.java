@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.common.annotation.processor;
 
+import cn.hutool.core.util.RandomUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,10 +23,10 @@ public class MappingProcess {
      * @param methodMappings 需要被过滤的列表
      */
     public void excludeSpecific(Role role, List<MethodMapping> methodMappings) {
-        excludeSpecific(role.exclude(),methodMappings);
+        excludeSpecific(role.exclude(), methodMappings);
     }
 
-    public void excludeSpecific(String[] exclude,List<MethodMapping> methodMappings){
+    public void excludeSpecific(String[] exclude, List<MethodMapping> methodMappings) {
         for (String excludeStr : exclude) {
             MethodMapping exculdeMethodMapping = excludeParsing(excludeStr);
             for (int index = methodMappings.size() - 1; index >= 0; index--) {
@@ -157,7 +158,8 @@ public class MappingProcess {
 
         public static Menu conver2Menu(String roleName, MethodMapping methodMapping) {
             Menu menu = new Menu();
-            menu.setPerms(roleName + SPLIT_STRING + methodMapping.getRequestMethods());
+            menu.setName(roleName + SPLIT_STRING + methodMapping.getRequestMethods() + SPLIT_STRING + methodMapping.getPath());
+            menu.setPerms(roleName + SPLIT_STRING + methodMapping.getRequestMethods() + SPLIT_STRING + methodMapping.getPath());
             menu.setRequestMethod(methodMapping.getRequestMethods());
             menu.setUrl(methodMapping.getPath());
             return menu;

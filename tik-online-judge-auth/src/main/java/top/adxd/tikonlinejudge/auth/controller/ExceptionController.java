@@ -16,7 +16,8 @@ public class ExceptionController {
 
     @ExceptionHandler(value = Exception.class)
     public CommonResult commonHandler(Exception exception) {
-        logger.error(exception.getLocalizedMessage());
+        exception.printStackTrace();
+        logger.error(exception.getMessage());
         return CommonResult.error("服务器内部错误");
     }
 }
