@@ -9,7 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author wait_light
  * @create 2021/9/9
  */
-@SpringBootApplication(scanBasePackages = {"top.adxd.tikonlinejudge.executor","top.adxd.tikonlinejudge.common"})
+@SpringBootApplication(scanBasePackages = {"top.adxd.tikonlinejudge.executor"})
 @EnableDiscoveryClient
 @MapperScan({"top.adxd.tikonlinejudge.executor.mapper"})
 public class TikOnlineJudgeExecutorApplication {

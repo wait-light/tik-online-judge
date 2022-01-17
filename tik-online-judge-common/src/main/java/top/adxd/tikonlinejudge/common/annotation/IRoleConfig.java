@@ -12,4 +12,6 @@ public interface IRoleConfig {
     Class[] getTarget();
 
     String[] getExclude();
+
+    Boolean isAppend();
 }

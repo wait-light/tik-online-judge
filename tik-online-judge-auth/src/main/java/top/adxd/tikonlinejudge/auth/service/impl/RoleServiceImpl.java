@@ -22,7 +22,10 @@ import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +63,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         return super.save(entity);
     }
 
-    public boolean systemSave(Role entity){
+    public boolean systemSave(Role entity) {
         boolean hasRole = hasRole(entity.getName());
         if (hasRole) {
             return false;
@@ -95,6 +98,32 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             return CommonResult.error("更新失败");
         }
         return CommonResult.success("更新成功");
+    }
+
+    @Override
+    public Role role(String name) {
+        return getOne(new QueryWrapper<Role>().eq("name", name));
+    }
+
+    @Override
+    public Set<String> rolePermissions(String roleName) {
+        Role role = role(roleName);
+        if (role == null) {
+            return new HashSet<>();
+        }
+        List<Long> menuIds = roleMenuService
+                .list(new QueryWrapper<RoleMenu>().eq("role_id", role.getId()).select("menu_id"))
+                .stream()
+                .map(RoleMenu::getMenuId)
+                .collect(Collectors.toList());
+
+        if (menuIds.size() == 0) {
+            return new HashSet<>();
+        }
+        return menuService.listByIds(menuIds)
+                .stream()
+                .map(item -> item.getPerms())
+                .collect(Collectors.toSet());
     }
 
     @Override

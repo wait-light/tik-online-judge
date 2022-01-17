@@ -31,4 +31,8 @@ public @interface Role {
      *  例如： get:/common/user/name
      */
     String[] exclude() default {};
+    /**
+     * 是否直接追加在同名的角色上
+     */
+    boolean append() default false;
 }

@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
 import top.adxd.tikonlinejudge.auth.api.RequestMethod;
 import top.adxd.tikonlinejudge.auth.api.dto.AuthorizationResult;
+
 import java.util.List;
 
 /*
@@ -35,23 +36,24 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
         if (request.getMethod() == HttpMethod.OPTIONS) {
             return chain.filter(exchange);
         }
-        System.out.println(request.getPath() + " " + request.getMethod());
         List<String> token = request.getHeaders().get(TOKEN_HEADER);
-        if (token != null && token.size() > 0) {
-            AuthorizationResult authorization = authorizationService.authorization(token.get(0), request.getPath().value(), RequestMethod.string2RequestMethods(request.getMethod().name()).get(0));
-            //认证不通过，提前结束
-            if (!authorization.success) {
-                ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(HttpStatus.FORBIDDEN);
-                return response.setComplete();
-            }
-            //附加用户信息
-            HttpHeaders headers = request.getHeaders();
+        AuthorizationResult authorization = authorizationService
+                .authorization(token != null && token.size() > 0 ? token.get(0) : null
+                        , request.getPath().value()
+                        , RequestMethod.string2RequestMethods(request.getMethod().name()).get(0));
+        //认证不通过，提前结束
+        if (!authorization.success) {
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.FORBIDDEN);
+            return response.setComplete();
+        }
+        //附加用户信息
+        HttpHeaders headers = request.getHeaders();
+        if (authorization.getUid() != null) {
             ServerHttpRequest newRequest = exchange.getRequest().mutate().header(UID_HEADER, authorization.getUid().toString()).build();
             exchange = exchange.mutate().request(newRequest).build();
-//            headers.add(UID_HEADER, authorization.getUid().toString());
-//            exchange.getRequest().mutate().
         }
+
         return chain.filter(exchange);
     }
 

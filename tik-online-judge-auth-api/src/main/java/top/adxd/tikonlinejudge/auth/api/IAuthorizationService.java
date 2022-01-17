@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.auth.api;
 import top.adxd.tikonlinejudge.auth.api.dto.AuthorizationResult;
 
 public interface IAuthorizationService {
+    final String ANONYMOUS_ROLE = "anonymous";
     /**
      * 利用通过认证的认证令牌获取权限授权
      * @param token 认证令牌

@@ -63,6 +63,8 @@ public class JWTUtil {
             return JWT.of(token).setKey(secretKeyBytes).verify();
         }catch (JWTException jwtException){
             return false;
+        }catch (NullPointerException nullPointerException){
+            return false;
         }
     }
 

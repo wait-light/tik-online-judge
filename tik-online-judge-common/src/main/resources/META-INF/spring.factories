@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-top.adxd.tikonlinejudge.common.config.CommonAutoConfiguration
+top.adxd.tikonlinejudge.common.config.CommonAutoConfiguration,\
+top.adxd.tikonlinejudge.common.config.CommonRoleProcessAutoconfiguration

@@ -13,6 +13,7 @@ import top.adxd.tikonlinejudge.auth.dto.PasswordUpdateByPasswordDto;
 import top.adxd.tikonlinejudge.auth.service.IAuthenticationService;
 import top.adxd.tikonlinejudge.auth.service.IUserService;
 import top.adxd.tikonlinejudge.auth.util.RegexUtil;
+import top.adxd.tikonlinejudge.common.annotation.Role;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.message.api.IVerificationCodeService;
 
@@ -22,6 +23,7 @@ import java.time.Duration;
  * @author wait-light
  * @date 2021/11/1
  */
+@Role(name = "anonymous")
 @RestController
 @RequestMapping("/auth/anonymous/index")
 public class AnonymousController {

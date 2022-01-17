@@ -25,19 +25,17 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
 
     private static final String ADMIN_PERMISSION = "*";
     @Autowired
-    private AuthorizationServiceCacheImpl authorizationServiceCache;
+    private PermissionCacheServiceImpl authorizationServiceCache;
     @Autowired
     private JWTUtil jwtUtil;
     @Autowired
     private IPathMatcher pathMatcher;
-
+    @Autowired
+    private IRoleService roleService;
 
     @Override
     public AuthorizationResult authorization(String token, String path, RequestMethod requestMethod) {
         Long uid = jwtUtil.uid(token);
-        if (uid == null) {
-            return new AuthorizationResult(false, null, "未登录或登录已过期");
-        }
         Menu matchMenu = pathMatcher.match(path,requestMethod);
         if (matchMenu == null) {
             return new AuthorizationResult(false, null, "拒绝访问");
@@ -67,9 +65,6 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
     }
 
     public Set<String> unloginAuthorization() {
-        LinkedHashSet<String> permissionSet = new LinkedHashSet<>();
-        permissionSet.add(IPathMatcher.ANONYMOUS);
-        return permissionSet;
+        return roleService.rolePermissions(ANONYMOUS_ROLE);
     }
-
 }

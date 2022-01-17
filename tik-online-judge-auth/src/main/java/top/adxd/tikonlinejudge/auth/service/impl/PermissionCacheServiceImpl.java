@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service("authorizationServiceCacheImpl")
-public class AuthorizationServiceCacheImpl {
+public class PermissionCacheServiceImpl {
     private static final String ADMIN_PERMISSION = "*";
     @Autowired
     private IUserService userService;
@@ -25,6 +25,7 @@ public class AuthorizationServiceCacheImpl {
     private IRoleService roleService;
     @Autowired
     private IMenuService menuService;
+
     @Cacheable("userAuthorization")
     public Set<String> userAuthorization(Long uid) {
         User user = userService.getById(uid);
@@ -71,4 +72,6 @@ public class AuthorizationServiceCacheImpl {
         permissionSet.add(IPathMatcher.LOGGED);
         return permissionSet;
     }
+
+
 }
