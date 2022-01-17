@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
@@ -43,6 +44,7 @@ import java.util.stream.Stream;
 @Service
 public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionMapper, ProblemCollection> implements IProblemCollectionService {
 
+
     @Autowired
     private ProblemCollectionItemMapper problemCollectionItemMapper;
     @Autowired
@@ -72,7 +74,7 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         return problemMapper
                 .selectList(new QueryWrapper<Problem>()
                         .in("id", problemIds)
-                        .select("name", "create_time", "update_time", "id")
+                        .select("name", "create_time", "update_time", "id","secret_key")
                 )
                 .stream().map((problem) -> {
                     ProblemSurvey problemSurvey = new ProblemSurvey();
@@ -90,6 +92,7 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         problem.setUpdateTime(now);
         problem.setCollectionId(collectionId);
         Long uid = UserInfoUtil.getUid();
+        problem.setSecretKey(RandomUtil.randomString(SECRET_KEY_LENGTH));
         problem.setUid(uid);
         int insert = problemMapper.insert(problem);
         if (insert <= 0) {

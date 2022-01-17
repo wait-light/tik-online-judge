@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.controller;
 
 
+import cn.hutool.core.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 import top.adxd.tikonlinejudge.executor.entity.ProblemData;
 import top.adxd.tikonlinejudge.executor.entity.ProblemTag;
+import top.adxd.tikonlinejudge.executor.service.IProblemCollectionService;
 import top.adxd.tikonlinejudge.executor.service.IProblemService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,6 +48,7 @@ public class ProblemController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody Problem entity) {
+        entity.setSecretKey(RandomUtil.randomString(IProblemCollectionService.SECRET_KEY_LENGTH));
         return problemService.save(entity) ?
                 CommonResult.success().setMsg("添加成功") :
                 CommonResult.error().setMsg("添加失败");
@@ -72,8 +75,11 @@ public class ProblemController {
     }
 
     @GetMapping("/{id}")
-    public CommonResult info(@PathVariable("id") Long id) {
+    public CommonResult info(@PathVariable("id") Long id, @RequestParam(value = "secretKey", required = false) String secretKey) {
         Problem entity = problemService.getById(id);
+        if (entity != null && !entity.getSecretKey().equals(secretKey)) {
+            return CommonResult.permissionDeny("无权访问");
+        }
         return entity != null ?
                 CommonResult.success().singleData(entity) :
                 CommonResult.error();

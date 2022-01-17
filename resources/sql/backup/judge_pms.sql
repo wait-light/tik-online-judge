@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50736
 File Encoding         : 65001
 
-Date: 2022-01-17 14:17:30
+Date: 2022-01-17 19:10:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -72,13 +72,14 @@ CREATE TABLE `pms_problem` (
   `output_describle` text COLLATE utf8mb4_unicode_ci COMMENT '输出描述',
   `collection_id` bigint(20) unsigned DEFAULT NULL COMMENT '所属合集',
   `share` bit(1) DEFAULT NULL COMMENT '是否与其他集合共享',
+  `secret_key` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_problem
 -- ----------------------------
-INSERT INTO `pms_problem` VALUES ('1', 'A + B问题', '1', 'a + b 问题。给你两个数，求出两个数的和。', '199 1', '200', '2021-11-08 15:21:05', '2021-11-08 15:21:05', '', 'a，b的长度在1~10000之间。', '输入两个数的和。', '1', '');
+INSERT INTO `pms_problem` VALUES ('1', 'A + B问题', '1', 'a + b 问题。给你两个数，求出两个数的和。', '199 1', '200', '2021-11-08 15:21:05', '2021-11-08 15:21:05', '', 'a，b的长度在1~10000之间。', '输入两个数的和。', '1', '', 'qvAc7x1YTCt3pv1dVRIgPtS5tBvcBZ3b');
 
 -- ----------------------------
 -- Table structure for pms_problem_collection
@@ -113,7 +114,7 @@ CREATE TABLE `pms_problem_collection_item` (
   `problem_id` bigint(20) unsigned DEFAULT NULL COMMENT '问题id',
   `status` bit(1) DEFAULT b'1' COMMENT '是否启用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of pms_problem_collection_item

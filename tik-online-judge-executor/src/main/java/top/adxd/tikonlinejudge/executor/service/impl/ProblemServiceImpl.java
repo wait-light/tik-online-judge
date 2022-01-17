@@ -1,11 +1,13 @@
 package top.adxd.tikonlinejudge.executor.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
+import top.adxd.tikonlinejudge.executor.api.IProblemServiceApi;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
 import top.adxd.tikonlinejudge.executor.entity.ProblemCollectionItem;
 import top.adxd.tikonlinejudge.executor.mapper.ProblemCollectionItemMapper;
@@ -27,7 +29,8 @@ import java.util.stream.Collectors;
  * @since 2021-09-22
  */
 @Service
-public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> implements IProblemService {
+@DubboService(interfaceClass = IProblemServiceApi.class)
+public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> implements IProblemService, IProblemServiceApi {
 
     @Autowired
     private ProblemCollectionItemMapper problemCollectionItemMapper;
@@ -47,10 +50,10 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
          * 所有公开或者的本合集私有的问题 的集合
          */
         Set<Long> sharedOrSelfProblemId = baseMapper.selectList(new QueryWrapper<Problem>()
-                        .eq("share", true)
-                        .or()
-                        .eq("collection_id", collectionId)
-                        .select("id"))
+                .eq("share", true)
+                .or()
+                .eq("collection_id", collectionId)
+                .select("id"))
                 .stream()
                 .map(item -> item.getId())
                 .collect(Collectors.toSet());
@@ -58,8 +61,8 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
          * 本集合已经添加的问题的集合
          */
         Set<Long> selfProblemId = problemCollectionItemMapper.selectList(new QueryWrapper<ProblemCollectionItem>()
-                        .eq("collection_id", collectionId)
-                        .select("problem_id"))
+                .eq("collection_id", collectionId)
+                .select("problem_id"))
                 .stream()
                 .map(item -> item.getProblemId())
                 .collect(Collectors.toSet());
@@ -73,14 +76,14 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
 
         List<ProblemSurvey> collect =
                 baseMapper.selectList(new QueryWrapper<Problem>()
-                                .in("id", sharedOrSelfProblemId)
-                                .select("name", "create_time", "update_time", "id")
-                        )
+                        .in("id", sharedOrSelfProblemId)
+                        .select("name", "create_time", "update_time", "id")
+                )
                         .stream().map((problem) -> {
-                            ProblemSurvey problemSurvey = new ProblemSurvey();
-                            BeanUtils.copyProperties(problem, problemSurvey);
-                            return problemSurvey;
-                        }).collect(Collectors.toList());
+                    ProblemSurvey problemSurvey = new ProblemSurvey();
+                    BeanUtils.copyProperties(problem, problemSurvey);
+                    return problemSurvey;
+                }).collect(Collectors.toList());
         return CommonResult.success().listData(collect);
     }
 
@@ -95,5 +98,19 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
                 .stream()
                 .collect(Collectors.toMap(Problem::getId, Problem::getName));
         return CommonResult.success().singleData(problems);
+    }
+
+    @Override
+    public List<top.adxd.tikonlinejudge.executor.api.entity.Problem> problemInfoList(List<Long> pids, String... select) {
+        if (pids == null || pids.size() <= 0) {
+            return new ArrayList<>();
+        }
+        return baseMapper.selectList(new QueryWrapper<Problem>().select(select).in("id", pids))
+                .stream()
+                .map(item -> {
+                    top.adxd.tikonlinejudge.executor.api.entity.Problem problem = new top.adxd.tikonlinejudge.executor.api.entity.Problem();
+                    BeanUtils.copyProperties(item, problem);
+                    return problem;
+                }).collect(Collectors.toList());
     }
 }

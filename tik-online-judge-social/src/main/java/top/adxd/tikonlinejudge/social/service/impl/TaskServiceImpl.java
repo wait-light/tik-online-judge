@@ -1,8 +1,10 @@
 package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
+import top.adxd.tikonlinejudge.executor.api.IProblemServiceApi;
 import top.adxd.tikonlinejudge.social.entity.Task;
 import top.adxd.tikonlinejudge.social.entity.TaskItem;
 import top.adxd.tikonlinejudge.social.mapper.TaskMapper;
@@ -27,21 +29,24 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements ITaskService {
     @Autowired
     private ITaskItemService taskItemService;
+    @DubboReference
+    private IProblemServiceApi problemService;
+
 
     @Override
     public CommonResult taskDetail(Long groupId, Long taskId) {
         //todo 权限校验
         Task task = getById(taskId);
         LocalDateTime now = LocalDateTime.now();
-        if (task.getBeginTime().isAfter(now)){
+        if (task.getBeginTime().isAfter(now)) {
             return CommonResult.error("任务还未开始");
         }
         if (task == null) {
             return CommonResult.error("非法访问");
         }
         List<Long> problems = taskItemService.list(new QueryWrapper<TaskItem>()
-                        .eq("task_id", taskId)
-                        .select("problem_id"))
+                .eq("task_id", taskId)
+                .select("problem_id"))
                 .stream()
                 .map(TaskItem::getProblemId)
                 .collect(Collectors.toList());
@@ -58,13 +63,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             return CommonResult.error("非法访问");
         }
         List<Long> problems = taskItemService.list(new QueryWrapper<TaskItem>()
-                        .eq("task_id", taskId)
-                        .select("problem_id"))
+                .eq("task_id", taskId)
+                .select("problem_id"))
                 .stream()
                 .map(TaskItem::getProblemId)
                 .collect(Collectors.toList());
         return CommonResult.success()
                 .add("task", task)
-                .add("problems", problems);
+                .add("problems", problemService.problemInfoList(problems, "id", "name", "secret_key"));
     }
 }

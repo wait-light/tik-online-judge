@@ -39,8 +39,13 @@ public class ProblemSurvey implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    public static QueryWrapper<Problem> problemSurveySelect(){
+    /**
+     * 秘钥
+     */
+    private String secretKey;
+
+    public static QueryWrapper<Problem> problemSurveySelect() {
         return new QueryWrapper<Problem>()
-                .select("id","name","uid","create_time","update_time");
+                .select("id", "name", "uid", "create_time", "update_time", "secret_key");
     }
 }

@@ -3,8 +3,10 @@ package top.adxd.tikonlinejudge.executor.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author wait_light
@@ -86,4 +88,8 @@ public class Problem implements Serializable {
      */
     private Boolean share;
 
+    /**
+     * 秘钥
+     */
+    private String secretKey;
 }
