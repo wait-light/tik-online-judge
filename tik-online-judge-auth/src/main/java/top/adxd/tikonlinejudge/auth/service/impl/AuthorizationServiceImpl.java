@@ -43,6 +43,8 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
         Set<String> permissionSet = null;
         if (uid != null){
             permissionSet = loginedAuthorization(uid);
+            //匿名权限也要拥有
+            permissionSet.addAll(unloginAuthorization());
         }else {
             permissionSet = unloginAuthorization();
         }

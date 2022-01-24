@@ -21,7 +21,6 @@ import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
  * @author wait_light
  * @since 2021-09-24
  */
-@Role(name = "judge")
 @RestController
 @RequestMapping("/executor/judge-result")
 public class JudgeResultController {

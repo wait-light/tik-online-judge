@@ -52,7 +52,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 .collect(Collectors.toList());
         return CommonResult.success()
                 .add("task", task)
-                .add("problems", problems);
+                .add("problems", problemService.problemInfoList(problems, "id", "name", "secret_key"));
     }
 
     @Override

@@ -17,42 +17,17 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("pms_problem_data")
-public class ProblemData implements Serializable {
+@TableName("pms_task_submit")
+public class TaskSubmit implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    /**
-     * 问题id
-     */
-    private Long problemId;
+    private Long taskId;
 
-    /**
-     * 输入
-     */
-    private String input;
-
-    /**
-     * 输出
-     */
-    private String output;
-
-    /**
-     * 数据提供者
-     */
-    private Long createUserId;
-
-    private Long timeLimit;
-
-    private Long memoryLimit;
-
-    private Long score;
+    private Long submitId;
 
 
 }
