@@ -37,12 +37,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     public CommonResult taskDetail(Long groupId, Long taskId) {
         //todo 权限校验
         Task task = getById(taskId);
+        if (task == null) {
+            return CommonResult.error("非法访问");
+        }
         LocalDateTime now = LocalDateTime.now();
         if (task.getBeginTime().isAfter(now)) {
             return CommonResult.error("任务还未开始");
-        }
-        if (task == null) {
-            return CommonResult.error("非法访问");
         }
         List<Long> problems = taskItemService.list(new QueryWrapper<TaskItem>()
                 .eq("task_id", taskId)
