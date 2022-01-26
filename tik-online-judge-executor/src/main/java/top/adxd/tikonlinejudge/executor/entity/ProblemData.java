@@ -48,11 +48,11 @@ public class ProblemData implements Serializable {
      */
     private Long createUserId;
 
-    private Long timeLimit;
+    private Integer timeLimit;
 
     private Long memoryLimit;
 
-    private Long score;
+    private Integer score;
 
 
 }

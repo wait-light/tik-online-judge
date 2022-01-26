@@ -27,4 +27,9 @@ public class RaceController {
     public CommonResult survey(@PathVariable("raceId") Long raceId) {
         return raceService.survey(raceId);
     }
+
+    @GetMapping("/problems/{raceId}")
+    public CommonResult problems(@PathVariable("raceId") Long raceId){
+        return raceService.problems(raceId);
+    }
 }

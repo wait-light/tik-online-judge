@@ -33,6 +33,9 @@ import java.util.List;
 public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> implements ICodeJudge {
     private static final Logger logger = LoggerFactory.getLogger(AbstractDockerJudgeTemplate.class);
     private static final String TRIM_END_REGEX = "[\\s]*$";
+    public static final Integer DEFAULT_TIME_LIMIT = 5000;
+    public static final Long DEFAULT_MEMORY_LIMIT = 131072L;
+    public static final Integer DEFAULT_SCORE = 1;
     //防止直接与默认Long最小值操作的时与所预期的想法不同。（越界）
     protected T dockerJudgeConfig;
 
@@ -107,12 +110,16 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
                 logger.error(e.getLocalizedMessage());
                 e.printStackTrace();
                 judge = new JudgeResult();
+                judge.setScore(0);
                 judge.setSuccess(false);
                 judge.setJudgeStatus(JudgeStatus.SYSTEM_ERROR);
                 judge.setSubmitId(submit.getId());
             }
             //编译错误，后续不在运行
             if (judge.getJudgeStatus() == JudgeStatus.COMPILE_ERROR) {
+                judge.setScore(0);
+                judge.setExecutionTime(DEFAULT_TIME_LIMIT);
+                judge.setRuntimeMemory(DEFAULT_MEMORY_LIMIT);
                 return results;
             }
             count++;
@@ -141,15 +148,17 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     protected JudgeResult judge(ProblemData problemData, Long submitId) {
         JudgeResult judgeResult = new JudgeResult();
         judgeResult.setSubmitId(submitId);
+        judgeResult.setScore(0);
         //启动程序
         try {
             startContainer();
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
         }
-        //TODO 等待程序强行停止的时间
+        Integer timeLimit = problemData.getTimeLimit() != null ? problemData.getTimeLimit() : DEFAULT_TIME_LIMIT;
         try {
-            stopProcess(3);
+            //强制停止时间
+            stopProcess(timeLimit + 1);
         } catch (NotModifiedException e) {
 
         } catch (Exception e) {
@@ -170,13 +179,19 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             judgeResult.setSuccess(false);
             return judgeResult;
         }
+        Long memoryLimit = problemData.getMemoryLimit() != null ? problemData.getMemoryLimit() : DEFAULT_MEMORY_LIMIT;
         RuntimeInfo runtimeInfo = getRuntimeInfo();
-        Long executeTime = runtimeInfo.getRuntime();
+        Integer executeTime = runtimeInfo.getRuntime();
         judgeResult.setRuntimeMemory(runtimeInfo.getRuntimeMemory());
         judgeResult.setExecutionTime(executeTime);
-        //TODO 时间限制
-        if (executeTime > 1500L) {
+
+        if (executeTime > timeLimit) {
             judgeResult.setJudgeStatus(JudgeStatus.TIME_LIME_EXCEEDED);
+            judgeResult.setSuccess(false);
+            return judgeResult;
+        }
+        if (runtimeInfo.getRuntimeMemory() > memoryLimit) {
+            judgeResult.setJudgeStatus(JudgeStatus.MEMORY_LIMIT_EXCEEDED);
             judgeResult.setSuccess(false);
             return judgeResult;
         }
@@ -193,6 +208,9 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
             judgeResult.setJudgeStatus(JudgeStatus.PRESENTATION_ERROR);
         } else {
             judgeResult.setJudgeStatus(JudgeStatus.WRONG_ANSWER);
+        }
+        if (judgeResult.getSuccess()) {
+            judgeResult.setScore(problemData.getScore() != null ? problemData.getScore() : DEFAULT_SCORE);
         }
         return judgeResult;
     }
@@ -277,26 +295,11 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
      * @return 运行资源消耗信息
      */
     protected RuntimeInfo getRuntimeInfo() {
-//
-//        Long compileTime = getCompileTime();
-//        InspectContainerResponse.ContainerState state = dockerClient
-//                .inspectContainerCmd(dockerJudgeConfig.getContainerName())
-//                .exec()
-//                .getState();
-//        String startedAt = state.getStartedAt();
-//        String finishedAt = state.getFinishedAt();
-//        Instant startInstant = Instant.parse(startedAt);
-//        Instant finishedInstant = Instant.parse(finishedAt);
-//        Duration between = Duration.between(startInstant, finishedInstant);
-//        Long executeTime = -compileTime + between.getSeconds() * 1000 + between.getNano() / 1000000 - 100;
-//        if (executeTime < 0) {
-//            executeTime = 0L;
-//        }
         String runtimeInfo = fileReaderWriter.Reader(dockerJudgeConfig.getRuntimeAndRuntimeMemory());
         String[] runtimeInfoSplit = runtimeInfo.split(" ");
         Long runtimeMemory = Long.parseLong(runtimeInfoSplit[0]);
-        Long runtime = new Double(Double.parseDouble(runtimeInfoSplit[1]) * 1000).longValue();
-        return new RuntimeInfo(runtime, runtimeMemory);
+        Integer runtime = new Double(Double.parseDouble(runtimeInfoSplit[1]) * 1000).intValue();
+        return new RuntimeInfo(runtimeMemory, runtime);
     }
 
     /**
@@ -391,14 +394,15 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     }
 
     public static class RuntimeInfo {
-        private Long runtime, runtimeMemory;
+        private Long runtimeMemory;
+        private Integer runtime;
 
-        public RuntimeInfo(Long runtime, Long runtimeMemory) {
-            this.runtime = runtime;
+        public RuntimeInfo(Long runtimeMemory, Integer runtime) {
             this.runtimeMemory = runtimeMemory;
+            this.runtime = runtime;
         }
 
-        public Long getRuntime() {
+        public Integer getRuntime() {
             return runtime;
         }
 

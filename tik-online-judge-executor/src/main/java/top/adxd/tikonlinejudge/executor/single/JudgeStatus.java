@@ -49,7 +49,16 @@ public enum JudgeStatus implements IEnum<Integer>, Serializable {
     /**
      * 结果错误
      */
-    WRONG_ANSWER(8);
+    WRONG_ANSWER(8),
+    /**
+     * 内存超限
+     */
+    MEMORY_LIMIT_EXCEEDED(9),
+    /**
+     * 部分正确
+     */
+    PART_ACCEPT(10);
+
     private Integer value;
 
     JudgeStatus(Integer value) {

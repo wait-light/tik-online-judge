@@ -68,10 +68,15 @@ public class Submit implements Serializable {
     /**
      * 运行时间
      */
-    private Long runtime;
+    private Integer runtime;
 
     /**
      * 运行内存
      */
     private Long runtimeMemory;
+
+    /**
+     * 分数
+     */
+    private Integer score;
 }

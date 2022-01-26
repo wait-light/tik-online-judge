@@ -2,11 +2,13 @@ package top.adxd.tikonlinejudge.social.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
@@ -14,6 +16,8 @@ import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import org.springframework.web.bind.annotation.RestController;
+import top.adxd.tikonlinejudge.executor.api.IProblemServiceApi;
+import top.adxd.tikonlinejudge.executor.api.entity.Problem;
 import top.adxd.tikonlinejudge.social.entity.Solution;
 import top.adxd.tikonlinejudge.social.service.ISolutionService;
 
@@ -31,6 +35,8 @@ public class SolutionController {
 
     @Autowired
     private ISolutionService solutionService;
+    @DubboReference
+    private IProblemServiceApi problemServiceApi;
 
     @GetMapping("/hasSolution/{problemId}")
     public CommonResult hasSolution(@PathVariable("problemId") Long problemId) {
@@ -92,11 +98,14 @@ public class SolutionController {
     @GetMapping("/{id}")
     public CommonResult info(@PathVariable("id") Long id) {
         Solution entity = solutionService.getById(id);
+        List<Long> problemIds = new ArrayList<>();
+        problemIds.add(entity.getProblemId());
+        Problem problem = problemServiceApi.problemInfoList(problemIds, "secret_key").get(0);
         if (entity != null) {
             solutionService.update(new UpdateWrapper<Solution>()
                     .eq("id", entity.getId())
                     .set("view", entity.getView() + 1));
-            return CommonResult.success().singleData(entity);
+            return CommonResult.success().singleData(entity).add("secretKey", problem.getSecretKey());
         } else {
             return CommonResult.error();
         }

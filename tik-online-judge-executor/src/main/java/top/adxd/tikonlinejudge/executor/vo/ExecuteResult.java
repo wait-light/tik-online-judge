@@ -11,23 +11,23 @@ public class ExecuteResult implements Serializable {
     public ExecuteStatus executeStatus;
     public Boolean success;
     public String outputString;
-    public Long executeTime;
+    public Integer executeTime;
 
     public ExecuteResult() {
     }
 
-    public ExecuteResult(ExecuteStatus executeStatus, Boolean success, String outputString, Long executeTime) {
+    public ExecuteResult(ExecuteStatus executeStatus, Boolean success, String outputString, Integer executeTime) {
         this.executeStatus = executeStatus;
         this.success = success;
         this.outputString = outputString;
         this.executeTime = executeTime;
     }
 
-    public Long getExecuteTime() {
+    public Integer getExecuteTime() {
         return executeTime;
     }
 
-    public void setExecuteTime(Long executeTime) {
+    public void setExecuteTime(Integer executeTime) {
         this.executeTime = executeTime;
     }
 
@@ -60,7 +60,7 @@ public class ExecuteResult implements Serializable {
         if (executeCMDResult == null) {
             return executeResult;
         }
-        executeResult.setExecuteTime(executeCMDResult.getExecuteTime());
+        executeResult.setExecuteTime(Integer.parseInt("" + executeCMDResult.getExecuteTime()));
         if (executeCMDResult.isSuccess()) {
             executeResult.setSuccess(true);
             executeResult.setExecuteStatus(ExecuteStatus.SUCCESS);

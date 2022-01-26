@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.executor.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -46,7 +47,7 @@ public class JudgeResult implements Serializable {
     /**
      * 执行时常
      */
-    private Long executionTime;
+    private Integer executionTime;
 
     /**
      * 错误信息
@@ -63,6 +64,11 @@ public class JudgeResult implements Serializable {
      */
     private Long runtimeMemory;
 
+    /**
+     * 分数
+     */
+    @TableField(exist = false)
+    private Integer score;
 
     public static JudgeResult parse(ExecuteResult executeResult, Long submitId, String output, Long executionTime) {
         if (null == executeResult) {

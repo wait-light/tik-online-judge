@@ -48,7 +48,7 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
     @Override
     public SubmitJudgeResult lastSubmitResults(Long problemId, Long userid) {
         Submit lastSubmit = submitService.getOne(new QueryWrapper<Submit>()
-                .select("id", "create_time", "status","runtime_memory","runtime")
+                .select("id", "create_time", "status", "runtime_memory", "runtime")
                 .eq("uid", userid)
                 .eq("problem_id", problemId)
                 .orderByDesc("create_time")
@@ -64,7 +64,7 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
     @Override
     public List<SubmitJudgeResult> problemSubmitsResults(Long problemId, Long userid) {
         List<Submit> submits = submitService.list(new QueryWrapper<Submit>()
-                .select("id", "create_time", "status","runtime_memory","runtime")
+                .select("id", "create_time", "status", "runtime_memory", "runtime")
                 .eq("uid", userid)
                 .eq("problem_id", problemId)
                 .orderByDesc("create_time"));
@@ -88,28 +88,36 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
         }
         JudgeStatus submitStatus = null;
         int acceptCount = 0;
-        Long maxRuntime = Long.MIN_VALUE, maxRuntimeMemory = Long.MIN_VALUE;
+        Integer maxRuntime = Integer.MIN_VALUE;
+        Long maxRuntimeMemory = Long.MIN_VALUE;
+        Integer score = 0;
         for (JudgeResult judgeResult : judgeResults) {
             if (judgeResult.getJudgeStatus() == JudgeStatus.ACCEPT) {
                 acceptCount++;
-            } else {
-                submitStatus = judgeResult.getJudgeStatus();
             }
+            score += judgeResult.getScore();
             maxRuntime = Math.max(maxRuntime, judgeResult.getExecutionTime());
             maxRuntimeMemory = Math.max(maxRuntimeMemory, judgeResult.getRuntimeMemory());
         }
         if (acceptCount == judgeResults.size()) {
             submitStatus = JudgeStatus.ACCEPT;
+        } else if (acceptCount > 0) {
+            submitStatus = JudgeStatus.PART_ACCEPT;
+        } else if (judgeResults.get(0).getJudgeStatus() == JudgeStatus.COMPILE_ERROR) {
+            submitStatus = JudgeStatus.COMPILE_ERROR;
+        } else {
+            submitStatus = JudgeStatus.WRONG_ANSWER;
         }
         this.saveBatch(judgeResults);
         submit.setStatus(submitStatus);
         submit.setRuntimeMemory(maxRuntimeMemory);
         submit.setRuntime(maxRuntime);
+        submit.setScore(score);
         submitService.updateById(submit);
     }
 
     private void fillData(SubmitJudgeResult submitJudgeResult, Submit submit) {
-        BeanUtils.copyProperties(submit,submitJudgeResult);
+        BeanUtils.copyProperties(submit, submitJudgeResult);
         submitJudgeResult.setSubmitId(submit.getId());
     }
 }
