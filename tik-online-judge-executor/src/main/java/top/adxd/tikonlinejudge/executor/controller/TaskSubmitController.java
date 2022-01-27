@@ -43,6 +43,11 @@ public class TaskSubmitController {
         return taskSubmitService.submit(submit, raceId);
     }
 
+    @GetMapping("/{raceId}/list")
+    public CommonResult submissions(@PathVariable("raceId") Long raceId){
+        return taskSubmitService.submissionList(raceId);
+    }
+
     @DeleteMapping("")
     public CommonResult deleteBatch(@RequestBody Long[] ids) {
         return taskSubmitService.removeByIds(Arrays.asList(ids)) ?

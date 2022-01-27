@@ -101,6 +101,15 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     }
 
     @Override
+    public String problemName(Long problemId) {
+        Problem problem = getOne(new QueryWrapper<Problem>().eq("id", problemId).select("name"));
+        if (problem == null) {
+            return "";
+        }
+        return problem.getName();
+    }
+
+    @Override
     public List<top.adxd.tikonlinejudge.executor.api.entity.Problem> problemInfoList(List<Long> pids, String... select) {
         if (pids == null || pids.size() <= 0) {
             return new ArrayList<>();

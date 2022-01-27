@@ -7,11 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.executor.entity.JudgeResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
+import top.adxd.tikonlinejudge.executor.entity.TaskSubmit;
 import top.adxd.tikonlinejudge.executor.mapper.JudgeResultMapper;
 import top.adxd.tikonlinejudge.executor.service.IJudgeResultService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
+import top.adxd.tikonlinejudge.executor.service.ITaskRankService;
+import top.adxd.tikonlinejudge.executor.service.ITaskSubmitService;
 import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 import top.adxd.tikonlinejudge.executor.vo.SubmitJudgeResult;
 
@@ -30,6 +33,10 @@ import java.util.List;
 public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, JudgeResult> implements IJudgeResultService {
     @Autowired
     private ISubmitService submitService;
+    @Autowired
+    private ITaskSubmitService taskSubmitService;
+    @Autowired
+    private ITaskRankService taskRankService;
 
     @Override
     public SubmitJudgeResult submitJudgeResults(Long submitId) {
@@ -114,6 +121,11 @@ public class JudgeResultServiceImpl extends ServiceImpl<JudgeResultMapper, Judge
         submit.setRuntime(maxRuntime);
         submit.setScore(score);
         submitService.updateById(submit);
+        //若是比赛的提交，则处理提交后的数据
+        TaskSubmit taskSubmit = taskSubmitService.getOne(new QueryWrapper<TaskSubmit>().eq("submit_id", submit.getId()));
+        if (taskSubmit != null) {
+            taskRankService.scoreUpdate(submit, taskSubmit.getTaskId());
+        }
     }
 
     private void fillData(SubmitJudgeResult submitJudgeResult, Submit submit) {

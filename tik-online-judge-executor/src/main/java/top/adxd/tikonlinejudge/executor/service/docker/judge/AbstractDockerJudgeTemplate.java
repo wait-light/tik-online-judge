@@ -199,6 +199,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         if (output.equals(problemData.getOutput())) {
             judgeResult.setSuccess(true);
             judgeResult.setJudgeStatus(JudgeStatus.ACCEPT);
+            judgeResult.setScore(problemData.getScore() != null ? problemData.getScore() : DEFAULT_SCORE);
             return judgeResult;
         }
         judgeResult.setSuccess(false);

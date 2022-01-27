@@ -98,17 +98,20 @@ public class SolutionController {
     @GetMapping("/{id}")
     public CommonResult info(@PathVariable("id") Long id) {
         Solution entity = solutionService.getById(id);
-        List<Long> problemIds = new ArrayList<>();
-        problemIds.add(entity.getProblemId());
-        Problem problem = problemServiceApi.problemInfoList(problemIds, "secret_key").get(0);
-        if (entity != null) {
+        if (entity == null) {
+            return CommonResult.permissionDeny("文章不存在");
+        }
+        CommonResult result = CommonResult.success().singleData(entity);
+        if (entity.getProblemId() != null) {
+            List<Long> problemIds = new ArrayList<>();
+            problemIds.add(entity.getProblemId());
+            Problem problem = problemServiceApi.problemInfoList(problemIds, "secret_key").get(0);
             solutionService.update(new UpdateWrapper<Solution>()
                     .eq("id", entity.getId())
                     .set("view", entity.getView() + 1));
-            return CommonResult.success().singleData(entity).add("secretKey", problem.getSecretKey());
-        } else {
-            return CommonResult.error();
+            result.add("secretKey", problem.getSecretKey());
         }
+        return result;
     }
 
 }

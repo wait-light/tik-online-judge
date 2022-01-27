@@ -18,4 +18,5 @@ public interface IProblemService extends IService<Problem> {
     CommonResult delete(Long problemId);
     CommonResult getAvailableProblem(Long collectionId);
     CommonResult problemNames(Long... problemIds);
+    String problemName(Long problemId);
 }

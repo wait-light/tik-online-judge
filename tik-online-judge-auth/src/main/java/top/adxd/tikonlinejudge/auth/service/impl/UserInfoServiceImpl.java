@@ -15,17 +15,29 @@ import top.adxd.tikonlinejudge.auth.service.IUserService;
 public class UserInfoServiceImpl implements IUserInfoService {
     @Autowired
     private IUserService userService;
+
     @Override
     public SafeUserDto getUser(String identify) {
         User user = userService.getOne(new QueryWrapper<User>()
                 .eq("username", identify)
                 .or()
                 .eq("email", identify));
-        if (user == null){
+        if (user == null) {
             return null;
         }
         SafeUserDto safeUserDto = new SafeUserDto();
-        BeanUtils.copyProperties(user,safeUserDto);
+        BeanUtils.copyProperties(user, safeUserDto);
         return safeUserDto;
+    }
+
+    @Override
+    public String userName(Long uid) {
+        User one = userService.getOne(new QueryWrapper<User>()
+                .eq("uid", uid)
+                .select("nickname"));
+        if (one == null){
+            return "";
+        }
+        return one.getNickname();
     }
 }

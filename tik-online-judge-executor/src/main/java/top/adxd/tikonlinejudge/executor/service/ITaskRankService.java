@@ -2,7 +2,7 @@ package top.adxd.tikonlinejudge.executor.service;
 
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
-import top.adxd.tikonlinejudge.executor.entity.TaskSubmit;
+import top.adxd.tikonlinejudge.executor.entity.TaskRank;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,9 +11,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author wait_light
- * @since 2022-01-24
+ * @since 2022-01-27
  */
-public interface ITaskSubmitService extends IService<TaskSubmit> {
-    CommonResult submit(Submit submit,Long raceId);
-    CommonResult submissionList(Long raceId);
+public interface ITaskRankService extends IService<TaskRank> {
+    CommonResult rank(Long raceId);
+    void scoreUpdate(Submit submit,Long taskId);
+    CommonResult taskProblemNames(Long raceId);
 }

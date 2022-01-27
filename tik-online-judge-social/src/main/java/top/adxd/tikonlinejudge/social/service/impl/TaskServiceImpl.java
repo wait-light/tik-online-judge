@@ -2,9 +2,12 @@ package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.api.IProblemServiceApi;
+import top.adxd.tikonlinejudge.social.api.ITaskServiceApi;
 import top.adxd.tikonlinejudge.social.entity.Task;
 import top.adxd.tikonlinejudge.social.entity.TaskItem;
 import top.adxd.tikonlinejudge.social.mapper.TaskMapper;
@@ -25,8 +28,9 @@ import java.util.stream.Collectors;
  * @author wait_light
  * @since 2021-11-04
  */
+@DubboService(interfaceClass = ITaskServiceApi.class)
 @Service
-public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements ITaskService {
+public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements ITaskService, ITaskServiceApi {
     @Autowired
     private ITaskItemService taskItemService;
     @DubboReference
@@ -71,5 +75,26 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         return CommonResult.success()
                 .add("task", task)
                 .add("problems", problemService.problemInfoList(problems, "id", "name", "secret_key"));
+    }
+
+    @Override
+    public top.adxd.tikonlinejudge.social.api.vo.Task getTask(Long taskId) {
+        Task task = getById(taskId);
+        if (task == null) {
+            return null;
+        }
+        top.adxd.tikonlinejudge.social.api.vo.Task result = new top.adxd.tikonlinejudge.social.api.vo.Task();
+        BeanUtils.copyProperties(task, result);
+        return result;
+    }
+
+    @Override
+    public List<Long> taskProblems(Long taskId) {
+        return taskItemService.list(new QueryWrapper<TaskItem>()
+                .eq("task_id", taskId)
+                .select("problem_id"))
+                .stream()
+                .map(TaskItem::getProblemId)
+                .collect(Collectors.toList());
     }
 }

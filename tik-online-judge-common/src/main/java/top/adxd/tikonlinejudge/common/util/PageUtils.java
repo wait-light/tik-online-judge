@@ -16,6 +16,11 @@ public class PageUtils {
 
     //从request中获取分页参数，同时利用pageHelper
     public static <E> Page<E> makePage() {
+        return makePage(true);
+    }
+
+    //从request中获取分页参数，同时利用pageHelper
+    public static <E> Page<E> makePage(boolean order) {
         Integer page = ServletUtils.getParameterToInt(PageConstant.PAGE_KEY);
         if (page == null || page <= 0) {
             page = 1;
@@ -25,21 +30,30 @@ public class PageUtils {
         if (pageSize == null || pageSize <= 0 || pageSize > 100) {
             pageSize = 10;
         }
-        //注入处理
+        if (order) {
+            //注入处理
+            String orderBy = SqlUtil.escapeOrderBySql(ServletUtils.getParameter(PageConstant.PAGE_ORDER_BY));
+            if (StringUtils.hasLength(orderBy)) {
+                Page<E> pageInfo = PageHelper.startPage(page, pageSize, orderBy);
+                LOCAL_PAGE.set(pageInfo);
+                return pageInfo;
+            }
+        }
+        Page<E> pageInfo = PageHelper.startPage(page, pageSize);
+        LOCAL_PAGE.set(pageInfo);
+        return pageInfo;
+    }
+
+    public static void MakeOrder() {
         String orderBy = SqlUtil.escapeOrderBySql(ServletUtils.getParameter(PageConstant.PAGE_ORDER_BY));
         if (StringUtils.hasLength(orderBy)) {
-            Page<E> pageInfo = PageHelper.startPage(page, pageSize, orderBy);
-            LOCAL_PAGE.set(pageInfo);
-            return pageInfo;
-        } else {
-            Page<E> pageInfo = PageHelper.startPage(page, pageSize);
-            LOCAL_PAGE.set(pageInfo);
-            return pageInfo;
+            PageHelper.orderBy(orderBy);
         }
     }
 
     /**
      * 获取makePage的页面信息
+     *
      * @param <E>
      * @return
      */
@@ -52,7 +66,7 @@ public class PageUtils {
     /**
      * 移除page信息
      */
-    public static void clear(){
+    public static void clear() {
         LOCAL_PAGE.remove();
     }
 }

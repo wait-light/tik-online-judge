@@ -9,4 +9,10 @@ public interface IUserInfoService {
      * @return 用户基础信息
      */
     SafeUserDto getUser(String identify);
+
+    /**
+     * @param uid
+     * @return 用户昵称
+     */
+    String userName(Long uid);
 }
