@@ -35,8 +35,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 @EnableRabbit
 public class SubmitConsumer {
-
-
     private static final Logger logger = LoggerFactory.getLogger(SubmitConsumer.class);
 
     private final AtomicInteger javaJudgeIndex = new AtomicInteger(0);

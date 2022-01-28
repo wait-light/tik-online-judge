@@ -19,6 +19,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.executor.service.mq.SubmitSender;
 import top.adxd.tikonlinejudge.executor.vo.SubmitInfo;
+import top.adxd.tikonlinejudge.social.api.ITaskServiceApi;
+import top.adxd.tikonlinejudge.social.api.vo.Task;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,13 +45,25 @@ public class TaskSubmitServiceImpl extends ServiceImpl<TaskSubmitMapper, TaskSub
     private IProblemService problemService;
     @DubboReference
     private IUserInfoService userInfoService;
+    @DubboReference
+    private ITaskServiceApi taskServiceApi;
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public CommonResult submit(Submit submit, Long raceId) {
+        Task task = taskServiceApi.getTask(raceId);
+        LocalDateTime now = LocalDateTime.now();
+        //未开始，或者已经结束
+        if (task.getEndTime().isBefore(now)) {
+            return CommonResult.permissionDeny("已结束,禁止提交");
+        }
+        if (task.getBeginTime().isAfter(now)) {
+            return CommonResult.permissionDeny("未开始,禁止提交");
+        }
+
         Long uid = UserInfoUtil.getUid();
-        submit.setCreateTime(LocalDateTime.now());
+        submit.setCreateTime(now);
         submit.setUid(uid);
         //保存到数据库
         submitService.save(submit);
