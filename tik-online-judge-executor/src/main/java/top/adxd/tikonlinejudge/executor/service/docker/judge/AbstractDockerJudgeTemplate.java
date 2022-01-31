@@ -1,5 +1,6 @@
 package top.adxd.tikonlinejudge.executor.service.docker.judge;
 
+import cn.hutool.core.util.RandomUtil;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotModifiedException;
@@ -21,6 +22,7 @@ import top.adxd.tikonlinejudge.executor.service.IProblemDataService;
 import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import top.adxd.tikonlinejudge.executor.service.docker.env.DockerEnvService;
 import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
+import top.adxd.tikonlinejudge.executor.single.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +38,10 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     public static final Integer DEFAULT_TIME_LIMIT = 5000;
     public static final Long DEFAULT_MEMORY_LIMIT = 131072L;
     public static final Integer DEFAULT_SCORE = 1;
+    //唯一标识
+    private String id;
     //防止直接与默认Long最小值操作的时与所预期的想法不同。（越界）
     protected T dockerJudgeConfig;
-
-    public AbstractDockerJudgeTemplate(T dockerJavaCodeJudge) {
-        this.dockerJudgeConfig = dockerJavaCodeJudge;
-    }
 
     private static final Long MIN_TIME = Long.MIN_VALUE / 2;
     @Autowired
@@ -57,6 +57,28 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     @Autowired
     protected ISubmitService submitService;
 
+    /**
+     * 当容器被创建完成即准备好了.
+     */
+    protected volatile boolean ready;
+    /**
+     * 当代码正在执行
+     */
+    protected volatile boolean running;
+
+    protected AbstractDockerJudgeTemplate(T dockerJavaCodeJudge) {
+        this();
+        this.dockerJudgeConfig = dockerJavaCodeJudge;
+    }
+
+    protected AbstractDockerJudgeTemplate() {
+        this.id = RandomUtil.randomString(20);
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public void setDockerJudgeConfig(T dockerJudgeConfig) {
         this.dockerJudgeConfig = dockerJudgeConfig;
     }
@@ -65,10 +87,13 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         return dockerJudgeConfig;
     }
 
-    /**
-     * 当容器被创建完成即准备好了.
-     */
-    protected volatile boolean ready;
+
+    public abstract Language getLanguage();
+
+    public boolean isRunning() {
+        return running;
+    }
+
 
     /**
      * 防止多个线程同时访问某个语言的评判
@@ -81,55 +106,66 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         if (!ready) {
             rescureContainer();
         }
-
-        writeSource(submit);
-        List<ProblemData> problemDataList = problemDataService.getProblemDataList(submit);
-        //保证不报空指针异常
-        if (problemDataList.size() == 0) {
-            ProblemData problemData = new ProblemData();
-            problemData.setInput("");
-            problemDataList.add(problemData);
-        }
+        running = true;
         List<JudgeResult> results = new ArrayList<>();
-        int count = 0;
-        for (ProblemData problemData : problemDataList) {
-            writeInputOutput(problemData);
-            if (count == 0) {
-                //第一次需要编译
-                setNeedCompile(true);
-                clearCompileInfo();
-            } else if (count == 1) {
-                setNeedCompile(false);
+        try {
+            writeSource(submit);
+            List<ProblemData> problemDataList = problemDataService.getProblemDataList(submit);
+            //保证不报空指针异常
+            if (problemDataList.size() == 0) {
+                ProblemData problemData = new ProblemData();
+                problemData.setInput("");
+                problemDataList.add(problemData);
             }
-            JudgeResult judge = null;
-            try {
-                setMaxRuntimeInfo(1024 * 100L, 5000L);
-                judge = judge(problemData, submit.getId());
-                results.add(judge);
-            } catch (Exception e) {
-                logger.error(e.getLocalizedMessage());
-                e.printStackTrace();
-                judge = new JudgeResult();
-                judge.setScore(0);
-                judge.setSuccess(false);
-                judge.setJudgeStatus(JudgeStatus.SYSTEM_ERROR);
-                judge.setSubmitId(submit.getId());
+            int count = 0;
+            for (ProblemData problemData : problemDataList) {
+                writeInputOutput(problemData);
+                if (count == 0) {
+                    //第一次需要编译
+                    setNeedCompile(true);
+                    clearCompileInfo();
+                } else if (count == 1) {
+                    setNeedCompile(false);
+                }
+                JudgeResult judge = null;
+                try {
+                    setMaxRuntimeInfo(1024 * 100L, 5000L);
+                    judge = judge(problemData, submit.getId());
+                    results.add(judge);
+                } catch (Exception e) {
+                    logger.error(e.getLocalizedMessage());
+                    e.printStackTrace();
+                    judge = new JudgeResult();
+                    judge.setScore(0);
+                    judge.setSuccess(false);
+                    judge.setJudgeStatus(JudgeStatus.SYSTEM_ERROR);
+                    judge.setSubmitId(submit.getId());
+                }
+                //编译错误，后续不在运行
+                if (judge.getJudgeStatus() == JudgeStatus.COMPILE_ERROR) {
+                    judge.setScore(0);
+                    judge.setExecutionTime(DEFAULT_TIME_LIMIT);
+                    judge.setRuntimeMemory(DEFAULT_MEMORY_LIMIT);
+                    return results;
+                }
+                count++;
             }
-            //编译错误，后续不在运行
-            if (judge.getJudgeStatus() == JudgeStatus.COMPILE_ERROR) {
-                judge.setScore(0);
-                judge.setExecutionTime(DEFAULT_TIME_LIMIT);
-                judge.setRuntimeMemory(DEFAULT_MEMORY_LIMIT);
-                return results;
-            }
-            count++;
+        } catch (Exception e) {
+            JudgeResult judgeResult = new JudgeResult();
+            judgeResult.setScore(0);
+            judgeResult.setSubmitId(submit.getId());
+            judgeResult.setSuccess(false);
+            judgeResult.setExecutionTime(DEFAULT_TIME_LIMIT);
+            judgeResult.setRuntimeMemory(DEFAULT_MEMORY_LIMIT);
+            judgeResult.setJudgeStatus(JudgeStatus.SYSTEM_ERROR);
+            results.clear();
+            results.add(judgeResult);
+        } finally {
+            running = false;
         }
         return results;
     }
 
-    public void unReady() {
-        this.ready = false;
-    }
 
     public boolean isReady() {
         return ready;
@@ -343,7 +379,8 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
      * 拯救已经坏了的容器，
      * 删除旧容器，重新创建新容器
      */
-    protected void rescureContainer() {
+    public void rescureContainer() {
+        running = false;
         if (!dockerEnvService.hasImage(dockerJudgeConfig.getImageName(), null)) {
             dockerEnvService.build(dockerJudgeConfig);
         }

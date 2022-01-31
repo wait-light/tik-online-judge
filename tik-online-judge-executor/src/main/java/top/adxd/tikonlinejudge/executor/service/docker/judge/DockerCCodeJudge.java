@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.service.docker.judge;
 
 import top.adxd.tikonlinejudge.executor.config.docker.impl.CDockerConfig;
+import top.adxd.tikonlinejudge.executor.single.Language;
 
 /**
  * @author wait-light
@@ -9,5 +10,10 @@ import top.adxd.tikonlinejudge.executor.config.docker.impl.CDockerConfig;
 public class DockerCCodeJudge extends AbstractDockerJudgeTemplate<CDockerConfig>{
     public DockerCCodeJudge(CDockerConfig dockerConfig) {
         super(dockerConfig);
+    }
+
+    @Override
+    public Language getLanguage() {
+        return Language.C;
     }
 }
