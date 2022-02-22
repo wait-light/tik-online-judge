@@ -20,4 +20,5 @@ public interface IRoleService extends IService<Role> {
     CommonResult updateById(RoleDto roleDto);
     Role role(String name);
     Set<String> rolePermissions(String roleName);
+    CommonResult userRoles(Long uid);
 }

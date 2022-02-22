@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.api.constant.SystemMenu;
 import top.adxd.tikonlinejudge.auth.api.dto.Menu;
 import top.adxd.tikonlinejudge.auth.dto.RoleDto;
+import top.adxd.tikonlinejudge.auth.dto.UserRoleVo;
 import top.adxd.tikonlinejudge.auth.entity.Role;
 import top.adxd.tikonlinejudge.auth.entity.RoleMenu;
 import top.adxd.tikonlinejudge.auth.entity.UserRole;
@@ -22,10 +23,7 @@ import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +46,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     private IUserRoleService userRoleService;
     @Autowired
     private top.adxd.tikonlinejudge.auth.entity.Menu systemAutoGenerator;
+
+    private static UserRoleVo role2RoleVo(Role item) {
+        UserRoleVo roleVo = new UserRoleVo();
+        roleVo.setId(item.getId());
+        roleVo.setName(item.getName());
+        return roleVo;
+    }
 
     @Override
     public boolean save(Role entity) {
@@ -124,6 +129,26 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
                 .stream()
                 .map(item -> item.getPerms())
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public CommonResult userRoles(Long uid) {
+        if (uid == null) {
+            return CommonResult.error("用户不存在");
+        }
+        List<Long> roleIds = userRoleService
+                .list(new QueryWrapper<UserRole>().eq("uid", uid).select("role_id"))
+                .stream()
+                .map(UserRole::getRoleId)
+                .collect(Collectors.toList());
+        if (roleIds.size() == 0) {
+            return CommonResult.success().singleData(Collections.EMPTY_LIST);
+        }
+        List<UserRoleVo> collect = listByIds(roleIds)
+                .stream()
+                .map(RoleServiceImpl::role2RoleVo)
+                .collect(Collectors.toList());
+        return CommonResult.success().singleData(collect);
     }
 
     @Override

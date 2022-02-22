@@ -42,7 +42,7 @@ public class ProblemCollectionController {
     public CommonResult list() {
         PageUtils.makePage();
         List<ProblemCollection> list = problemCollectionService.list();
-        return CommonResult.success().add("list", list);
+        return CommonResult.success().listData(list);
     }
 
     @GetMapping("/public")

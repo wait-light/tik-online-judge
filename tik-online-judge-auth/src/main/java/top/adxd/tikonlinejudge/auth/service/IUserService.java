@@ -25,4 +25,10 @@ public interface IUserService extends IService<User> {
     CommonResult updatePassword(PasswordUpdateByEmailDto dto);
 
     CommonResult updatePassword(PasswordUpdateByPasswordDto dto);
+
+    CommonResult resetPassword(Long uid);
+
+    CommonResult updateUser(User user);
+
+    CommonResult addUser(User user);
 }

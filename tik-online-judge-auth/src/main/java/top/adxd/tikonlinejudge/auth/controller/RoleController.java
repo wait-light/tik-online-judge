@@ -4,6 +4,7 @@ package top.adxd.tikonlinejudge.auth.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Arrays;
 
@@ -28,6 +29,11 @@ public class RoleController {
 
     @Autowired
     private IRoleService roleService;
+
+    @GetMapping("/user/{uid}/roles")
+    public CommonResult userRoles(@PathVariable("uid") Long uid) {
+        return roleService.userRoles(uid);
+    }
 
     @GetMapping("/list")
     public CommonResult list() {

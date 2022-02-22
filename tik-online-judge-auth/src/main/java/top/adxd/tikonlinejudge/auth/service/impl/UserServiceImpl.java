@@ -5,6 +5,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Reference;
+import org.springframework.util.StringUtils;
 import top.adxd.tikonlinejudge.auth.api.dto.SafeUserDto;
 import top.adxd.tikonlinejudge.auth.config.SecureConfig;
 import top.adxd.tikonlinejudge.auth.dto.PasswordUpdateByEmailDto;
@@ -14,9 +15,12 @@ import top.adxd.tikonlinejudge.auth.mapper.UserMapper;
 import top.adxd.tikonlinejudge.auth.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.message.api.IVerificationCodeService;
 import top.adxd.tikonlinejudge.message.api.VerifyCodeStatus;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -28,10 +32,12 @@ import top.adxd.tikonlinejudge.message.api.VerifyCodeStatus;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+    public static final String DEFAULT_PASSWORD = "123456";
     @DubboReference
     private IVerificationCodeService verificationCodeService;
     @Autowired
     private SecureConfig secureConfig;
+
 
     @Override
     public User getUser(String email) {
@@ -88,5 +94,63 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String newPassword = secureConfig.getSymmetricCrypto().encryptHex(dto.getNewPassword());
         user.setPassword(newPassword);
         return super.updateById(user) ? CommonResult.success("密码修改成功") : CommonResult.error("密码修改失败");
+    }
+
+    @Override
+    public CommonResult resetPassword(Long uid) {
+        Long operatorUid = UserInfoUtil.getUid();
+        User user = getById(uid);
+        if (user.getAdmin() && !user.getUid().equals(operatorUid)) {
+            return CommonResult.permissionDeny("无操作权限");
+        }
+        String resetPassword = secureConfig.getSymmetricCrypto().encryptHex(DEFAULT_PASSWORD);
+        user.setPassword(resetPassword);
+        return super.updateById(user) ? CommonResult.success(String.format("密码重置为【%s】", DEFAULT_PASSWORD)) : CommonResult.error("重置失败");
+    }
+
+    @Override
+    public CommonResult updateUser(User user) {
+        if (user.getUid() == null) {
+            return CommonResult.error("用户不存在");
+        }
+        User u = getById(user.getUid());
+        if (u == null) {
+            return CommonResult.error("用户不存在");
+        }
+        if (user.getStatus() != null && user.getStatus()) {
+            u.setStatus(user.getStatus());
+        }
+        if (user.getNickname() != null && StringUtils.hasText(user.getNickname())) {
+            u.setNickname(user.getNickname());
+        }
+        if (user.getAvatar() != null && StringUtils.hasText(user.getAvatar())) {
+            u.setAvatar(user.getAvatar());
+        }
+        u.setTelephone(user.getTelephone());
+        u.setEmail(user.getEmail());
+        return updateById(u) ? CommonResult.success("更新成功") : CommonResult.error("更新失败");
+    }
+
+    @Override
+    public CommonResult addUser(User user) {
+        if (user.getEmail() != null && StringUtils.hasLength(user.getEmail())) {
+            User emailUser = getUser(user.getEmail());
+            if (emailUser != null) {
+                return CommonResult.error("用户邮箱已被使用");
+            }
+        }
+        if (user.getUsername() != null && StringUtils.hasLength(user.getUsername())) {
+            User userByUsername = getUserByUsername(user.getUsername());
+            if (userByUsername != null) {
+                return CommonResult.error("用户名已被使用");
+            }
+        }
+        if (user.getUsername() == null && user.getEmail() == null) {
+            return CommonResult.error("用户名或者邮箱至少需要填写一个");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        user.setUpdateTime(now);
+        user.setCreateTime(now);
+        return save(user) ? CommonResult.success("添加成功") : CommonResult.error("添加失败");
     }
 }

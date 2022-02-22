@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
-@DubboService(interfaceClass = IExecutorServiceApi.class)
+@DubboService(interfaceClass = IExecutorServiceApi.class,cluster = "mergeable")
 public class ExecutorServiceApiImpl implements IExecutorServiceApi {
     @Autowired
     private List<AbstractDockerJudgeTemplate> abstractDockerJudgeTemplates;
