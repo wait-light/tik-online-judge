@@ -3,7 +3,6 @@
 touch compile.info compile.time input stderr stdout Main.cpp needCompile time_memory
 chmod 766 compile.info compile.time input stderr stdout Main.cpp needCompile
 chmod 764 time_memory
-chown :docker needCompile
 compile_begin_time=$[$(date +%s%N)]
 #将编译信息输出到/home/tik-online-judge/compile.info
 #判断是否需要编译

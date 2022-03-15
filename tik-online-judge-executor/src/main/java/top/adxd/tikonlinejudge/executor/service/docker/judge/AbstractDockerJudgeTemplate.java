@@ -1,6 +1,7 @@
 package top.adxd.tikonlinejudge.executor.service.docker.judge;
 
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.exception.NotModifiedException;
@@ -95,7 +96,11 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         return running;
     }
 
-
+    private void submitJudgingStatusUpdate(Long id,JudgeStatus judgeStatus){
+        submitService.update(new UpdateWrapper<Submit>()
+                .eq("id", id)
+                .set("status", judgeStatus));
+    }
     /**
      * 防止多个线程同时访问某个语言的评判
      *
@@ -105,9 +110,17 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     @Override
     public synchronized List<JudgeResult> judge(Submit submit) {
         if (!ready) {
-            rescureContainer();
+            try {
+                rescureContainer();
+            } catch (Exception e) {
+                logger.error(e.getLocalizedMessage());
+                e.printStackTrace();
+            }
         }
         running = true;
+
+        submitJudgingStatusUpdate(submit.getId(),JudgeStatus.JUDGING);
+
         List<JudgeResult> results = new ArrayList<>();
         try {
             writeSource(submit);

@@ -49,7 +49,6 @@ public class SubmitConsumer {
     @Autowired
     private IJudgeResultService judgeResultService;
 
-
     @Bean
     public Queue submitQueue(){
         Queue queue = new Queue( SubmitSender.SUBMIT_QUERY,false,false,true);
@@ -86,6 +85,7 @@ public class SubmitConsumer {
         }
         AtomicInteger atomicInteger = getAtomicInteger(languageType);
         int index = atomicInteger.getAndIncrement();
+
         List<JudgeResult> judgeResultList  = ((AbstractDockerJudgeTemplate) list.get(index % dockerJavaCodeJudges.size())).judge(submit);
         judgeResultService.updateCommitAfterJudge(judgeResultList,submit);
         try {
