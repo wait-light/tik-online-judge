@@ -4,7 +4,6 @@ compile_begin_time=$[$(date +%s%N)]
 touch compile.info compile.time input stdout stderr Main.java needCompile time_memory
 chmod 766 compile.info compile.time input stdout stderr Main.java needCompile
 chmod 764 time_memory
-chown :docker needCompile
 #判断是否需要编译
 read isNeedCompile < needCompile
 if [ "$isNeedCompile" != "0" ];

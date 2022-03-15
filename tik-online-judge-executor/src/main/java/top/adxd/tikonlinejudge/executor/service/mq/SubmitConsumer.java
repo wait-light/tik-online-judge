@@ -92,6 +92,7 @@ public class SubmitConsumer {
             channel.basicAck(deliveryTag,false);
         } catch (IOException e) {
             logger.error(e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 

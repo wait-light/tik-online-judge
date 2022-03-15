@@ -143,7 +143,8 @@ public class DockerJudgeBeanPostProcess implements BeanDefinitionRegistryPostPro
         if (bean instanceof AbstractDockerJudgeTemplate){
             AbstractDockerJudgeTemplate dockerCodeJudge = (AbstractDockerJudgeTemplate) bean;
             IDockerJudgeConfig dockerJudgeConfig = dockerCodeJudge.getDockerJudgeConfig();
-            String path = dockerJudgeConfig.getPath() + File.separator + beanName;
+            //使用linux的路径分割符
+            String path = dockerJudgeConfig.getPath() + "/" + beanName;
             checkPathPermission(path);
             IDockerJudgeConfig newDockerJudgeConfig = createIDockerJudgeConfig(dockerJudgeConfig.getClass());
             newDockerJudgeConfig.newConfig(path, beanName);

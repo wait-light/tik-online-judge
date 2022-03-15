@@ -2,9 +2,9 @@ mybatis-plus:
   type-enums-package: top/adxd/tikonlinejudge/executor/single
 tik-online-judge.executor:
   docker-java:
-    path: /tmp/judge-info/judge-java
+    path: C:/Users/wait-light/code/tik-online-judge-executor-tmp/judge-java
   docker-cpp:
-    path: /tmp/judge-info/judge-cpp
+    path: C:/Users/wait-light/code/tik-online-judge-executor-tmp/judge-cpp
   language:
     map:
       JAVA:

@@ -23,6 +23,7 @@ import top.adxd.tikonlinejudge.executor.service.ISubmitService;
 import top.adxd.tikonlinejudge.executor.service.docker.env.DockerEnvService;
 import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 import top.adxd.tikonlinejudge.executor.single.Language;
+import top.adxd.tikonlinejudge.executor.util.PathUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -401,8 +402,15 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
 
         } catch (Exception e) {
             logger.error(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         this.ready = false;
+    }
+
+
+    private boolean isWindowsPath(String path) {
+
+        return false;
     }
 
     /**
@@ -411,7 +419,17 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
     protected void createContainer() {
         HostConfig hostConfig = new HostConfig();
         Volume inner = new Volume(dockerJudgeConfig.getWorkDir());
-        Bind bind = new Bind(dockerJudgeConfig.getPath(), inner);
+        /**
+         * 将绑定的地址转换为unix地址
+         * PathUtil.dosPath2unixPath(dockerJudgeConfig.getPath())。
+         * 开发环境原因，wsl中的地址与windows本身的路径不同
+         * 还需要将wsl中的root地址改为 /
+         * 即修改 wsl中的 /etc/wsl.conf为如下内容
+         * [automount]
+         * root = /
+         * options = "metadata"
+         */
+        Bind bind = new Bind(PathUtil.dosPath2unixPath(dockerJudgeConfig.getPath()), inner);
         hostConfig.setBinds(bind);
         CreateContainerResponse exec = null;
         boolean success = true;
@@ -424,6 +442,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         } catch (Exception e) {
             success = false;
             logger.error(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         if (success && null != exec) {
             logger.trace("成功创建容器：" + exec.getId());

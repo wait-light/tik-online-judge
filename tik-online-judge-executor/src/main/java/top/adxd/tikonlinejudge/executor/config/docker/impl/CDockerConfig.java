@@ -19,6 +19,7 @@ public class CDockerConfig implements ICompileAbleConfig, IDockerJudgeConfig, In
      * 以下文件可配置
      * 源码文件地址
      */
+    //本机地址路径前缀
     private String path;
     private String containerName;
     private String imageName;
