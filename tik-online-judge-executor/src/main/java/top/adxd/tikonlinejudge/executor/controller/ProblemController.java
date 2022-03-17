@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import top.adxd.tikonlinejudge.common.annotation.Role;
 import top.adxd.tikonlinejudge.common.util.ServletUtils;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
@@ -47,7 +48,11 @@ public class ProblemController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody Problem entity) {
+        LocalDateTime now = LocalDateTime.now();
+        entity.setUid(UserInfoUtil.getUid());
         entity.setSecretKey(RandomUtil.randomString(IProblemCollectionService.SECRET_KEY_LENGTH));
+        entity.setCreateTime(now);
+        entity.setUpdateTime(now);
         return problemService.save(entity) ?
                 CommonResult.success().setMsg("添加成功") :
                 CommonResult.error().setMsg("添加失败");
