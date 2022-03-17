@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.common.constant.PageConstant;
+import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.auth.entity.User;
@@ -38,9 +40,7 @@ public class UserController {
 
     @GetMapping("/list")
     public CommonResult list() {
-        PageUtils.makePage();
-        List<User> list = userService.list();
-        return CommonResult.success().listData(list);
+        return userService.userListByUserName(ServletUtils.getParameter(IUserService.USERNAME_SEARCH_KEY));
     }
 
     @PostMapping("")

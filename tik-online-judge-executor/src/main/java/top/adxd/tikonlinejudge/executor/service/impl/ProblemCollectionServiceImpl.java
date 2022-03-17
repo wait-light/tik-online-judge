@@ -150,4 +150,18 @@ public class ProblemCollectionServiceImpl extends ServiceImpl<ProblemCollectionM
         }
         return CommonResult.success().add("list", listByIds(collectionIds));
     }
+
+    @Override
+    public CommonResult problemCollectionListByName(String problemCollectionName) {
+        PageUtils.makePage();
+        return CommonResult
+                .success()
+                .listData(
+                        list(new QueryWrapper<ProblemCollection>()
+                                .like(problemCollectionName != null && !problemCollectionName.trim().equals("")
+                                        , "name"
+                                        , problemCollectionName
+                                ))
+                );
+    }
 }

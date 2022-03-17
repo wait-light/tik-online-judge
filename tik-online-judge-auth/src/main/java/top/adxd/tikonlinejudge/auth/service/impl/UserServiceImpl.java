@@ -15,6 +15,7 @@ import top.adxd.tikonlinejudge.auth.mapper.UserMapper;
 import top.adxd.tikonlinejudge.auth.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.message.api.IVerificationCodeService;
@@ -33,6 +34,7 @@ import java.time.LocalDateTime;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     public static final String DEFAULT_PASSWORD = "123456";
+
     @DubboReference
     private IVerificationCodeService verificationCodeService;
     @Autowired
@@ -152,5 +154,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setUpdateTime(now);
         user.setCreateTime(now);
         return save(user) ? CommonResult.success("添加成功") : CommonResult.error("添加失败");
+    }
+
+    @Override
+    public CommonResult userListByUserName(String userName) {
+        PageUtils.makePage();
+        return CommonResult
+                .success()
+                .listData(
+                        list(new QueryWrapper<User>()
+                                .like(userName != null && !userName.trim().equals("")
+                                        , "username"
+                                        , userName
+                                ))
+                );
     }
 }

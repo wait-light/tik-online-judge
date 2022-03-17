@@ -18,6 +18,7 @@ import java.util.List;
  */
 public interface IProblemCollectionService extends IService<ProblemCollection> {
     Integer SECRET_KEY_LENGTH = 32;
+    String NAME_SEARCH_KEY = "search";
 
     List<ProblemSurvey> collectionsItem(Long collectionId, boolean all);
 
@@ -28,4 +29,6 @@ public interface IProblemCollectionService extends IService<ProblemCollection> {
     CommonResult collectionProblems(Long collectionId);
 
     CommonResult personCollection();
+
+    CommonResult problemCollectionListByName(String problemCollectionName);
 }

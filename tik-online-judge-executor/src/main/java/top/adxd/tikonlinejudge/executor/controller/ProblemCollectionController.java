@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
@@ -33,16 +34,17 @@ public class ProblemCollectionController {
     @Autowired
     private IProblemCollectionService problemCollectionService;
 
-        @GetMapping("/collection/{collectionId}")
-    public CommonResult collectionProblems(@PathVariable("collectionId")Long collectionId){
+    @GetMapping("/collection/{collectionId}")
+    public CommonResult collectionProblems(@PathVariable("collectionId") Long collectionId) {
         return problemCollectionService.collectionProblems(collectionId);
     }
 
     @GetMapping("/list")
     public CommonResult list() {
-        PageUtils.makePage();
-        List<ProblemCollection> list = problemCollectionService.list();
-        return CommonResult.success().listData(list);
+        return problemCollectionService
+                .problemCollectionListByName(
+                        ServletUtils
+                                .getParameter(IProblemCollectionService.NAME_SEARCH_KEY));
     }
 
     @GetMapping("/public")
@@ -51,7 +53,7 @@ public class ProblemCollectionController {
                 problemCollectionService
                         .list(new QueryWrapper<ProblemCollection>()
                                 .eq("public_collection", true)
-                                .eq("status",true));
+                                .eq("status", true));
         return CommonResult.success().add("list", list);
     }
 
@@ -59,24 +61,25 @@ public class ProblemCollectionController {
     public CommonResult privateList() {
         return problemCollectionService.personCollection();
     }
+
     /**
-     *
      * @return 返回指定问题集的分页数据
      */
     @GetMapping("/{collection-id}")
-    public CommonResult collectionItem(@PathVariable("collection-id") Long collectionId){
-        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId,false);
+    public CommonResult collectionItem(@PathVariable("collection-id") Long collectionId) {
+        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId, false);
         return CommonResult.success().listData(problems);
     }
 
     /**
      * 返回指定问题集的全部数据
+     *
      * @param collectionId
      * @return
      */
     @GetMapping("/all/{collection-id}")
-    public CommonResult collectionItemAll(@PathVariable("collection-id") Long collectionId){
-        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId,true);
+    public CommonResult collectionItemAll(@PathVariable("collection-id") Long collectionId) {
+        List<ProblemSurvey> problems = problemCollectionService.collectionsItem(collectionId, true);
         return CommonResult.success().singleData(problems);
     }
 
@@ -109,8 +112,8 @@ public class ProblemCollectionController {
     }
 
     @PostMapping("/problem/{collectionid}")
-    public CommonResult addProblem(@RequestBody Problem problem,@PathVariable("collectionid") Long collectionId){
-        return problemCollectionService.addProblem(problem,collectionId);
+    public CommonResult addProblem(@RequestBody Problem problem, @PathVariable("collectionid") Long collectionId) {
+        return problemCollectionService.addProblem(problem, collectionId);
     }
 
 }

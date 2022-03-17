@@ -110,6 +110,20 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
     }
 
     @Override
+    public CommonResult problemListByName(String problemName) {
+        PageUtils.makePage();
+        return CommonResult
+                .success()
+                .listData(
+                        list(new QueryWrapper<Problem>()
+                                .like(problemName != null && !problemName.trim().equals("")
+                                        , "name"
+                                        , problemName
+                                ))
+                );
+    }
+
+    @Override
     public List<top.adxd.tikonlinejudge.executor.api.entity.Problem> problemInfoList(List<Long> pids, String... select) {
         if (pids == null || pids.size() <= 0) {
             return new ArrayList<>();

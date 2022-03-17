@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Arrays;
 
 import top.adxd.tikonlinejudge.common.annotation.Role;
+import top.adxd.tikonlinejudge.common.util.ServletUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
@@ -41,9 +42,7 @@ public class ProblemController {
 
     @GetMapping("/list")
     public CommonResult list() {
-        PageUtils.makePage();
-        List<Problem> list = problemService.list();
-        return CommonResult.success().listData(list);
+        return problemService.problemListByName(ServletUtils.getParameter(IProblemService.NAME_SEARCH_KEY));
     }
 
     @PostMapping("")

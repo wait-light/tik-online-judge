@@ -16,6 +16,7 @@ import top.adxd.tikonlinejudge.common.vo.CommonResult;
  * @since 2021-10-26
  */
 public interface IUserService extends IService<User> {
+    String USERNAME_SEARCH_KEY = "search";
     User getUser(String email);
 
     User getUserByUsername(String username);
@@ -31,4 +32,6 @@ public interface IUserService extends IService<User> {
     CommonResult updateUser(User user);
 
     CommonResult addUser(User user);
+
+    CommonResult userListByUserName(String userName);
 }

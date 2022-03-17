@@ -15,8 +15,10 @@ import java.util.List;
  * @since 2021-09-22
  */
 public interface IProblemService extends IService<Problem> {
+    String NAME_SEARCH_KEY = "search";
     CommonResult delete(Long problemId);
     CommonResult getAvailableProblem(Long collectionId);
     CommonResult problemNames(Long... problemIds);
     String problemName(Long problemId);
+    CommonResult problemListByName(String problemName);
 }
