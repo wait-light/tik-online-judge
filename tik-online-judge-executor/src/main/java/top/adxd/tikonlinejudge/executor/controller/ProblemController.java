@@ -48,6 +48,18 @@ public class ProblemController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody Problem entity) {
+        if (entity.getInput() == null){
+            entity.setInput("");
+        }
+        if (entity.getInputDescrible() == null){
+            entity.setInputDescrible("");
+        }
+        if (entity.getOutput() == null){
+            entity.setOutput("");
+        }
+        if (entity.getOutputDescrible() == null){
+            entity.setOutputDescrible("");
+        }
         LocalDateTime now = LocalDateTime.now();
         entity.setUid(UserInfoUtil.getUid());
         entity.setSecretKey(RandomUtil.randomString(IProblemCollectionService.SECRET_KEY_LENGTH));

@@ -1,0 +1,25 @@
+warning: CRLF will be replaced by LF in tik-online-judge-executor/src/main/java/top/adxd/tikonlinejudge/executor/controller/ProblemController.java.
+The file will have its original line endings in your working directory
+[1mdiff --git a/tik-online-judge-executor/src/main/java/top/adxd/tikonlinejudge/executor/controller/ProblemController.java b/tik-online-judge-executor/src/main/java/top/adxd/tikonlinejudge/executor/controller/ProblemController.java[m
+[1mindex 17c9b21..a5417f2 100644[m
+[1m--- a/tik-online-judge-executor/src/main/java/top/adxd/tikonlinejudge/executor/controller/ProblemController.java[m
+[1m+++ b/tik-online-judge-executor/src/main/java/top/adxd/tikonlinejudge/executor/controller/ProblemController.java[m
+[36m@@ -48,6 +48,18 @@[m [mpublic class ProblemController {[m
+ [m
+     @PostMapping("")[m
+     public CommonResult save(@RequestBody Problem entity) {[m
+[32m+[m[32m        if (entity.getInput() == null){[m
+[32m+[m[32m            entity.setInput("");[m
+[32m+[m[32m        }[m
+[32m+[m[32m        if (entity.getInputDescrible() == null){[m
+[32m+[m[32m            entity.setInputDescrible("");[m
+[32m+[m[32m        }[m
+[32m+[m[32m        if (entity.getOutput() == null){[m
+[32m+[m[32m            entity.setOutput("");[m
+[32m+[m[32m        }[m
+[32m+[m[32m        if (entity.getOutputDescrible() == null){[m
+[32m+[m[32m            entity.setOutputDescrible("");[m
+[32m+[m[32m        }[m
+         LocalDateTime now = LocalDateTime.now();[m
+         entity.setUid(UserInfoUtil.getUid());[m
+         entity.setSecretKey(RandomUtil.randomString(IProblemCollectionService.SECRET_KEY_LENGTH));[m
