@@ -73,7 +73,7 @@ public class SolutionController {
         entity.setCreateTime(now);
         entity.setUpdateTime(now);
         return solutionService.save(entity) ?
-                CommonResult.success().setMsg("添加成功") :
+                CommonResult.success().setMsg("添加成功").add("id",entity.getId()) :
                 CommonResult.error().setMsg("添加失败");
     }
 

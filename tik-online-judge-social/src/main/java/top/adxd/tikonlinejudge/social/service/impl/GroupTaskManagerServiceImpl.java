@@ -1,20 +1,21 @@
 package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
+import top.adxd.tikonlinejudge.executor.api.ITaskRankServiceApi;
 import top.adxd.tikonlinejudge.social.dto.GroupTaskDto;
 import top.adxd.tikonlinejudge.social.entity.GroupTask;
+import top.adxd.tikonlinejudge.social.entity.GroupUser;
 import top.adxd.tikonlinejudge.social.entity.Task;
 import top.adxd.tikonlinejudge.social.entity.TaskItem;
-import top.adxd.tikonlinejudge.social.service.IGroupTaskManagerService;
-import top.adxd.tikonlinejudge.social.service.IGroupTaskService;
-import top.adxd.tikonlinejudge.social.service.ITaskItemService;
-import top.adxd.tikonlinejudge.social.service.ITaskService;
+import top.adxd.tikonlinejudge.social.service.*;
+import top.adxd.tikonlinejudge.social.single.GroupUserType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +29,10 @@ public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
     private IGroupTaskService groupTaskService;
     @Autowired
     private ITaskItemService taskItemService;
+    @Autowired
+    private IGroupUserService groupUserService;
+    @DubboReference
+    private ITaskRankServiceApi taskRankServiceApi;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -49,7 +54,6 @@ public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
     }
 
     private boolean addTaskInner(Long groupId, GroupTaskDto taskDto, boolean needCheckAuthority) {
-
         if (needCheckAuthority) {
             //todo 权限校验
         }
@@ -79,7 +83,16 @@ public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
                     taskItem.setProblemId(item);
                     taskItemService.save(taskItem);
                 });
-        return true;
+
+        List<Long> uids = groupUserService
+                .list(new QueryWrapper<GroupUser>()
+                        .eq("group_id", groupId)
+                        .eq("user_type", GroupUserType.COMMON)
+                        .select("uid"))
+                .stream()
+                .map(GroupUser::getUid)
+                .collect(Collectors.toList());
+        return taskRankServiceApi.initializationTaskRank(task.getId(), uids);
     }
 
     private boolean deleteTaskInner(Long groupId, Long taskId, boolean needCheckAuthority) {
@@ -110,8 +123,8 @@ public class GroupTaskManagerServiceImpl implements IGroupTaskManagerService {
     public CommonResult tasks(Long groupId) {
         //todo 权限校验
         List<Long> tasks = groupTaskService.list(new QueryWrapper<GroupTask>()
-                        .eq("group_id", groupId)
-                        .select("task_id"))
+                .eq("group_id", groupId)
+                .select("task_id"))
                 .stream()
                 .map(item -> item.getTaskId())
                 .collect(Collectors.toList());

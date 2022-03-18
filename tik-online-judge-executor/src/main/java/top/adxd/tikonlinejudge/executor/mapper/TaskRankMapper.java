@@ -15,6 +15,6 @@ import java.util.List;
  * @since 2022-01-27
  */
 public interface TaskRankMapper extends BaseMapper<TaskRank> {
-    @Select("select *,@rank:=@rank + 1 as rank from pms_task_rank,(SELECT @rank := 0) r where task_id = #{raceId} order by score desc,penalty asc")
+    @Select("select *,@rank:=@rank + 1 as `rank` from pms_task_rank,(SELECT @rank := 0) r where task_id = #{raceId} order by score desc,penalty asc")
     List<TaskRank> rank(Long raceId);
 }

@@ -3,10 +3,12 @@ package top.adxd.tikonlinejudge.executor.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import top.adxd.tikonlinejudge.auth.api.IUserInfoService;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
+import top.adxd.tikonlinejudge.executor.api.ITaskRankServiceApi;
 import top.adxd.tikonlinejudge.executor.entity.Submit;
 import top.adxd.tikonlinejudge.executor.entity.TaskRank;
 import top.adxd.tikonlinejudge.executor.entity.TaskSubmit;
@@ -20,6 +22,7 @@ import top.adxd.tikonlinejudge.social.api.ITaskServiceApi;
 import top.adxd.tikonlinejudge.social.api.vo.Task;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,8 @@ import java.util.stream.Collectors;
  * @since 2022-01-27
  */
 @Service
-public class TaskRankServiceImpl extends ServiceImpl<TaskRankMapper, TaskRank> implements ITaskRankService {
+@DubboService(interfaceClass = ITaskRankServiceApi.class)
+public class TaskRankServiceImpl extends ServiceImpl<TaskRankMapper, TaskRank> implements ITaskRankService, ITaskRankServiceApi {
     @Autowired
     private ITaskSubmitItemService taskSubmitItemService;
     @Autowired
@@ -53,6 +57,7 @@ public class TaskRankServiceImpl extends ServiceImpl<TaskRankMapper, TaskRank> i
     public CommonResult rank(Long raceId) {
         PageUtils.makePage();
         List<TaskRank> taskRanks = baseMapper.rank(raceId);
+
 //        List<TaskRank> taskRanks = list(new QueryWrapper<TaskRank>().orderByDesc("score").orderByAsc("penalty")
 //                .select("score", "taskId", "uid", "penalty", ""));
         taskRanks.stream()
@@ -67,6 +72,7 @@ public class TaskRankServiceImpl extends ServiceImpl<TaskRankMapper, TaskRank> i
                 });
         return CommonResult.success().listData(taskRanks);
     }
+
 
     @Override
     public void scoreUpdate(Submit submit, Long taskId) {
@@ -168,5 +174,25 @@ public class TaskRankServiceImpl extends ServiceImpl<TaskRankMapper, TaskRank> i
         return taskSubmitService.count(new QueryWrapper<TaskSubmit>()
                 .eq("task_id", taskId)
                 .in("submit_id", accept)) > 0;
+    }
+
+    @Override
+    public boolean initializationTaskRank(Long taskId, List<Long> uids) {
+        if (taskId == null) {
+            return false;
+        }
+        if (uids == null || uids.size() == 0) {
+            return true;
+        }
+        List<TaskRank> taskRanks = new ArrayList<>();
+        uids.forEach((item) -> {
+            TaskRank taskRank = new TaskRank();
+            taskRank.setTaskId(taskId);
+            taskRank.setUid(item);
+            taskRank.setPenalty(0L);
+            taskRank.setScore(0);
+            taskRanks.add(taskRank);
+        });
+        return saveBatch(taskRanks);
     }
 }
