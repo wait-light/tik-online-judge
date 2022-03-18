@@ -22,4 +22,5 @@ public interface ISolutionService extends IService<Solution> {
      */
     Long hasSolution(Long uid,Long problemId);
     List<Solution> solutionList(Long problemId);
+    List<Solution> userSolutionList(Long uid);
 }

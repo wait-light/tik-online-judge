@@ -39,6 +39,11 @@ public class VerifiedController {
         return verifiedService.accountMessage(UserInfoUtil.getUid());
     }
 
+    @GetMapping("/accountMessage/{uid}")
+    public CommonResult accountMessage(@PathVariable("uid") Long uid){
+        return verifiedService.accountMessage(uid);
+    }
+
     @PutMapping("/nickname")
     public CommonResult changeNickName(@RequestBody Nickname nickname, @RequestHeader("uid") Long uid) {
         return verifiedService.changeNickName(uid, nickname.getNickname());

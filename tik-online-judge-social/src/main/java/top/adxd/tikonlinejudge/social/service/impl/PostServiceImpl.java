@@ -2,22 +2,29 @@ package top.adxd.tikonlinejudge.social.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.Page;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.auth.api.IUserInfoService;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
+import top.adxd.tikonlinejudge.social.dto.SolutionDto;
 import top.adxd.tikonlinejudge.social.entity.Solution;
 import top.adxd.tikonlinejudge.social.service.IPostService;
 import top.adxd.tikonlinejudge.social.service.ISolutionService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements IPostService {
     @Autowired
     private ISolutionService solutionService;
+    @DubboReference
+    private IUserInfoService userInfoService;
     //    private static final String SPECIAL_SYMBOLS = "[\n`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%…‘；：”“’。， 、]";
 //    private static final String REG = "(#+ \\S+\\s)|(\\.+ \\S+\\s)|(```\\S+\\s)";
     private static final String REG_TITLE = "((#+ )\\S+\\s?)|(```\\S*\\s([^`]*)```)|(!?\\[.*\\]\\(.+\\))";
@@ -78,15 +85,23 @@ public class PostServiceImpl implements IPostService {
         } else {
             posts = random();
         }
-        posts.stream().forEach(post -> {
-            String content = post.getContent();
-            content = content.replaceAll(REG_TITLE, "").trim();
-            int len = Math.min(64, content.length());
-            content = content.substring(0, len);
-            post.setContent(content);
-        });
+        posts = posts.stream().map(post -> {
+            post.setContent(getDisplayContent(post.getContent()));
+            SolutionDto solutionDto = new SolutionDto();
+            BeanUtils.copyProperties(post, solutionDto);
+            solutionDto.setUsername(userInfoService.userName(post.getUid()));
+            return solutionDto;
+        }).collect(Collectors.toList());
         return CommonResult.success().listData(posts);
     }
+
+    private String getDisplayContent(String content) {
+        //去除markdown格式
+        content = content.replaceAll(REG_TITLE, "");
+        //截取一部分数据用于展示
+        return content.substring(0, Math.min(content.length(), 50));
+    }
+
 
     @Override
     public CommonResult getPost(Long postId) {

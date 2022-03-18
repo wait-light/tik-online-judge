@@ -53,6 +53,11 @@ public class SolutionController {
         return CommonResult.success().listData(solutions);
     }
 
+    @GetMapping("/user-solution/{uid}")
+    public CommonResult userSolution(@PathVariable("uid") Long uid) {
+        return CommonResult.success().listData(solutionService.userSolutionList(uid));
+    }
+
     @GetMapping("/list")
     public CommonResult list() {
         PageUtils.makePage();

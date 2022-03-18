@@ -60,6 +60,7 @@ public class ProblemController {
         if (entity.getOutputDescrible() == null){
             entity.setOutputDescrible("");
         }
+
         LocalDateTime now = LocalDateTime.now();
         entity.setUid(UserInfoUtil.getUid());
         entity.setSecretKey(RandomUtil.randomString(IProblemCollectionService.SECRET_KEY_LENGTH));

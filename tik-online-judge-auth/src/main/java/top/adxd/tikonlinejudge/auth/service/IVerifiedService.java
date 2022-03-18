@@ -27,12 +27,6 @@ public interface IVerifiedService {
      */
     CommonResult changeNickName(Long uid, String nickname);
 
-    /**
-     * 用户账户私人信息（邮箱）
-     *
-     * @param uid 用户id
-     * @return 用户私人信息
-     */
     CommonResult accountMessage(Long uid);
 
     CommonResult changeEmail(ChangeEmailDto changeEmailDto);

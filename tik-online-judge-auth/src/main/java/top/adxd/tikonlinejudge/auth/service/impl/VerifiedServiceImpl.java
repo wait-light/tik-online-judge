@@ -64,6 +64,7 @@ public class VerifiedServiceImpl implements IVerifiedService {
             return CommonResult.error("用户不存在");
         }
         return CommonResult.success()
+                .add("avatar", user.getAvatar())
                 .add("email", user.getEmail())
                 .add("nickname", user.getNickname());
     }
