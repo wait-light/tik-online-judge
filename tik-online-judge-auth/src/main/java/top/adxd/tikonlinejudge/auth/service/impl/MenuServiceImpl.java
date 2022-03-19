@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.auth.service.IRoleMenuService;
 import top.adxd.tikonlinejudge.auth.service.IRoleService;
 import top.adxd.tikonlinejudge.auth.service.IUserRoleService;
+import top.adxd.tikonlinejudge.auth.single.MenuType;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 
 import java.io.Serializable;
@@ -78,7 +79,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         //转换为MenuTree，同时存入map 方便后期快速取出
         List<MenuTree> menuTrees = menus.stream().map((item) -> {
             MenuTree menuTree = new MenuTree();
-            menuTree.setChildren(new ArrayList());
+            menuTree.setChildren(new ArrayList(0));
             BeanUtils.copyProperties(item, menuTree);
             map.put(menuTree.getId(), menuTree);
             return menuTree;
@@ -86,14 +87,40 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         menuTrees.forEach((item) -> {
             //子菜单，组装到父菜单中
             if (item.getParentId() != null && item.getParentId() != 0) {
-                MenuTree menuTree = map.get(item.getParentId());
-                menuTree.getChildren().add(item);
+                MenuTree menuTree = getUsefulParent(map, item);
+                if (menuTree != null) {
+                    menuTree.getChildren().add(item);
+                } else {
+                    item.setParentId(0L);
+                }
             }
         });
         return menuTrees     //过滤成只有根菜单的列表，便于转成json
                 .stream()
                 .filter(item -> item.getParentId() == null || item.getParentId() == 0)
                 .collect(Collectors.toList());
+    }
+
+    public MenuTree getUsefulParent(Map<Long, MenuTree> menuTreeMap, MenuTree menuTree) {
+        if (menuTree.getParentId() == 0) {
+            return null;
+        }
+        MenuTree parentMenuTree = menuTreeMap.get(menuTree.getParentId());
+        if (parentMenuTree == null) {
+            Menu parent = getById(menuTree.getParentId());
+            MenuTree parentTree = new MenuTree();
+            BeanUtils.copyProperties(parent, parentTree);
+            parentTree.setChildren(new ArrayList<>());
+            if (parent.getType() != MenuType.DIRECTORY) {
+                parentTree = getUsefulParent(menuTreeMap, parentTree);
+                //将其最近的有用的父节点设置成其父节点
+                if (menuTree.getType() == MenuType.DIRECTORY) {
+                    menuTreeMap.put(menuTree.getParentId(), parentTree);
+                }
+            }
+            return parentTree;
+        }
+        return parentMenuTree;
     }
 
     @Override
@@ -120,7 +147,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         }
         return roleMenuMapper.selectList(new QueryWrapper<RoleMenu>()
                 .in("role_id", roleIds)
-                .select("menuId"))
+                .select("menu_id"))
                 .stream()
                 .map(RoleMenu::getMenuId)
                 .collect(Collectors.toList());

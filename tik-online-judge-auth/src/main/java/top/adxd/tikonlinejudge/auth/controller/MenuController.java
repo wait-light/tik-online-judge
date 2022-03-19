@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
 import top.adxd.tikonlinejudge.auth.entity.Menu;
@@ -35,8 +36,8 @@ public class MenuController {
         return CommonResult.success().singleData(menuService.menuTree());
     }
 
-    @GetMapping("/directory/{uid}")
-    public CommonResult userDirectory(@PathVariable("uid") Long uid) {
+    @GetMapping("/directory")
+    public CommonResult userDirectory(@RequestHeader("uid") Long uid) {
         return CommonResult.success().singleData(menuService.userDirectoryMenuTree(uid));
     }
 
