@@ -40,17 +40,24 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     @Autowired
     private RoleMenuMapper roleMenuMapper;
 
-    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,allEntries = true)
+
+    @CacheEvict(value = {CacheAblePathMenuMapLoader.PATH_MENU_CACHE_VALUE}, allEntries = true)
+    @Override
+    public boolean save(Menu entity) {
+        return super.save(entity);
+    }
+
+    @CacheEvict(value = {PermissionCacheServiceImpl.USER_CACHE_VALUE, CacheAblePathMenuMapLoader.PATH_MENU_CACHE_VALUE}, allEntries = true)
     @Override
     public boolean updateById(Menu entity) {
         return super.updateById(entity);
     }
 
-    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,allEntries = true)
+    @CacheEvict(value = {PermissionCacheServiceImpl.USER_CACHE_VALUE, CacheAblePathMenuMapLoader.PATH_MENU_CACHE_VALUE}, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean removeById(Serializable id) {
-        roleMenuMapper.delete(new QueryWrapper<RoleMenu>().eq("menu_id",id));
+        roleMenuMapper.delete(new QueryWrapper<RoleMenu>().eq("menu_id", id));
         return super.removeById(id);
     }
 
