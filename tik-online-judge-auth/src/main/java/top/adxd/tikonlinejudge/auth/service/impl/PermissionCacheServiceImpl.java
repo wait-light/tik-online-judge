@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @Service("authorizationServiceCacheImpl")
 public class PermissionCacheServiceImpl {
     private static final String ADMIN_PERMISSION = "*";
+    public static final String USER_CACHE_VALUE = "userAuthorization";
+    public static final String USER_CACHE_KEY = "#uid";
     @Autowired
     private IUserService userService;
     @Autowired
@@ -26,7 +28,7 @@ public class PermissionCacheServiceImpl {
     @Autowired
     private IMenuService menuService;
 
-    @Cacheable("userAuthorization")
+    @Cacheable(value = USER_CACHE_VALUE,key = USER_CACHE_KEY)
     public Set<String> userAuthorization(Long uid) {
         User user = userService.getById(uid);
         Set<String> permissionSet = new LinkedHashSet<>();
@@ -49,14 +51,14 @@ public class PermissionCacheServiceImpl {
         if (userRoleIds.size() == 0) {
             return permissionSet;
         }
-        List<String> userRoleNames = roleService.list(new QueryWrapper<Role>()
-                        .in("id", userRoleIds)
-                        .eq("status", true)
-                        .select("name"))
-                .stream()
-                .map(item -> item.getName())
-                .collect(Collectors.toList());
-        //添加角色
+//        List<String> userRoleNames = roleService.list(new QueryWrapper<Role>()
+//                        .in("id", userRoleIds)
+//                        .eq("status", true)
+//                        .select("name"))
+//                .stream()
+//                .map(item -> item.getName())
+//                .collect(Collectors.toList());
+        //获取角色对应的权限
         List<Long> userMenuIds = roleMenuService.list(new QueryWrapper<RoleMenu>().in("role_id", userRoleIds))
                 .stream()
                 .map(item -> item.getMenuId())

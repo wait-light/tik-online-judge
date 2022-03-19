@@ -48,23 +48,9 @@ public class UserRoleController {
                 CommonResult.error().setMsg("添加失败");
     }
 
-    @DeleteMapping("")
-    public CommonResult deleteBatch(@RequestBody Long[] ids) {
-        return userRoleService.removeByIds(Arrays.asList(ids)) ?
-                CommonResult.success().setMsg("删除成功") :
-                CommonResult.error().setMsg("删除失败");
-    }
-
     @DeleteMapping("/{uid}/{roleId}")
     public CommonResult delete(@PathVariable("uid") Long uid, @PathVariable("roleId") Long roleId) {
         return userRoleService.removeUserRole(uid, roleId);
-    }
-
-    @PutMapping("/{id}")
-    public CommonResult update(@RequestBody UserRole entity) {
-        return userRoleService.updateById(entity) ?
-                CommonResult.success().setMsg("更新成功") :
-                CommonResult.error().setMsg("更新失败");
     }
 
     @GetMapping("/{id}")

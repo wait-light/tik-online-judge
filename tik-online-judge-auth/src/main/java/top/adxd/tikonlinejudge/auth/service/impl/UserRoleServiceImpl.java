@@ -3,6 +3,7 @@ package top.adxd.tikonlinejudge.auth.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import top.adxd.tikonlinejudge.auth.dto.UserRoleWithRemarkVo;
 import top.adxd.tikonlinejudge.auth.entity.Role;
 import top.adxd.tikonlinejudge.auth.entity.UserRole;
@@ -30,6 +31,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Autowired
     private IRoleService roleService;
 
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,key = "#entity.uid")
+    @Override
+    public boolean save(UserRole entity) {
+        return super.save(entity);
+    }
+
     @Override
     public CommonResult userUnRoledRole(Long uid) {
         if (uid == null) {
@@ -51,6 +58,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
                         .collect(Collectors.toList()));
     }
 
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,key = "#uid")
     @Override
     public CommonResult removeUserRole(Long uid, Long roleId) {
         UserRole one = getOne(new QueryWrapper<UserRole>().eq("uid", uid).eq("role_id", roleId).last("limit 1"));

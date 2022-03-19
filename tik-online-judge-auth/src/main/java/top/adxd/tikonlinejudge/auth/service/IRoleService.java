@@ -5,6 +5,7 @@ import top.adxd.tikonlinejudge.auth.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,4 +22,5 @@ public interface IRoleService extends IService<Role> {
     Role role(String name);
     Set<String> rolePermissions(String roleName);
     CommonResult userRoles(Long uid);
+    List<Long> userRoleIdList(Long uid);
 }

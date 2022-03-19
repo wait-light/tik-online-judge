@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
-import top.adxd.tikonlinejudge.auth.api.constant.SystemMenu;
 import top.adxd.tikonlinejudge.auth.api.dto.Menu;
 import top.adxd.tikonlinejudge.auth.dto.RoleDto;
 import top.adxd.tikonlinejudge.auth.dto.UserRoleVo;
@@ -19,9 +19,11 @@ import top.adxd.tikonlinejudge.auth.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.auth.service.IUserRoleService;
+import top.adxd.tikonlinejudge.auth.single.MenuType;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,8 +46,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     private IRoleMenuService roleMenuService;
     @Autowired
     private IUserRoleService userRoleService;
-    @Autowired
+    @Autowired(required = false)
     private top.adxd.tikonlinejudge.auth.entity.Menu systemAutoGenerator;
+
+
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean removeById(Serializable id) {
+        roleMenuService.remove(new QueryWrapper<RoleMenu>()
+                .eq("role_id", id));
+        return super.removeById(id);
+    }
 
     private static UserRoleVo role2RoleVo(Role item) {
         UserRoleVo roleVo = new UserRoleVo();
@@ -54,6 +66,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         return roleVo;
     }
 
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,allEntries = true)
     @Override
     public boolean save(Role entity) {
         boolean hasRole = hasRole(entity.getName());
@@ -81,6 +94,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         return super.save(entity);
     }
 
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public CommonResult updateById(RoleDto roleDto) {
         Role original = getById(roleDto.getId());
@@ -133,22 +147,27 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public CommonResult userRoles(Long uid) {
-        if (uid == null) {
-            return CommonResult.error("用户不存在");
-        }
-        List<Long> roleIds = userRoleService
-                .list(new QueryWrapper<UserRole>().eq("uid", uid).select("role_id"))
-                .stream()
-                .map(UserRole::getRoleId)
-                .collect(Collectors.toList());
+        List<Long> roleIds = userRoleIdList(uid);
         if (roleIds.size() == 0) {
-            return CommonResult.success().singleData(Collections.EMPTY_LIST);
+            return CommonResult.success().singleData(roleIds);
         }
         List<UserRoleVo> collect = listByIds(roleIds)
                 .stream()
                 .map(RoleServiceImpl::role2RoleVo)
                 .collect(Collectors.toList());
         return CommonResult.success().singleData(collect);
+    }
+
+    @Override
+    public List<Long> userRoleIdList(Long uid) {
+        if (uid == null) {
+            return Collections.EMPTY_LIST;
+        }
+        return userRoleService
+                .list(new QueryWrapper<UserRole>().eq("uid", uid).select("role_id"))
+                .stream()
+                .map(UserRole::getRoleId)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -192,7 +211,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         roleMenu.setRoleId(role.getId());
         top.adxd.tikonlinejudge.auth.entity.Menu root = new top.adxd.tikonlinejudge.auth.entity.Menu();
         root.setName(roleName);
-        root.setType(SystemMenu.MENU_TYPE);
+        root.setType(MenuType.DIRECTORY);
         root.setPerms(roleName);
         root.setParentId(systemAutoGenerator.getId());
         menuService.save(root);
@@ -201,7 +220,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         //将对应权限添加到角色上
         for (Menu menu : menus) {
             m.setParentId(root.getId());
-            m.setType(SystemMenu.MENU_TYPE);
+            m.setType(MenuType.INTERFACE);
             m.setOrder(0);
             BeanUtils.copyProperties(menu, m);
             menuService.save(m);

@@ -10,6 +10,7 @@ import top.adxd.tikonlinejudge.auth.service.IMenuService;
 import top.adxd.tikonlinejudge.auth.service.IPathMatcher;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodMatcher;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodResolver;
+import top.adxd.tikonlinejudge.auth.single.MenuType;
 
 
 import javax.annotation.PostConstruct;
@@ -41,7 +42,7 @@ public class PathMatcher implements IPathMatcher {
     private Map<String, Menu> loadFilterChainDefinitionMap() {
         Map<String, Menu> menuMap = new HashMap<>();
         menuService
-                .list(new QueryWrapper<Menu>().eq("type", 2).isNotNull("url").orderByDesc("`order`"))
+                .list(new QueryWrapper<Menu>().eq("type", MenuType.INTERFACE).isNotNull("url").orderByDesc("`order`"))
                 .stream()
                 .forEach((menu -> {
                     menuMap.put(menu.getUrl(), menu);

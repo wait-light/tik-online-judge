@@ -6,6 +6,15 @@ public class AuthorizationResult implements Serializable {
     public Boolean success;
     public Long uid;
     public String message;
+    public Boolean admin;
+
+    public Boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
 
     public String getMessage() {
         return message;
@@ -34,18 +43,10 @@ public class AuthorizationResult implements Serializable {
     public AuthorizationResult() {
     }
 
-    public AuthorizationResult(Boolean success, Long uid, String message) {
+    public AuthorizationResult(Boolean success, Long uid, String message, Boolean admin) {
         this.success = success;
         this.uid = uid;
         this.message = message;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthorizationResult{" +
-                "success=" + success +
-                ", uid=" + uid +
-                ", message='" + message + '\'' +
-                '}';
+        this.admin = admin;
     }
 }

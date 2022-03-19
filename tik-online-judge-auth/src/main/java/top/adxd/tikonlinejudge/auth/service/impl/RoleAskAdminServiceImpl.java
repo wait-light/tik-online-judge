@@ -2,6 +2,7 @@ package top.adxd.tikonlinejudge.auth.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.auth.dto.AskDto;
@@ -42,9 +43,11 @@ public class RoleAskAdminServiceImpl implements IRoleAskAdminService {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,key = "#id",condition = "#askStatus == AskStatus.ADOPT")
     @Override
     public CommonResult examine(Long id, AskStatus askStatus) {
         RoleAsk roleAsk = roleAskService.getById(id);
+
         if (roleAsk == null) {
             return CommonResult.error("操作有误");
         }

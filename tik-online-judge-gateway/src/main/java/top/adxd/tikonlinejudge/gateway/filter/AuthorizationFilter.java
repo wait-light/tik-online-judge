@@ -29,6 +29,7 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
     private IAuthorizationService authorizationService;
     public static final String UID_HEADER = "uid";
     public static final String TOKEN_HEADER = "token";
+    public static final String ADMIN_HEADER = "isAdmin";
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -50,7 +51,12 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
         //附加用户信息
         HttpHeaders headers = request.getHeaders();
         if (authorization.getUid() != null) {
-            ServerHttpRequest newRequest = exchange.getRequest().mutate().header(UID_HEADER, authorization.getUid().toString()).build();
+            ServerHttpRequest newRequest = exchange
+                    .getRequest()
+                    .mutate()
+                    .header(UID_HEADER, authorization.getUid().toString())
+                    .header(ADMIN_HEADER, authorization.isAdmin().toString())
+                    .build();
             exchange = exchange.mutate().request(newRequest).build();
         }
 

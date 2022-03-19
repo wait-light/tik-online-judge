@@ -16,4 +16,5 @@ import java.util.List;
  */
 public interface IMenuService extends IService<Menu> {
     List<MenuTree> menuTree();
+    List<MenuTree> userDirectoryMenuTree(Long uid);
 }

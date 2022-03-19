@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import top.adxd.tikonlinejudge.auth.single.MenuType;
 
 /**
  * <p>
@@ -35,9 +36,9 @@ public class Menu implements Serializable {
      */
     private String perms;
     /**
-     * 类型(0:目录 1.菜单 2.按钮)
+     * 类型(0:目录 1.接口)
      */
-    private Integer type;
+    private MenuType type;
     /**
      * 菜单地址
      */

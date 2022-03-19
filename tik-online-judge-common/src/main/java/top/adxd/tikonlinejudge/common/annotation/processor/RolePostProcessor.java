@@ -23,7 +23,10 @@ import java.util.List;
 /**
  * 处理自动注入
  */
-@Component
+/*
+TODO 完善自动生成的步骤，效果
+ */
+//@Component
 public class RolePostProcessor implements BeanPostProcessor, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent> {
     private static final Logger logger = LoggerFactory.getLogger(RolePostProcessor.class);
     private ApplicationContext applicationContext;

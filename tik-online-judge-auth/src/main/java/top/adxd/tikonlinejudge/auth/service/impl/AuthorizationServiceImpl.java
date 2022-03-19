@@ -11,6 +11,7 @@ import top.adxd.tikonlinejudge.auth.entity.*;
 import top.adxd.tikonlinejudge.auth.service.*;
 import top.adxd.tikonlinejudge.auth.util.JWTUtil;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,22 +37,22 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
     @Override
     public AuthorizationResult authorization(String token, String path, RequestMethod requestMethod) {
         Long uid = jwtUtil.uid(token);
-        Menu matchMenu = pathMatcher.match(path,requestMethod);
+        Menu matchMenu = pathMatcher.match(path, requestMethod);
         if (matchMenu == null) {
-            return new AuthorizationResult(false, null, "拒绝访问");
+            return new AuthorizationResult(false, null, "拒绝访问", false);
         }
         Set<String> permissionSet = null;
-        if (uid != null){
+        if (uid != null) {
             permissionSet = loginedAuthorization(uid);
             //匿名权限也要拥有
             permissionSet.addAll(unloginAuthorization());
-        }else {
+        } else {
             permissionSet = unloginAuthorization();
         }
         if (permissionSet.contains(ADMIN_PERMISSION) || (permissionSet.contains(matchMenu.getPerms()))) {
-            return new AuthorizationResult(true, uid, "权限校验成功");
+            return new AuthorizationResult(true, uid, "权限校验成功", permissionSet.contains(ADMIN_PERMISSION));
         }
-        return new AuthorizationResult(false, null, "拒绝访问");
+        return new AuthorizationResult(false, null, "拒绝访问", false);
     }
 
     @Override
