@@ -37,8 +37,8 @@ public class MenuController {
     }
 
     @GetMapping("/directory")
-    public CommonResult userDirectory(@RequestHeader("uid") Long uid) {
-        return CommonResult.success().singleData(menuService.userDirectoryMenuTree(uid));
+    public CommonResult userDirectory() {
+        return CommonResult.success().singleData(menuService.userDirectoryMenuTree(UserInfoUtil.getUid()));
     }
 
 

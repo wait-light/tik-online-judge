@@ -125,6 +125,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public List<MenuTree> userDirectoryMenuTree(Long uid) {
+        if(uid == null){
+            return Collections.EMPTY_LIST;
+        }
         if (UserInfoUtil.isAdmin()) {
             return menuTreeBuild(
                     baseMapper.selectList(new QueryWrapper<Menu>()
