@@ -36,11 +36,11 @@ public class AuthorizationServiceImpl implements IAuthorizationService {
 
     @Override
     public AuthorizationResult authorization(String token, String path, RequestMethod requestMethod) {
-        Long uid = jwtUtil.uid(token);
         Menu matchMenu = pathMatcher.match(path, requestMethod);
         if (matchMenu == null) {
             return new AuthorizationResult(false, null, "拒绝访问", false);
         }
+        Long uid = jwtUtil.uid(token);
         Set<String> permissionSet = null;
         if (uid != null) {
             permissionSet = loginedAuthorization(uid);

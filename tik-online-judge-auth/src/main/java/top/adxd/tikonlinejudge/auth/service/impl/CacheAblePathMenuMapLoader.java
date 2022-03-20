@@ -12,6 +12,8 @@ import top.adxd.tikonlinejudge.auth.service.IPathMenuMapLoader;
 import top.adxd.tikonlinejudge.auth.service.IRequestMethodResolver;
 import top.adxd.tikonlinejudge.auth.single.MenuType;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -27,8 +29,8 @@ public class CacheAblePathMenuMapLoader implements IPathMenuMapLoader {
 
     @Cacheable(value = PATH_MENU_CACHE_VALUE)
     @Override
-    public ConcurrentMap<String, Menu> getFilterChainDefinitionMap() {
-        ConcurrentMap<String, Menu> menuMap = new ConcurrentHashMap<>();
+    public Map<String, Menu> getFilterChainDefinitionMap() {
+        Map<String, Menu> menuMap = new LinkedHashMap<String, Menu>();
         menuService
                 .list(new QueryWrapper<Menu>().eq("type", MenuType.INTERFACE).isNotNull("url").orderByDesc("`order`"))
                 .stream()

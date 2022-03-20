@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Arrays;
 
+import top.adxd.tikonlinejudge.auth.api.IAuthorizationService;
+import top.adxd.tikonlinejudge.auth.service.impl.PermissionCacheServiceImpl;
 import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
@@ -29,7 +31,8 @@ public class MenuController {
 
     @Autowired
     private IMenuService menuService;
-
+    @Autowired
+    private PermissionCacheServiceImpl permissionCacheService;
 
     @GetMapping("/tree/")
     public CommonResult treeMenu() {
@@ -40,7 +43,6 @@ public class MenuController {
     public CommonResult userDirectory() {
         return CommonResult.success().singleData(menuService.userDirectoryMenuTree(UserInfoUtil.getUid()));
     }
-
 
     @GetMapping("/list")
     public CommonResult list() {
@@ -86,6 +88,14 @@ public class MenuController {
         return entity != null ?
                 CommonResult.success().singleData(entity) :
                 CommonResult.error();
+    }
+
+    @GetMapping("/interfaces")
+    public CommonResult userInterfaces() {
+        Long uid = UserInfoUtil.getUid();
+        return CommonResult
+                .success()
+                .singleData(permissionCacheService.userAuthorization(uid));
     }
 
 }

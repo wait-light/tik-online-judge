@@ -20,7 +20,7 @@ import java.io.IOException;
 @Slf4j
 public class ServletUtils {
 
-    private ServletUtils(){
+    private ServletUtils() {
         throw new IllegalStateException("Utility class");
     }
 
@@ -34,9 +34,10 @@ public class ServletUtils {
     /**
      * 获取String数组参数
      */
-    public static String[] getParameters(String name){
+    public static String[] getParameters(String name) {
         return getRequest().getParameterValues(name);
     }
+
     /**
      * 获取String参数
      */
@@ -97,7 +98,7 @@ public class ServletUtils {
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
         } catch (IOException e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -120,7 +121,7 @@ public class ServletUtils {
         }
 
         String uri = request.getRequestURI();
-        if (StrUtil.containsAnyIgnoreCase(uri, ".json" , ".xml")) {
+        if (StrUtil.containsAnyIgnoreCase(uri, ".json", ".xml")) {
             return true;
         }
 
@@ -129,11 +130,14 @@ public class ServletUtils {
 
     }
 
-    public static String getHeader(String key){
+    public static String getHeader(String key) {
         return getRequest().getHeader(key);
     }
 
-    public static Long getHeader2Long(String key){
+    public static Long getHeader2Long(String key) {
+        if (key == null || "".equals(key)) {
+            return null;
+        }
         return Long.parseLong(getHeader(key));
     }
 }

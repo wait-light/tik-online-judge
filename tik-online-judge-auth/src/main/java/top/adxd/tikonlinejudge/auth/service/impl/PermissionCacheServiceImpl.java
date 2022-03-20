@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import top.adxd.tikonlinejudge.auth.entity.*;
 import top.adxd.tikonlinejudge.auth.service.*;
 
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,11 +31,14 @@ public class PermissionCacheServiceImpl {
 
     @Cacheable(value = USER_CACHE_VALUE,key = USER_CACHE_KEY)
     public Set<String> userAuthorization(Long uid) {
-        User user = userService.getById(uid);
-        Set<String> permissionSet = new LinkedHashSet<>();
-        if (user == null) {
-            return permissionSet;
+        if(uid == null){
+            return Collections.EMPTY_SET;
         }
+        User user = userService.getById(uid);
+        if (user == null) {
+            return Collections.EMPTY_SET;
+        }
+        Set<String> permissionSet = new LinkedHashSet<>();
         //管理员，拥有所有权限
         if (user.getAdmin()) {
             permissionSet.add(ADMIN_PERMISSION);
