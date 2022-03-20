@@ -21,6 +21,7 @@ import top.adxd.tikonlinejudge.executor.entity.ProblemTag;
 import top.adxd.tikonlinejudge.executor.service.IProblemCollectionService;
 import top.adxd.tikonlinejudge.executor.service.IProblemService;
 import org.springframework.web.bind.annotation.RestController;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 
 /**
  * <p>
@@ -48,16 +49,16 @@ public class ProblemController {
 
     @PostMapping("")
     public CommonResult save(@RequestBody Problem entity) {
-        if (entity.getInput() == null){
+        if (entity.getInput() == null) {
             entity.setInput("");
         }
-        if (entity.getInputDescrible() == null){
+        if (entity.getInputDescrible() == null) {
             entity.setInputDescrible("");
         }
-        if (entity.getOutput() == null){
+        if (entity.getOutput() == null) {
             entity.setOutput("");
         }
-        if (entity.getOutputDescrible() == null){
+        if (entity.getOutputDescrible() == null) {
             entity.setOutputDescrible("");
         }
 
@@ -105,6 +106,11 @@ public class ProblemController {
     @GetMapping("/availableProblem/{collectionId}")
     public CommonResult getAvailableProblem(@PathVariable("collectionId") Long collectionId) {
         return problemService.getAvailableProblem(collectionId);
+    }
+
+    @GetMapping("/submittedProblem/{uid}/{status}")
+    public CommonResult getSubmittedProblem(@PathVariable("uid") Long uid, @PathVariable("status") JudgeStatus status) {
+        return problemService.userFinishedProblem(uid, status);
     }
 }
 

@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.adxd.tikonlinejudge.executor.mapper.ProblemMapper">
-
+    <resultMap id="publicFinishedProblem" type="top.adxd.tikonlinejudge.executor.vo.ProblemSimpleVo">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="secret_key" property="secretKey"></result>
+    </resultMap>
+    <select id="userFinishedProblem" resultMap="publicFinishedProblem">
+        select distinct p.id,p.name,p.secret_key from pms_problem p left join pms_submit s on p.id = s.problem_id
+        <where>
+            <if test="status != 6">
+                s.status != 6
+            </if>
+            <if test="status == 6">
+                s.status = 6
+            </if>
+             and s.uid = #{uid}
+            <if test="onlyPublic">
+                and p.share = true
+            </if>
+        </where>
+    </select>
 </mapper>

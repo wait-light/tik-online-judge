@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.adxd.tikonlinejudge.common.util.PageUtils;
+import top.adxd.tikonlinejudge.common.util.UserInfoUtil;
 import top.adxd.tikonlinejudge.common.vo.CommonResult;
 import top.adxd.tikonlinejudge.executor.api.IProblemServiceApi;
 import top.adxd.tikonlinejudge.executor.entity.Problem;
@@ -15,6 +16,7 @@ import top.adxd.tikonlinejudge.executor.mapper.ProblemMapper;
 import top.adxd.tikonlinejudge.executor.service.IProblemService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import top.adxd.tikonlinejudge.executor.single.JudgeStatus;
 import top.adxd.tikonlinejudge.executor.vo.ProblemSurvey;
 
 import java.util.*;
@@ -121,6 +123,15 @@ public class ProblemServiceImpl extends ServiceImpl<ProblemMapper, Problem> impl
                                         , problemName
                                 ))
                 );
+    }
+
+    @Override
+    public CommonResult userFinishedProblem(Long uid, JudgeStatus status) {
+        Long selfId = UserInfoUtil.getUid();
+        return CommonResult
+                .success()
+                .singleData(baseMapper
+                        .userFinishedProblem(uid, uid != selfId, status.getValue()));
     }
 
     @Override
