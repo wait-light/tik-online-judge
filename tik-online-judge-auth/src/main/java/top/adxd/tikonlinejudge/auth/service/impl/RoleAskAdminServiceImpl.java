@@ -41,13 +41,12 @@ public class RoleAskAdminServiceImpl implements IRoleAskAdminService {
         List<AskDto> untreated = roleAskMapper.getUntreated();
         return CommonResult.success().listData(untreated);
     }
-
+//    condition = "#askStatus.getValue() == AskStatus.ADOPT.getValue()"
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,key = "#id",condition = "#askStatus == AskStatus.ADOPT")
+    @CacheEvict(value = PermissionCacheServiceImpl.USER_CACHE_VALUE,key = "#id")
     @Override
     public CommonResult examine(Long id, AskStatus askStatus) {
         RoleAsk roleAsk = roleAskService.getById(id);
-
         if (roleAsk == null) {
             return CommonResult.error("操作有误");
         }

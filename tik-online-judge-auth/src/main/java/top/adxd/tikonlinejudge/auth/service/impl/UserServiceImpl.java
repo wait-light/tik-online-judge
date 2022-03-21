@@ -153,6 +153,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         LocalDateTime now = LocalDateTime.now();
         user.setUpdateTime(now);
         user.setCreateTime(now);
+        String resetPassword = secureConfig.getSymmetricCrypto().encryptHex(DEFAULT_PASSWORD);
+        user.setPassword(resetPassword);
         return save(user) ? CommonResult.success("添加成功") : CommonResult.error("添加失败");
     }
 
