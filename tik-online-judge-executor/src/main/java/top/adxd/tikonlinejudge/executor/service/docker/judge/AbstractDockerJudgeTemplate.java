@@ -96,11 +96,12 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         return running;
     }
 
-    private void submitJudgingStatusUpdate(Long id,JudgeStatus judgeStatus){
+    private void submitJudgingStatusUpdate(Long id, JudgeStatus judgeStatus) {
         submitService.update(new UpdateWrapper<Submit>()
                 .eq("id", id)
                 .set("status", judgeStatus));
     }
+
     /**
      * 防止多个线程同时访问某个语言的评判
      *
@@ -119,7 +120,7 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         }
         running = true;
 
-        submitJudgingStatusUpdate(submit.getId(),JudgeStatus.JUDGING);
+        submitJudgingStatusUpdate(submit.getId(), JudgeStatus.JUDGING);
 
         List<JudgeResult> results = new ArrayList<>();
         try {
@@ -199,6 +200,8 @@ public abstract class AbstractDockerJudgeTemplate<T extends IDockerJudgeConfig> 
         JudgeResult judgeResult = new JudgeResult();
         judgeResult.setSubmitId(submitId);
         judgeResult.setScore(0);
+        judgeResult.setExecutionTime(problemData.getTimeLimit() != null ? problemData.getTimeLimit() : DEFAULT_TIME_LIMIT);
+        judgeResult.setRuntimeMemory(problemData.getMemoryLimit() != null ? problemData.getMemoryLimit() : DEFAULT_MEMORY_LIMIT);
         //启动程序
         try {
             startContainer();

@@ -31,6 +31,10 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
     public static final String TOKEN_HEADER = "token";
     public static final String ADMIN_HEADER = "isAdmin";
 
+    public static void main(String[] args) throws Exception {
+        throw new Exception("trying throw");
+    }
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
