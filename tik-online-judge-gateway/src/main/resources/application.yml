@@ -42,4 +42,4 @@ dubbo:
   cloud:
     subscribed-services: tik-online-judge-auth
 server:
-  port: 10000
+  port: 12222

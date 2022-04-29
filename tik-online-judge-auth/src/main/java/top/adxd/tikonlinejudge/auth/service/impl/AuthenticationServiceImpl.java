@@ -41,6 +41,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private JWTUtil jwtUtil;
     @DubboReference
     private IVerificationCodeService emailVerificationCodeService;
+    private volatile int userCount = 0;
 
     @Override
     public CommonResult usernameLogin(String username, String password) {
@@ -59,7 +60,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CommonResult emailLogin(String email, String code) {
-        if(code == null){
+        if (code == null) {
             return CommonResult.error("验证码为空");
         }
         VerifyCodeStatus verifyCodeStatus = emailVerificationCodeService.verifyCode(email, code);
@@ -73,6 +74,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     private User saveUserIfNotExist(String email) {
         User user = userService.getOne(new QueryWrapper<User>().eq("email", email));
+        if (userCount == 0) {
+            userCount = userService.count();
+        }
         if (user == null) {
             user = new User();
             LocalDateTime now = LocalDateTime.now();
@@ -84,7 +88,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             user.setUsername(email);
             user.setStatus(true);
             user.setAvatar(userDefaultConfig.getAvatar());
-            userService.save(user);
+            //第一个用户默认为管理员
+            if (userCount == 0) {
+                user.setAdmin(true);
+            }
+            userCount += userService.save(user) ? 1 : 0;
         }
         return user;
     }
