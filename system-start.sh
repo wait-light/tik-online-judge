@@ -6,4 +6,4 @@ cd ../tik-online-judge-message && mvn clean install
 cd ../tik-online-judge-social && mvn clean install
 cd ../tik-online-judge-thirdpart && mvn clean install
 cd ..
-compost up -d
+docker-compose up -d
