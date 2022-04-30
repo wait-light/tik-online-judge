@@ -13,8 +13,8 @@
 
  Date: 28/04/2022 22:44:26
 */
-CREATE DATABASE IF NOT EXISTS judge_cms
-USE judge_cms
+CREATE DATABASE IF NOT EXISTS judge_cms;
+USE judge_cms;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 

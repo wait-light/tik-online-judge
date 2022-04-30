@@ -13,8 +13,8 @@
 
  Date: 28/04/2022 22:44:19
 */
-CREATE DATABASE IF NOT EXISTS judge_pms
-USE judge_pms
+CREATE DATABASE IF NOT EXISTS judge_pms;
+USE judge_pms;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
