@@ -24,7 +24,7 @@
         <fastjson.version>1.2.83</fastjson.version>
         <hutool.version>5.7.11</hutool.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <spring.boot.version>2.4.11</spring.boot.version>
+        <spring.boot.version>2.5.12</spring.boot.version>
         <spring-boot.version>2.4.11</spring-boot.version>
         <spring.cloud.alibaba.version>2021.1</spring.cloud.alibaba.version>
         <spring.cloud.dependencies.version>3.0.1</spring.cloud.dependencies.version>
